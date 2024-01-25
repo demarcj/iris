@@ -1,0 +1,29 @@
+.header{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 10px 30px;
+}
+
+.nav{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav > *{
+  cursor: pointer;
+}
+
+.setting{
+  justify-content: end;
+}
+
+.logo{
+  width: 75px;
+  cursor: pointer;
+  justify-items: center;
+}
+
+.logo_wrapper{
+  text-align: center;
+}

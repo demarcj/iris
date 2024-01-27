@@ -1,0 +1,11 @@
+.footer{
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.footer_section{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}

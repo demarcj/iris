@@ -1,19 +1,28 @@
 import Link from 'next/link';
-
+import Image from 'next/image';
 import styles from "@/_styles/nav_menu.module.css";
 
 export const NavMenu = () => (
   <header className={styles.header}>
     <ul className={styles.nav}>
       <li>
-        <div><Link href="./" >Home</Link></div>
+        <div><Link href="./">Home</Link></div>
+      </li>
+      <li>
+        <div><Link href="./properties">Properties</Link></div>
+      </li>
+      <li>
+        <div><Link href="./contact_us">Contact</Link></div>
       </li>
     </ul>
     <div className={styles.logo_wrapper}>
       <Link href="./">
-        <img
+        <Image
           className={styles.logo}
-          src="logo.png" alt="" 
+          src="/logo.png" 
+          alt=""
+          width={75}
+          height={75}
         />
       </Link>
     </div>

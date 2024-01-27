@@ -1,6 +1,6 @@
 .header{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr auto 1fr;
   padding: 10px 30px;
 }
 
@@ -19,9 +19,7 @@
 }
 
 .logo{
-  width: 75px;
   cursor: pointer;
-  justify-items: center;
 }
 
 .logo_wrapper{

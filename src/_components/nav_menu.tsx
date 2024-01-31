@@ -6,7 +6,7 @@ export const NavMenu = () => (
   <header className={styles.header}>
     <ul className={styles.nav}>
       <li>
-        <div><Link href="./">Home</Link></div>
+        <div><Link href="/">Home</Link></div>
       </li>
       <li>
         <div><Link href="./properties">Properties</Link></div>
@@ -16,7 +16,7 @@ export const NavMenu = () => (
       </li>
     </ul>
     <div className={styles.logo_wrapper}>
-      <Link href="./">
+      <Link href="/">
         <Image
           className={styles.logo}
           src="/logo.png" 

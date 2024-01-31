@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NavMenu, Footer } from "@/_components";
+import styles from "@/_styles/layout.module.css";
 import "./globals.css";
 
 import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
@@ -25,7 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NavMenu />
-        <main>{children}</main>
+        <div className={styles.layout}>{children}</div>
         <Footer />
       </body>
     </html>

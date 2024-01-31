@@ -1,6 +1,6 @@
 const Property = () => {
   return (
-    <div>Hello</div>
+    <main>Hello</main>
   )
 }
 

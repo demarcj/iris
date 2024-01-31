@@ -1,8 +1,8 @@
 const Properties = () => {
   return (
-    <section>
+    <main>
       Coming soon
-    </section>
+    </main>
   )
 }
 

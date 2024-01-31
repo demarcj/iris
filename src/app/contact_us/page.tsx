@@ -1,8 +1,8 @@
 const ContactUs = () => {
   return (
-    <section>
+    <main>
       Coming soon
-    </section>
+    </main>
   )
 }
 

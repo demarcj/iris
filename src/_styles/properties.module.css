@@ -1,0 +1,14 @@
+.properties_container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.hero{
+  max-height: 75vh;
+  width: 100%;
+}
+
+.property_name{
+  text-align: center;
+}

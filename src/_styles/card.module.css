@@ -2,6 +2,8 @@
   background-color: white;
   display: block;
   color: black;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .carousel_img{
@@ -23,4 +25,9 @@
   display: flex;
   gap: 15px;
   padding-top: 15px;
+}
+
+.elegant_style{
+  font-style: italic;
+  font-size: 18px;
 }

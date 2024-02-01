@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NavMenu, Footer } from "@/_components";
+import { NavMenu, Footer } from "@/_components/layout_section";
 import styles from "@/_styles/layout.module.css";
 import "./globals.css";
 

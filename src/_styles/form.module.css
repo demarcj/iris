@@ -1,0 +1,25 @@
+.main{
+  display: flex;
+  flex-direction: row;
+}
+
+.main > div{
+  width: 100%;
+}
+
+.submit{
+  display: block;
+}
+
+.input_select{
+  border-bottom: 1px solid white;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  color: white;
+  outline: none;
+}
+
+.label{
+  color: white;
+}

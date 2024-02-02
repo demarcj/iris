@@ -9,10 +9,10 @@ export const NavMenu = () => (
         <div><Link href="/">Home</Link></div>
       </li>
       <li>
-        <div><Link href="./properties">Properties</Link></div>
+        <div><Link href="/properties">Properties</Link></div>
       </li>
       <li>
-        <div><Link href="./contact_us">Contact</Link></div>
+        <div><Link href="/contact_us">Contact</Link></div>
       </li>
     </ul>
     <div className={styles.logo_wrapper}>
@@ -35,7 +35,7 @@ export const NavMenu = () => (
       </li>
       <li>
         <div>
-          <Link href="/forum"> List Your Property </Link> 
+          <Link href="/form"> List Your Property </Link> 
         </div>
       </li>
     </ul>

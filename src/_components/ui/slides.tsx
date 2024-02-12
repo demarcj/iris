@@ -22,11 +22,11 @@ export const PropertyCard: React.FC<PropertyCardModel> = ({card}) =>  {
         alt=''
       />
       <div className={styles.carousel_content}>
-        <h3 className={styles.property_name}>{card.property_name}</h3>
+        <h3 className={styles.property_name}>{card.name}</h3>
         <div><span className={styles.elegant_style}>Price: </span> ${card.price} </div>
         <div className={styles.property_detail}>
-          <div><FontAwesomeIcon icon={faBed} /> : {card.num_bedrooms}</div>
-          <div><FontAwesomeIcon icon={faHotel} /> : {card.property_type}</div>
+          <div><FontAwesomeIcon icon={faBed} /> : {card.bedrooms}</div>
+          <div><FontAwesomeIcon icon={faHotel} /> : {card.type}</div>
           <div><FontAwesomeIcon icon={faMaximize} /> : {card.size}</div>
         </div>
       </div>

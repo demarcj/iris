@@ -4,28 +4,42 @@ import { useState } from 'react';
 import Image from "next/image";
 import { ToastContainer, toast } from 'react-toastify';
 
+// Firebase
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from "@/firebase/firebase"
+
 import styles from "@/_styles/form.module.css";
 
 // Material
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 
 const Form = () => {
-  const [area, set_area] = useState([]);
-  const [amenities, set_amenities] = useState([]);
-  const [name, set_name] = useState(``);
-  const [price, set_price] = useState(``);
-  const [bedrooms, set_bedrooms] = useState(`0`);
-  const [size, set_size] = useState(``);
-  const [description, set_description] = useState(``);
-  const [option, set_option] = useState(``);
-  const [type, set_type] = useState(``);
+  const [property, set_property] = useState({
+      address: ``,
+      amenities: [],
+      area: [],
+      bathrooms: 1, 
+      bedrooms: 0, 
+      description: ``,
+      email: ``, 
+      id: ``,
+      img: ``,
+      images: [],
+      name: ``, 
+      phone_num: ``,
+      option: ``, 
+      price: 0, 
+      size: 0, 
+      type: ``
+  } as {[key: string]: any});
+  const required = [`name`, `address`, ``, `option`, `price`, `type`];
 
   const input_select = {
       borderBottom: `1px solid white`,
@@ -43,37 +57,27 @@ const Form = () => {
     color: 'white' 
   };
 
-  const is_valid = (): boolean => {
-    const required: any = {name, price, type, option};
-    const values = Object.keys(required).filter(key => !required[key]);
-    return !values.length;
-  }
+  const is_valid = (): boolean => !required.filter(key => !property[key]).length;
 
   const not_valid = () => {
-    const required: any = {name, price, type, option};
-    const values = Object.keys(required).filter(key => !required[key]).join(` and `);
+    const values = required.filter(key => !property[key]).join(` and `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
   
   const handle_submit = async () => {
     const id = self.crypto.randomUUID();
-    const values = {
-      id,
-      area, 
-      name, 
-      price, 
-      bedrooms, 
-      size, 
-      description, 
-      option, 
-      type
-    };
-    localStorage.setItem(`create`, JSON.stringify({...values, id}));
-    toast(`Entry has successfully been saved!`);
+    set_property({...property, id});
+    try{
+      await addDoc(collection(db, `properties`), { property });
+      toast(`Entry has successfully been saved!`);
+    } catch(e) {
+      toast(`Something went wrong. Please try again.`);
+      console.error(e);
+    }
   }
 
   const type_menu = [`Condo`, `House`, `Villa`, `Land`];
-  const option_menu = [`Buy`, `Sell`, `Rental`];
+  const option_menu = [`Sell`, `Rental`];
   const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
   const amenities_menu = [`Microwave`, `Free Wifi`, `Pool`, `Fitness Room`];
 
@@ -90,20 +94,56 @@ const Form = () => {
               id="name"
               style={input_select}
               label="Property Name"
-              value={name}
+              value={property.name}
               InputLabelProps={{ style : label }}
               inputProps={{ sx: imput_text }}
               fullWidth
               variant="standard"
-              onChange={e => set_name(e.target.value)}
+              onChange={e => set_property({...property, name: e.target.value})}
               required
+            />
+            <TextField
+              id="address"
+              style={input_select}
+              label="Property Address"
+              value={property.address}
+              InputLabelProps={{ style : label }}
+              inputProps={{ sx: imput_text }}
+              fullWidth
+              variant="standard"
+              onChange={e => set_property({...property, address: e.target.value})}
+              required
+            />
+            <TextField
+              id="address"
+              style={input_select}
+              label="Property Address"
+              value={property.address}
+              InputLabelProps={{ style : label }}
+              inputProps={{ sx: imput_text }}
+              fullWidth
+              variant="standard"
+              onChange={e => set_property({...property, address: e.target.value})}
+              required
+            />
+            <TextField
+              id="email"
+              style={input_select}
+              label="Email"
+              type='email'
+              value={property.email}
+              InputLabelProps={{ style : label }}
+              inputProps={{ sx: imput_text }}
+              fullWidth
+              variant="standard"
+              onChange={e => set_property({...property, email: e.target.value})}
             />
             <TextField
               id="price"
               style={input_select}
               label="Price"
               type="number"
-              value={price}
+              value={property.price}
               InputLabelProps={{ style : label }}
               inputProps={{
                 min: 0,
@@ -111,15 +151,30 @@ const Form = () => {
               }}
               fullWidth
               variant="standard"
-              onChange={e => set_price(e.target.value)}
+              onChange={e => set_property({ ...property, price: parseInt(e.target.value)})}
               required
+            />
+            <TextField
+              id="bathrooms"
+              style={input_select}
+              label="No. Bedroom"
+              type='number'
+              value={property.bathrooms}
+              InputLabelProps={{ style : label }}
+              inputProps={{
+                min: 1,
+                sx: imput_text
+              }}
+              fullWidth
+              variant="standard"
+              onChange={e => set_property({...property, bathrooms: parseInt(e.target.value)})}
             />
             <TextField
               id="bebrooms"
               style={input_select}
               label="No. Bedroom"
               type='number'
-              value={bedrooms}
+              value={property.bedrooms}
               InputLabelProps={{ style : label }}
               inputProps={{
                 min: 0,
@@ -127,7 +182,7 @@ const Form = () => {
               }}
               fullWidth
               variant="standard"
-              onChange={e => set_bedrooms(e.target.value)}
+              onChange={e => set_property({...property, bedrooms: parseInt(e.target.value)})}
             />
             <FormControl variant="standard" fullWidth>
               <InputLabel style={label} required htmlFor="type">Property Type</InputLabel>
@@ -135,10 +190,10 @@ const Form = () => {
                 id="type"
                 style={input_select}
                 labelId="type"
-                value={type}
+                value={property.type}
                 label="Property Type"
                 sx={select}
-                onChange={e => set_type(e.target.value)}
+                onChange={e => set_property({...property, type: e.target.value})}
               >
                 { type_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
               </Select>
@@ -149,10 +204,10 @@ const Form = () => {
                 style={input_select}
                 labelId="option"
                 id="option"
-                value={option}
+                value={property.option}
                 label="Property Option"
                 sx={select}
-                onChange={e => set_option(e.target.value)}
+                onChange={e => set_property({...property, option: e.target.value})}
               >
                 { option_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
               </Select>
@@ -163,10 +218,10 @@ const Form = () => {
                 style={input_select}
                 labelId="area"
                 id="area"
-                value={area}
+                value={property.area}
                 label="Nearby Areas"
                 sx={select}
-                onChange={e => set_area(e.target.value as [])}
+                onChange={e => set_property({...property, area: e.target.value as []})}
                 multiple
               >
                 { area_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
@@ -178,10 +233,10 @@ const Form = () => {
                 style={input_select}
                 labelId="amenities"
                 id="amenities"
-                value={amenities}
+                value={property.amenities}
                 label="Amenities"
                 sx={select}
-                onChange={e => set_amenities(e.target.value as [])}
+                onChange={e => set_property({...property, amenities: e.target.value as []})}
                 multiple
               >
                 { amenities_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
@@ -192,7 +247,7 @@ const Form = () => {
               style={input_select}
               label="Property Size"
               type='number'
-              value={size}
+              value={property.size}
               InputLabelProps={{ style : label }}
               inputProps={{
                 min: 0,
@@ -200,20 +255,20 @@ const Form = () => {
               }}
               fullWidth
               variant="standard"
-              onChange={e => set_size(e.target.value)}
+              onChange={e => set_property({...property, size: parseInt(e.target.value)})}
             />
             <TextField
               id="description"
               style={input_select}
               label="Description"
               multiline
-              value={description}
+              value={property.description}
               rows={4}
               InputLabelProps={{ style : label }}
               inputProps={{ sx: imput_text }}
               variant="standard"
               fullWidth
-              onChange={e => set_description(e.target.value)}
+              onChange={e => set_property({...property, description :e.target.value})}
             />
             <Button
               variant="contained" 

@@ -1,14 +1,17 @@
 export type PropertyModel = {
-  id: string;
+  address: string;
   amenities?: string[];
   area?: string;
+  bathrooms: number;
+  bedrooms: number;
   description?: string;
+  id: string;
   images?: string[];
   img: string;
-  num_bedrooms: number;
+  name: string;
+  option?: string;
+  phone_num: string;
   price: number;
-  property_name: string;
-  property_option?: string;
-  property_type: string;
   size?: string;
+  type: string;
 }

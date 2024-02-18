@@ -37,6 +37,11 @@ label{
   display: block;
 }
 
+input{
+  background-color: black;
+  color: white;
+}
+
 @media (prefers-color-scheme: dark) {
   /* :root {} */
   html {

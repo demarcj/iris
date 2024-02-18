@@ -12,13 +12,28 @@ import styles from "@/_styles/form.module.css";
 
 // Material
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
+import Textarea from '@mui/joy/Textarea';
+import Input from '@mui/joy/Input';
+import FormLabel from '@mui/joy/FormLabel';
+import FormControl from '@mui/joy/FormControl';
+import Select from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
 import SendIcon from '@mui/icons-material/Send';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+import Button from '@mui/joy/Button';
+import SvgIcon from '@mui/joy/SvgIcon';
+import { styled } from '@mui/joy';
+
+const VisuallyHiddenInput = styled('input')`
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  white-space: nowrap;
+  width: 1px;
+`;
 
 const Form = () => {
   const [property, set_property] = useState({
@@ -39,7 +54,7 @@ const Form = () => {
       size: 0, 
       type: ``
   } as {[key: string]: any});
-  const required = [`name`, `address`, ``, `option`, `price`, `type`];
+  const required = [`name`, `address`, `size`, `option`, `price`, `type`];
 
   const input_select = {
       borderBottom: `1px solid white`,
@@ -47,7 +62,8 @@ const Form = () => {
       borderLeft: `none`,
       borderRight: `none`,
       outline: `none`,
-      margin: `15px 0`
+      margin: `15px 0`,
+      backgroundColor: `transparent`
   };
 
   const imput_text = { color: "white" };
@@ -84,196 +100,186 @@ const Form = () => {
   return (
     <>
       <main className={styles.main}>
-        <div>
+        <div id="form">
           <Box
             component="form"
             noValidate
             autoComplete="off"
           >
-            <TextField
-              id="name"
-              style={input_select}
-              label="Property Name"
-              value={property.name}
-              InputLabelProps={{ style : label }}
-              inputProps={{ sx: imput_text }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, name: e.target.value})}
-              required
-            />
-            <TextField
-              id="address"
-              style={input_select}
-              label="Property Address"
-              value={property.address}
-              InputLabelProps={{ style : label }}
-              inputProps={{ sx: imput_text }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, address: e.target.value})}
-              required
-            />
-            <TextField
-              id="address"
-              style={input_select}
-              label="Property Address"
-              value={property.address}
-              InputLabelProps={{ style : label }}
-              inputProps={{ sx: imput_text }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, address: e.target.value})}
-              required
-            />
-            <TextField
-              id="email"
-              style={input_select}
-              label="Email"
-              type='email'
-              value={property.email}
-              InputLabelProps={{ style : label }}
-              inputProps={{ sx: imput_text }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, email: e.target.value})}
-            />
-            <TextField
-              id="price"
-              style={input_select}
-              label="Price"
-              type="number"
-              value={property.price}
-              InputLabelProps={{ style : label }}
-              inputProps={{
-                min: 0,
-                sx: imput_text
-              }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({ ...property, price: parseInt(e.target.value)})}
-              required
-            />
-            <TextField
-              id="bathrooms"
-              style={input_select}
-              label="No. Bedroom"
-              type='number'
-              value={property.bathrooms}
-              InputLabelProps={{ style : label }}
-              inputProps={{
-                min: 1,
-                sx: imput_text
-              }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, bathrooms: parseInt(e.target.value)})}
-            />
-            <TextField
-              id="bebrooms"
-              style={input_select}
-              label="No. Bedroom"
-              type='number'
-              value={property.bedrooms}
-              InputLabelProps={{ style : label }}
-              inputProps={{
-                min: 0,
-                sx: imput_text
-              }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, bedrooms: parseInt(e.target.value)})}
-            />
-            <FormControl variant="standard" fullWidth>
-              <InputLabel style={label} required htmlFor="type">Property Type</InputLabel>
-              <Select
-                id="type"
-                style={input_select}
-                labelId="type"
-                value={property.type}
-                label="Property Type"
-                sx={select}
-                onChange={e => set_property({...property, type: e.target.value})}
-              >
-                { type_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
-              </Select>
+            <FormControl>
+              <FormLabel sx={label} required>Property Name</FormLabel>
+              <Input
+                id="name"
+                value={property.name}
+                fullWidth
+                onChange={e => set_property({ ...property, name: e.target.value})}
+                required
+              />
             </FormControl>
-            <FormControl variant="standard" fullWidth>
-              <InputLabel style={label} required htmlFor="option"> Property Option</InputLabel>
-              <Select
-                style={input_select}
-                labelId="option"
-                id="option"
-                value={property.option}
-                label="Property Option"
-                sx={select}
-                onChange={e => set_property({...property, option: e.target.value})}
-              >
-                { option_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
-              </Select>
+            <FormControl>
+              <FormLabel sx={label} required>Property Address</FormLabel>
+              <Input
+                id="address"
+                value={property.address}
+                fullWidth
+                onChange={e => set_property({ ...property, address: e.target.value})}
+                required
+              />
             </FormControl>
-            <FormControl variant="standard" fullWidth>
-              <InputLabel style={label} htmlFor="area">Nearby Areas</InputLabel>
-              <Select
-                style={input_select}
-                labelId="area"
-                id="area"
-                value={property.area}
-                label="Nearby Areas"
-                sx={select}
-                onChange={e => set_property({...property, area: e.target.value as []})}
-                multiple
-              >
-                { area_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
-              </Select>
+            <FormControl>
+              <FormLabel sx={label} required>Email</FormLabel>
+              <Input
+                id="email"
+                type="email"
+                value={property.email}
+                fullWidth
+                onChange={e => set_property({ ...property, email: e.target.value})}
+                required
+              />
             </FormControl>
-            <FormControl variant="standard" fullWidth>
-              <InputLabel style={label} htmlFor="amenities">Amenities</InputLabel>
-              <Select
-                style={input_select}
-                labelId="amenities"
-                id="amenities"
-                value={property.amenities}
-                label="Amenities"
-                sx={select}
-                onChange={e => set_property({...property, amenities: e.target.value as []})}
-                multiple
-              >
-                { amenities_menu.map((menu, i) => <MenuItem key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</MenuItem>) }
-              </Select>
+            <FormControl>
+              <FormLabel sx={label} required>Price</FormLabel>
+              <Input
+                id="price"
+                type="number"
+                value={property.price}
+                slotProps={{
+                  input: {
+                    min: 0,
+                    className: `hello`
+                  },
+                }}
+                fullWidth
+                onChange={e => set_property({ ...property, price: parseInt(e.target.value)})}
+                required
+              />
             </FormControl>
-            <TextField
-              id="size"
-              style={input_select}
-              label="Property Size"
-              type='number'
-              value={property.size}
-              InputLabelProps={{ style : label }}
-              inputProps={{
-                min: 0,
-                sx: imput_text
-              }}
-              fullWidth
-              variant="standard"
-              onChange={e => set_property({...property, size: parseInt(e.target.value)})}
-            />
-            <TextField
-              id="description"
-              style={input_select}
-              label="Description"
-              multiline
-              value={property.description}
-              rows={4}
-              InputLabelProps={{ style : label }}
-              inputProps={{ sx: imput_text }}
-              variant="standard"
-              fullWidth
-              onChange={e => set_property({...property, description :e.target.value})}
-            />
+            <FormControl>
+              <FormLabel sx={label}>Bathrooms No.</FormLabel>
+              <Input
+                id="bathrooms"
+                type="number"
+                value={property.bathrooms}
+                slotProps={{
+                  input: {
+                    min: 0
+                  },
+                }}
+                fullWidth
+                onChange={e => set_property({ ...property, bathrooms: parseInt(e.target.value)})}
+                required
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel sx={label}>Bedrooms No.</FormLabel>
+              <Input
+                id="bedrooms"
+                type="number"
+                value={property.bedrooms}
+                slotProps={{
+                  input: {
+                    min: 0
+                  },
+                }}
+                fullWidth
+                onChange={e => set_property({ ...property, bedrooms: parseInt(e.target.value)})}
+                required
+              />
+            </FormControl>
+            <FormLabel style={label} required htmlFor="type">Property Type</FormLabel>
+            <Select
+              id="type"
+              value={property.type}
+              onChange={(e: any, value) => set_property({...property, type: value})}
+            >
+              { type_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+            </Select>
+            <FormLabel style={label} required htmlFor="option"> Property Option</FormLabel>
+            <Select
+              id="option"
+              value={property.option}
+              onChange={(e: any, value) => set_property({...property, option: value})}
+            >
+              { option_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+            </Select>
+            <FormLabel style={label} htmlFor="area">Nearby Areas</FormLabel>
+            <Select
+              id="area"
+              value={property.area}
+              onChange={(e: any, value) => set_property({...property, area: value})}
+              multiple
+            >
+              { area_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+            </Select>
+            <FormLabel style={label} htmlFor="amenities">Amenities</FormLabel>
+            <Select
+              id="amenities"
+              value={property.amenities}
+              onChange={(e: any, value) => set_property({...property, amenities: value})}
+              multiple
+            >
+              { amenities_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+            </Select>
+            <FormControl>
+              <FormLabel sx={label} required>Land Size</FormLabel>
+              <Input
+                id="size"
+                type="number"
+                value={property.size}
+                slotProps={{
+                  input: {
+                    min: 0
+                  },
+                }}
+                fullWidth
+                onChange={(e: any) => set_property({ ...property, size: parseInt(e.target.value)})}
+                required
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel sx={label}>Description</FormLabel>
+              <Textarea
+                id="description"
+                value={property.description}
+                minRows={3}
+              />
+            </FormControl>
+            <div>
+              <Button
+                component="label"
+                role={undefined}
+                sx={{mt: `15px`}}
+                tabIndex={-1}
+                variant="outlined"
+                startDecorator={
+                  <SvgIcon>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                      />
+                    </svg>
+                  </SvgIcon>
+                }
+              >
+                Upload Images
+                <VisuallyHiddenInput 
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  multiple
+                />
+              </Button>
+            </div>
             <Button
-              variant="contained" 
+              sx={{mt: `15px`}}
               onClick={() => is_valid() ? handle_submit() : not_valid()}
-              endIcon={<SendIcon />}
             >
               Submit
             </Button>

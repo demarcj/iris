@@ -5,14 +5,12 @@ import Image from "next/image";
 import { ToastContainer, toast } from 'react-toastify';
 
 // Firebase
-import { collection, addDoc } from 'firebase/firestore';
-// import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { collection, addDoc } from "firebase/firestore";
 import { updatePropertyImage } from "@/firebase/storage";
 import { db } from "@/firebase/firebase";
-import { updatePropertyImageReference } from "@/firebase/firestore";
-
 
 import styles from "@/_styles/form.module.css";
+import global from "@/_styles/global.module.css";
 
 // Material
 import Box from '@mui/material/Box';
@@ -23,6 +21,7 @@ import FormControl from '@mui/joy/FormControl';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 // import SendIcon from '@mui/icons-material/Send';
+import CircularProgress from '@mui/joy/CircularProgress';
 import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
 import { styled } from '@mui/joy';
@@ -41,38 +40,43 @@ const VisuallyHiddenInput = styled('input')`
 
 const Form = () => {
   const [property, set_property] = useState({
-      address: ``,
-      amenities: [],
-      area: [],
-      bathrooms: 1, 
-      bedrooms: 0, 
-      description: ``,
-      email: ``, 
-      id: self.crypto.randomUUID(),
-      img: ``,
-      images: [],
-      name: ``, 
-      phone: ``,
-      option: ``, 
-      price: 0, 
-      size: 0, 
-      type: ``
+    address: ``,
+    amenities: [],
+    area: [],
+    bathrooms: 1, 
+    bedrooms: 0, 
+    description: ``,
+    email: ``, 
+    id: crypto.randomUUID(),
+    img: ``,
+    images: [],
+    name: ``, 
+    phone: ``,
+    option: ``, 
+    price: 0, 
+    size: 0, 
+    type: ``
   } as {[key: string]: any});
   const [images, set_images] = useState({});
-  const [img, set_img] = useState({});
+  const [img, set_img] = useState({} as File);
+  const [loading, set_loading]  = useState(false);
+
   const required = [`name`, `address`, `size`, `option`, `price`, `type`];
+  const type_menu = [`Condo`, `House`, `Villa`, `Land`];
+  const option_menu = [`Sell`, `Rental`];
+  const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
+  const amenities_menu = [`Microwave`, `Free Wifi`, `Pool`, `Fitness Room`];
+  const label = { color: `white` };
+  // const select = { 
+  //   "& .MuiSvgIcon-root": { color: "white" }, 
+  //   color: 'white' 
+  // };
 
   const handleImage = (event: any, type: `single` | `multiple`) => {
     const target = event?.target;
     const files = !!target?.files.length ? target.files : null;
-    type === `single` ? set_img(files) : set_images(files);
+    type === `single` ? set_img(files[0]) : set_images(files);
   }
-
-  const label = { color: `white` };
-  const select = { 
-    "& .MuiSvgIcon-root": { color: "white" }, 
-    color: 'white' 
-  };
 
   const is_valid = (): boolean => !required.filter(key => !property[key]).length;
 
@@ -80,18 +84,18 @@ const Form = () => {
     const values = required.filter(key => !property[key]).join(` and `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
-  
+
+  const submit_img = async (id: string, image: File, key: string) => {
+    try{
+      return await updatePropertyImage(id, image);
+    } catch(e) {
+      toast(`Something went wrong with uploading image. Please try uploading and submiting again.`);
+    }
+  }
+
   const handle_submit = async () => {
     try{
-      const doc_ref = await addDoc(collection(db, `properties`), { ...property });
-      Object.values(images).forEach(async (image: any) => {
-        await updatePropertyImage(doc_ref.id, image).then(
-          async (data) => {
-            set_property({ ...property, images: [...property.images, data]});
-            await updatePropertyImageReference(doc_ref.id, property.images);
-          }
-        )
-      });
+      await addDoc(collection(db, `properties`), { ...property });
       toast(`Entry has successfully been saved!`);
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
@@ -99,10 +103,38 @@ const Form = () => {
     }
   }
 
-  const type_menu = [`Condo`, `House`, `Villa`, `Land`];
-  const option_menu = [`Sell`, `Rental`];
-  const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
-  const amenities_menu = [`Microwave`, `Free Wifi`, `Pool`, `Fitness Room`];
+  useEffect(() => {
+    if(!!img.name){
+      const data = async () => {
+        await submit_img(property.id, img, `img`).then(url => {
+          set_property({ ...property, img: url});
+        });
+      }
+      data();
+    }
+  }, [img]);
+
+  useEffect(() => {
+    if(!!Object.keys(images).length){
+      set_loading(true);
+      let urls: any[] = [];
+      const promise = new Promise((res, rej) => {
+        Object.values(images).forEach(async (image, i, arr) => {
+          await submit_img(property.id, image as File, `images`).then(url => {
+            urls = [...urls, url];
+            (arr.length === urls.length) && res(urls);
+          })
+        });
+      });
+      promise.then(data => set_property({...property, images: data}))
+      set_loading(false);
+    }
+  }, [images]);
+
+  useEffect(() => {
+    set_loading(property.images === Object.values(images).length);
+    console.log(property)
+  }, [property]);
 
   return (
     <>
@@ -290,7 +322,7 @@ const Form = () => {
                 Upload Main Image
                 <VisuallyHiddenInput 
                   type="file"
-                  accept=".jpg, .jpeg, .png"
+                  accept=".jpg, .jpeg, .png .webp"
                   onChange={e => handleImage(e, `single`)}
                 />
               </Button>
@@ -323,7 +355,7 @@ const Form = () => {
                 Upload Images
                 <VisuallyHiddenInput 
                   type="file"
-                  accept=".jpg, .jpeg, .png"
+                  accept=".jpg, .jpeg, .png .webp"
                   onChange={e => handleImage(e, `multiple`)}
                   multiple
                 />
@@ -349,6 +381,7 @@ const Form = () => {
         </div>
       </main>
       <ToastContainer />
+      { loading && <div className={global.loading}><CircularProgress variant="soft" /></div> }
     </>
   )
 }

@@ -26,7 +26,7 @@ const Property = () => {
     const q = query(collection(db, `properties`));
     onSnapshot(q, (querySnapshot) => {
       let items: any[] = [];
-      querySnapshot.forEach(item => { items = [item.data().values, ...items]; });
+      querySnapshot.forEach(item => { items = [item.data(), ...items]; });
       const item = items.find(item => item.id === param.id);
       set_property(item);
     })

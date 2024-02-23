@@ -9,9 +9,7 @@ export async function updatePropertyImage(property_id: string, image: File) {
     if (!image || !image?.name)
       throw new Error("A valid image has not been provided.");
 
-    const publicImageUrl = await uploadImage(property_id, image);
-
-    return publicImageUrl;
+    return await uploadImage(property_id, image)
     } catch (error) {
         console.error("Error processing request:", error);
     }

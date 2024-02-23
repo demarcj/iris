@@ -1,0 +1,8 @@
+.loading{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: black;
+  opacity: .4;
+}

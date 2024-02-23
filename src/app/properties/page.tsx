@@ -6,7 +6,7 @@ import styles from "@/_styles/properties.module.css";
 
 // Firebase
 import { collection, getDoc, query, onSnapshot } from 'firebase/firestore';
-import { db } from "@/firebase/firebase"
+import { db } from "@/firebase/firebase";
 
 const Properties = () => {
   const [cards, set_cards] = useState([] as any[])
@@ -15,7 +15,7 @@ const Properties = () => {
     const q = query(collection(db, `properties`));
     onSnapshot(q, (querySnapshot) => {
       let items: any[] = [];
-      querySnapshot.forEach(item => { items = [item.data().values, ...items]; });
+      querySnapshot.forEach(item => { items = [item.data(), ...items]; });
       set_cards(items);
     })
   }, []);

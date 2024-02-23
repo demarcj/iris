@@ -10,7 +10,7 @@ export type PropertyModel = {
   img: string;
   name: string;
   option?: string;
-  phone_num: string;
+  phone?: string;
   price: number;
   size?: string;
   type: string;

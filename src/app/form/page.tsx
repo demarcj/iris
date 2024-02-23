@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import { ToastContainer, toast } from 'react-toastify';
 
 // Firebase
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from "@/firebase/firebase"
+// import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { updatePropertyImage } from "@/firebase/storage";
+import { db } from "@/firebase/firebase";
+import { updatePropertyImageReference } from "@/firebase/firestore";
+
 
 import styles from "@/_styles/form.module.css";
 
@@ -18,7 +22,7 @@ import FormLabel from '@mui/joy/FormLabel';
 import FormControl from '@mui/joy/FormControl';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
-import SendIcon from '@mui/icons-material/Send';
+// import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
 import { styled } from '@mui/joy';
@@ -44,29 +48,26 @@ const Form = () => {
       bedrooms: 0, 
       description: ``,
       email: ``, 
-      id: ``,
+      id: self.crypto.randomUUID(),
       img: ``,
       images: [],
       name: ``, 
-      phone_num: ``,
+      phone: ``,
       option: ``, 
       price: 0, 
       size: 0, 
       type: ``
   } as {[key: string]: any});
+  const [images, set_images] = useState({});
+  const [img, set_img] = useState({});
   const required = [`name`, `address`, `size`, `option`, `price`, `type`];
 
-  const input_select = {
-      borderBottom: `1px solid white`,
-      borderTop: `none`,
-      borderLeft: `none`,
-      borderRight: `none`,
-      outline: `none`,
-      margin: `15px 0`,
-      backgroundColor: `transparent`
-  };
+  const handleImage = (event: any, type: `single` | `multiple`) => {
+    const target = event?.target;
+    const files = !!target?.files.length ? target.files : null;
+    type === `single` ? set_img(files) : set_images(files);
+  }
 
-  const imput_text = { color: "white" };
   const label = { color: `white` };
   const select = { 
     "& .MuiSvgIcon-root": { color: "white" }, 
@@ -81,10 +82,16 @@ const Form = () => {
   }
   
   const handle_submit = async () => {
-    const id = self.crypto.randomUUID();
-    set_property({...property, id});
     try{
-      await addDoc(collection(db, `properties`), { property });
+      const doc_ref = await addDoc(collection(db, `properties`), { ...property });
+      Object.values(images).forEach(async (image: any) => {
+        await updatePropertyImage(doc_ref.id, image).then(
+          async (data) => {
+            set_property({ ...property, images: [...property.images, data]});
+            await updatePropertyImageReference(doc_ref.id, property.images);
+          }
+        )
+      });
       toast(`Entry has successfully been saved!`);
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
@@ -138,6 +145,17 @@ const Form = () => {
               />
             </FormControl>
             <FormControl>
+              <FormLabel sx={label} required>Phone Number</FormLabel>
+              <Input
+                id="phone"
+                type="phone"
+                value={property.phone}
+                fullWidth
+                onChange={e => set_property({ ...property, phone: e.target.value})}
+                required
+              />
+            </FormControl>
+            <FormControl>
               <FormLabel sx={label} required>Price</FormLabel>
               <Input
                 id="price"
@@ -145,8 +163,7 @@ const Form = () => {
                 value={property.price}
                 slotProps={{
                   input: {
-                    min: 0,
-                    className: `hello`
+                    min: 0
                   },
                 }}
                 fullWidth
@@ -242,8 +259,42 @@ const Form = () => {
                 id="description"
                 value={property.description}
                 minRows={3}
+                onChange={(e) => set_property({...property, description: e.target.value})}
               />
             </FormControl>
+            <div>
+              <Button
+                component="label"
+                role={undefined}
+                sx={{mt: `15px`}}
+                tabIndex={-1}
+                variant="outlined"
+                startDecorator={
+                  <SvgIcon>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                      />
+                    </svg>
+                  </SvgIcon>
+                }
+              >
+                Upload Main Image
+                <VisuallyHiddenInput 
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  onChange={e => handleImage(e, `single`)}
+                />
+              </Button>
+            </div>
             <div>
               <Button
                 component="label"
@@ -273,13 +324,15 @@ const Form = () => {
                 <VisuallyHiddenInput 
                   type="file"
                   accept=".jpg, .jpeg, .png"
+                  onChange={e => handleImage(e, `multiple`)}
                   multiple
                 />
               </Button>
             </div>
             <Button
               sx={{mt: `15px`}}
-              onClick={() => is_valid() ? handle_submit() : not_valid()}
+              // onClick={() => is_valid() ? handle_submit() : not_valid()}
+              onClick={handle_submit}
             >
               Submit
             </Button>

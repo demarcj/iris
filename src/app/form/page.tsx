@@ -51,8 +51,8 @@ const Form = () => {
     img: ``,
     images: [],
     name: ``, 
-    phone: ``,
     option: ``, 
+    phone: ``,
     price: 0, 
     size: 0, 
     type: ``
@@ -60,8 +60,10 @@ const Form = () => {
   const [images, set_images] = useState({});
   const [img, set_img] = useState({} as File);
   const [loading, set_loading]  = useState(false);
+  const [submit, set_submit] = useState(false);
+  const [temp_state, set_temp_state] = useState(``);
 
-  const required = [`name`, `address`, `size`, `option`, `price`, `type`];
+  const required = [`address`, `name`, `option`, `phone`, `price`, `size`, `type`];
   const type_menu = [`Condo`, `House`, `Villa`, `Land`];
   const option_menu = [`Sell`, `Rental`];
   const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
@@ -78,14 +80,23 @@ const Form = () => {
     type === `single` ? set_img(files[0]) : set_images(files);
   }
 
-  const is_valid = (): boolean => !required.filter(key => !property[key]).length;
+  const is_valid = (required_list: string[]): boolean => {
+    const has_img = !!img?.name;
+    const required_property = !required_list.filter(key => {
+      if(Array.isArray(property[key])){
+        return !property[key].length;
+      }
+      return !property[key]
+    }).length;
+    return has_img && required_property;
+  };
 
   const not_valid = () => {
-    const values = required.filter(key => !property[key]).join(` and `);
+    const values = required.filter(key => !property[key]).join(`, `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
 
-  const submit_img = async (id: string, image: File, key: string) => {
+  const submit_img = async (id: string, image: File) => {
     try{
       return await updatePropertyImage(id, image);
     } catch(e) {
@@ -93,47 +104,56 @@ const Form = () => {
     }
   }
 
-  const handle_submit = async () => {
-    try{
-      await addDoc(collection(db, `properties`), { ...property });
-      toast(`Entry has successfully been saved!`);
-    } catch(e) {
-      toast(`Something went wrong. Please try again.`);
-      console.error(e);
-    }
-  }
-
-  useEffect(() => {
-    if(!!img.name){
-      const data = async () => {
-        await submit_img(property.id, img, `img`).then(url => {
-          set_property({ ...property, img: url});
-        });
-      }
-      data();
-    }
-  }, [img]);
-
-  useEffect(() => {
-    if(!!Object.keys(images).length){
-      set_loading(true);
+  const get_images = () => {
+    return new Promise((request, reject) => {
       let urls: any[] = [];
       const promise = new Promise((res, rej) => {
         Object.values(images).forEach(async (image, i, arr) => {
-          await submit_img(property.id, image as File, `images`).then(url => {
+          await submit_img(property.id, image as File).then(url => {
             urls = [...urls, url];
             (arr.length === urls.length) && res(urls);
           })
         });
       });
-      promise.then(data => set_property({...property, images: data}))
+      promise.then(data => request(data))
+    })
+  }
+
+  const get_img = () => {
+    return new Promise(async (resolve, reject) => {
+      const promise = new Promise( async (res, rej) => {
+        await submit_img(property.id, img).then(data => res(data) );
+      })
+      promise.then(data => resolve(data));
+    });
+  }
+
+  const handle_submit = async () => {
+    set_loading(true);
+    try{
+      const data_images = await get_images();
+      const data_img = await get_img();
+      set_submit(true);
+      set_property({ ...property, images: data_images, img: data_img })
+    } catch(e) {
+      toast(`Something went wrong. Please try again.`);
+      console.error(e);
       set_loading(false);
+      set_submit(false);
     }
-  }, [images]);
+  }
 
   useEffect(() => {
-    set_loading(property.images === Object.values(images).length);
-    console.log(property)
+    if(!submit){
+      return;
+    }
+    const wait = async () => {
+      await addDoc(collection(db, `properties`), { ...property });
+      set_loading(false);
+      set_submit(false);
+      toast(`Entry has successfully been saved!`);
+    }
+    is_valid([...required, `img`]) && wait();
   }, [property]);
 
   return (
@@ -363,8 +383,7 @@ const Form = () => {
             </div>
             <Button
               sx={{mt: `15px`}}
-              // onClick={() => is_valid() ? handle_submit() : not_valid()}
-              onClick={handle_submit}
+              onClick={() => is_valid(required) ? handle_submit() : not_valid()}
             >
               Submit
             </Button>

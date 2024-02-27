@@ -4,17 +4,6 @@ import styles from "@/_styles/nav_menu.module.css";
 
 export const NavMenu = () => (
   <header className={styles.header}>
-    <ul className={styles.nav}>
-      <li>
-        <div><Link href="/">Home</Link></div>
-      </li>
-      <li>
-        <div><Link href="/properties">Properties</Link></div>
-      </li>
-      <li>
-        <div><Link href="/contact_us">Contact</Link></div>
-      </li>
-    </ul>
     <div className={styles.logo_wrapper}>
       <Link href="/">
         <Image
@@ -26,7 +15,19 @@ export const NavMenu = () => (
         />
       </Link>
     </div>
-    <ul className={[styles.nav, styles.setting].join(' ')}>
+    <ul className={styles.nav}>
+      {/* <li>
+        <div><Link href="/">Home</Link></div>
+      </li> */}
+      <li>
+        <div><Link href="/properties">Properties</Link></div>
+      </li>
+      <li>
+        <div><Link href="/contact_us">Contact</Link></div>
+      </li>
+    </ul>
+    
+    {/* <ul className={[styles.nav, styles.setting].join(' ')}>
       <li>
         <div>Currency - Baht</div>
       </li>
@@ -38,6 +39,6 @@ export const NavMenu = () => (
           <Link href="/form"> List Your Property </Link> 
         </div>
       </li>
-    </ul>
+    </ul> */}
   </header>
 )

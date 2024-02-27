@@ -12,3 +12,12 @@
   width: 100%;
   max-height: 100vh;
 }
+
+@media screen and (width < 769px) {
+  .main{
+    display: block;
+  }
+  .image_container{
+    display: none;
+  }
+}

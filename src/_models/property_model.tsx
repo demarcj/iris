@@ -5,6 +5,7 @@ export type PropertyModel = {
   bathrooms: number;
   bedrooms: number;
   description?: string;
+  hot_deal: boolean;
   id: string;
   images?: string[];
   img: string;
@@ -12,6 +13,8 @@ export type PropertyModel = {
   option?: string;
   phone?: string;
   price: number;
+  property_id: string;
   size?: string;
   type: string;
+  unit_number?: string;
 }

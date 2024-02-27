@@ -4,8 +4,30 @@
   padding: 15px 30px;
 }
 
-.footer_section{
+.footer_section, .contact{
   display: flex;
   align-items: center;
   gap: 15px;
 }
+
+.footer_section, .email{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@media screen and (width < 769px) {
+  .footer, .footer_section{
+    display: block;
+  }
+
+  .footer_section > div{
+    margin-bottom: 15px;
+  }
+}
+
+/* @media screen and (width < 480px) {
+  .footer_section{
+    display: block;
+  }
+} */

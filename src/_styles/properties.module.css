@@ -12,3 +12,15 @@
 .property_name{
   text-align: center;
 }
+
+@media screen and (width < 769px) and (width > 480px) {
+  .properties_container{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (width < 481px) {
+  .properties_container{
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

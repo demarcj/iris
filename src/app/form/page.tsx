@@ -61,13 +61,18 @@ const Form = () => {
   const [img, set_img] = useState({} as File);
   const [loading, set_loading]  = useState(false);
   const [submit, set_submit] = useState(false);
-  const [temp_state, set_temp_state] = useState(``);
 
   const required = [`address`, `name`, `option`, `phone`, `price`, `size`, `type`];
   const type_menu = [`Condo`, `House`, `Villa`, `Land`];
   const option_menu = [`Sell`, `Rental`];
   const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
-  const amenities_menu = [`Microwave`, `Free Wifi`, `Pool`, `Fitness Room`];
+  const amenities_menu = [
+    `Fitness Room`,
+    `Free Wifi`,
+    `Microwave`,
+    `Pool`,
+    `Pet Friendly`,
+  ];
   const label = { color: `white` };
   // const select = { 
   //   "& .MuiSvgIcon-root": { color: "white" }, 
@@ -115,7 +120,7 @@ const Form = () => {
           })
         });
       });
-      promise.then(data => request(data))
+      promise.then(data => request(data));
     })
   }
 
@@ -123,7 +128,7 @@ const Form = () => {
     return new Promise(async (resolve, reject) => {
       const promise = new Promise( async (res, rej) => {
         await submit_img(property.id, img).then(data => res(data) );
-      })
+      });
       promise.then(data => resolve(data));
     });
   }
@@ -143,17 +148,15 @@ const Form = () => {
     }
   }
 
+  const wait = async () => {
+    await addDoc(collection(db, `properties`), { ...property });
+    set_loading(false);
+    set_submit(false);
+    toast(`Entry has successfully been saved!`);
+  }
+
   useEffect(() => {
-    if(!submit){
-      return;
-    }
-    const wait = async () => {
-      await addDoc(collection(db, `properties`), { ...property });
-      set_loading(false);
-      set_submit(false);
-      toast(`Entry has successfully been saved!`);
-    }
-    is_valid([...required, `img`]) && wait();
+    (submit && is_valid([...required, `img`])) && wait();
   }, [property]);
 
   return (
@@ -389,7 +392,7 @@ const Form = () => {
             </Button>
           </Box>
         </div>
-        <div>
+        <div className={styles.image_container}>
           <Image
             className={styles.img}
             src="/hero.jpg" 

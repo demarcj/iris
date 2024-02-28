@@ -322,6 +322,11 @@ const Form = () => {
                 component="label"
                 role={undefined}
                 sx={{mt: `15px`}}
+                slotProps={{
+                  root: {
+                    className: styles.button
+                  },
+                }}
                 tabIndex={-1}
                 variant="outlined"
                 startDecorator={
@@ -355,6 +360,11 @@ const Form = () => {
                 component="label"
                 role={undefined}
                 sx={{mt: `15px`}}
+                slotProps={{
+                  root: {
+                    className: styles.button
+                  },
+                }}
                 tabIndex={-1}
                 variant="outlined"
                 startDecorator={
@@ -386,6 +396,11 @@ const Form = () => {
             </div>
             <Button
               sx={{mt: `15px`}}
+              slotProps={{
+                root: {
+                  className: styles.button
+                },
+              }}
               onClick={() => is_valid(required) ? handle_submit() : not_valid()}
             >
               Submit

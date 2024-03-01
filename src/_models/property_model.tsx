@@ -14,6 +14,7 @@ export type PropertyModel = {
   phone?: string;
   price: number;
   property_id: string;
+  reference_id: string;
   size?: string;
   type: string;
   unit_number?: string;

@@ -20,6 +20,7 @@ import FormLabel from '@mui/joy/FormLabel';
 import FormControl from '@mui/joy/FormControl';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
+import Checkbox from '@mui/joy/Checkbox';
 // import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/joy/CircularProgress';
 import Button from '@mui/joy/Button';
@@ -50,17 +51,21 @@ const Form = () => {
     id: crypto.randomUUID(),
     img: ``,
     images: [],
+    hot_deal: false,
     name: ``, 
     option: ``, 
     phone: ``,
-    price: 0, 
+    price: 0,
+    property_id: ``,
     size: 0, 
-    type: ``
+    type: ``,
+    unit_number: ``
   } as {[key: string]: any});
   const [images, set_images] = useState({});
   const [img, set_img] = useState({} as File);
   const [loading, set_loading]  = useState(false);
   const [submit, set_submit] = useState(false);
+  const [property_id, set_property_id] = useState(``)
 
   const required = [`address`, `name`, `option`, `phone`, `price`, `size`, `type`];
   const type_menu = [`Condo`, `House`, `Villa`, `Land`];
@@ -139,13 +144,27 @@ const Form = () => {
       const data_images = await get_images();
       const data_img = await get_img();
       set_submit(true);
-      set_property({ ...property, images: data_images, img: data_img })
+      set_property({ 
+        ...property, 
+        images: data_images, 
+        img: data_img,
+        property_id: property_id + property.property_id
+      })
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
-      console.error(e);
       set_loading(false);
       set_submit(false);
+      console.error(e);
     }
+  }
+
+  const handle_name = (e: any) => {
+    const get_ref = e.target.value.split(` `)
+      .filter((name: string) => !!name)
+      .map((name: string) => name[0].toLocaleUpperCase())
+      .join(``);
+    set_property({ ...property, name: e.target.value });
+    set_property_id(get_ref)
   }
 
   const wait = async () => {
@@ -158,6 +177,10 @@ const Form = () => {
   useEffect(() => {
     (submit && is_valid([...required, `img`])) && wait();
   }, [property]);
+
+  useEffect(() => {
+    set_property({...property, property_id: `-${property.id.split(`-`)[1]}`});
+  }, []);
 
   return (
     <>
@@ -174,18 +197,36 @@ const Form = () => {
                 id="name"
                 value={property.name}
                 fullWidth
-                onChange={e => set_property({ ...property, name: e.target.value})}
+                onChange={e => handle_name(e)}
                 required
               />
             </FormControl>
             <FormControl>
-              <FormLabel sx={label} required>Property Address</FormLabel>
+              <FormLabel sx={label} required>Address</FormLabel>
               <Input
                 id="address"
                 value={property.address}
                 fullWidth
                 onChange={e => set_property({ ...property, address: e.target.value})}
                 required
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel sx={label}>Unit Number</FormLabel>
+              <Input
+                id="unit_number"
+                value={property.unit_number}
+                fullWidth
+                onChange={e => set_property({ ...property, unit_number: e.target.value})}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel sx={label}>Property ID</FormLabel>
+              <Input
+                id="property_id"
+                value={property_id + property.property_id}
+                fullWidth
+                readOnly
               />
             </FormControl>
             <FormControl>
@@ -314,14 +355,32 @@ const Form = () => {
                 id="description"
                 value={property.description}
                 minRows={3}
+                slotProps={{
+                  textarea: {
+                    className: styles.textarea
+                  }
+                }}
                 onChange={(e) => set_property({...property, description: e.target.value})}
               />
             </FormControl>
+            <div className={styles.checkbox}>
+              <FormControl>
+                <Checkbox
+                  id="hot_deal"
+                  label="Hot Deal"
+                  slotProps={{
+                    root: {
+                      style: label
+                    },
+                  }}
+                  onChange={e => set_property({...property, hot_deal: e.target.checked})}
+                />
+              </FormControl>
+            </div>
             <div>
               <Button
                 component="label"
                 role={undefined}
-                sx={{mt: `15px`}}
                 slotProps={{
                   root: {
                     className: styles.button
@@ -396,11 +455,6 @@ const Form = () => {
             </div>
             <Button
               sx={{mt: `15px`}}
-              slotProps={{
-                root: {
-                  className: styles.button
-                },
-              }}
               onClick={() => is_valid(required) ? handle_submit() : not_valid()}
             >
               Submit

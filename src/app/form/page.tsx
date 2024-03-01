@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Image from "next/image";
+import { PropertyModel } from "@/_models"
 import { ToastContainer, toast } from 'react-toastify';
+import Image from "next/image";
 
 // Firebase
 import { collection, addDoc } from "firebase/firestore";
 import { updatePropertyImage } from "@/firebase/storage";
 import { db } from "@/firebase/firebase";
 
+//Stylings
 import styles from "@/_styles/form.module.css";
 import global from "@/_styles/global.module.css";
 
@@ -21,7 +23,6 @@ import FormControl from '@mui/joy/FormControl';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Checkbox from '@mui/joy/Checkbox';
-// import SendIcon from '@mui/icons-material/Send';
 import CircularProgress from '@mui/joy/CircularProgress';
 import Button from '@mui/joy/Button';
 import SvgIcon from '@mui/joy/SvgIcon';
@@ -60,12 +61,12 @@ const Form = () => {
     size: 0, 
     type: ``,
     unit_number: ``
-  } as {[key: string]: any});
+  } as PropertyModel);
   const [images, set_images] = useState({});
   const [img, set_img] = useState({} as File);
   const [loading, set_loading]  = useState(false);
   const [submit, set_submit] = useState(false);
-  const [property_id, set_property_id] = useState(``)
+  const [property_id, set_property_id] = useState(``);
 
   const required = [`address`, `name`, `option`, `phone`, `price`, `size`, `type`];
   const type_menu = [`Condo`, `House`, `Villa`, `Land`];
@@ -92,17 +93,17 @@ const Form = () => {
 
   const is_valid = (required_list: string[]): boolean => {
     const has_img = !!img?.name;
-    const required_property = !required_list.filter(key => {
-      if(Array.isArray(property[key])){
-        return !property[key].length;
+    const required_property = !required_list.filter((key: string) => {
+      if(Array.isArray(property[key as keyof typeof property])){
+        return (!property[key as keyof typeof property] as any)?.length;
       }
-      return !property[key]
+      return !property[key as keyof typeof property]
     }).length;
     return has_img && required_property;
   };
 
   const not_valid = () => {
-    const values = required.filter(key => !property[key]).join(`, `);
+    const values = required.filter((key: string) => !property[key as keyof typeof property]).join(`, `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
 
@@ -146,8 +147,8 @@ const Form = () => {
       set_submit(true);
       set_property({ 
         ...property, 
-        images: data_images, 
-        img: data_img,
+        images: data_images as string[], 
+        img: data_img as string,
         property_id: property_id + property.property_id
       })
     } catch(e) {
@@ -158,13 +159,16 @@ const Form = () => {
     }
   }
 
-  const handle_name = (e: any) => {
-    const get_ref = e.target.value.split(` `)
+  const get_name_ref = (name: string) => {
+    return name.split(` `)
       .filter((name: string) => !!name)
       .map((name: string) => name[0].toLocaleUpperCase())
       .join(``);
+  }
+
+  const handle_name = (e: any) => {
     set_property({ ...property, name: e.target.value });
-    set_property_id(get_ref)
+    set_property_id(get_name_ref(e.target.value))
   }
 
   const wait = async () => {
@@ -303,7 +307,7 @@ const Form = () => {
             <Select
               id="type"
               value={property.type}
-              onChange={(e: any, value) => set_property({...property, type: value})}
+              onChange={(e: any, value) => set_property({...property, type: value as string})}
             >
               { type_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
             </Select>
@@ -311,7 +315,7 @@ const Form = () => {
             <Select
               id="option"
               value={property.option}
-              onChange={(e: any, value) => set_property({...property, option: value})}
+              onChange={(e: any, value) => set_property({...property, option: value as string})}
             >
               { option_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
             </Select>

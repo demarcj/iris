@@ -4,6 +4,7 @@ export type PropertyModel = {
   area?: string[];
   bathrooms: number;
   bedrooms: number;
+  created_at: Date | string;
   description?: string;
   email: string;
   hot_deal: boolean;
@@ -17,5 +18,6 @@ export type PropertyModel = {
   property_id: string;
   size?: number;
   type: string;
+  updated_at: Date | string;
   unit_number?: string;
 }

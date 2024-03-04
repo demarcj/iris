@@ -6,3 +6,9 @@
   background-color: black;
   opacity: .4;
 }
+
+@media screen and (width < 769px) {
+  .button{
+    width: 100%;
+  }
+}

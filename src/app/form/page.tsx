@@ -11,6 +11,7 @@ import { updatePropertyImage } from "@/firebase/storage";
 import { db } from "@/firebase/firebase";
 
 //Stylings
+import { label } from '@/_styles';
 import styles from "@/_styles/form.module.css";
 import global from "@/_styles/global.module.css";
 
@@ -46,7 +47,8 @@ const Form = () => {
     amenities: [],
     area: [],
     bathrooms: 1, 
-    bedrooms: 0, 
+    bedrooms: 0,
+    created_at: ``, 
     description: ``,
     email: ``, 
     id: crypto.randomUUID(),
@@ -60,12 +62,12 @@ const Form = () => {
     property_id: ``,
     size: 0, 
     type: ``,
+    updated_at: ``,
     unit_number: ``
   } as PropertyModel);
   const [images, set_images] = useState({});
   const [img, set_img] = useState({} as File);
   const [loading, set_loading]  = useState(false);
-  const [submit, set_submit] = useState(false);
   const [property_id, set_property_id] = useState(``);
 
   const required = [`address`, `name`, `option`, `phone`, `price`, `size`, `type`];
@@ -75,15 +77,11 @@ const Form = () => {
   const amenities_menu = [
     `Fitness Room`,
     `Free Wifi`,
+    `Air conditioner`,
     `Microwave`,
     `Pool`,
     `Pet Friendly`,
   ];
-  const label = { color: `white` };
-  // const select = { 
-  //   "& .MuiSvgIcon-root": { color: "white" }, 
-  //   color: 'white' 
-  // };
 
   const handleImage = (event: any, type: `single` | `multiple`) => {
     const target = event?.target;
@@ -132,7 +130,7 @@ const Form = () => {
 
   const get_img = () => {
     return new Promise(async (resolve, reject) => {
-      const promise = new Promise( async (res, rej) => {
+      const promise = new Promise(async (res, rej) => {
         await submit_img(property.id, img).then(data => res(data) );
       });
       promise.then(data => resolve(data));
@@ -144,17 +142,19 @@ const Form = () => {
     try{
       const data_images = await get_images();
       const data_img = await get_img();
-      set_submit(true);
+      const date = new Date();
       set_property({ 
         ...property, 
         images: data_images as string[], 
         img: data_img as string,
-        property_id: property_id + property.property_id
-      })
+        property_id: property_id + property.property_id,
+        created_at: date,
+        updated_at: date
+      });
+      is_valid([...required, `img`]) && wait();
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
       set_loading(false);
-      set_submit(false);
       console.error(e);
     }
   }
@@ -174,13 +174,8 @@ const Form = () => {
   const wait = async () => {
     await addDoc(collection(db, `properties`), { ...property });
     set_loading(false);
-    set_submit(false);
     toast(`Entry has successfully been saved!`);
   }
-
-  useEffect(() => {
-    (submit && is_valid([...required, `img`])) && wait();
-  }, [property]);
 
   useEffect(() => {
     set_property({...property, property_id: `-${property.id.split(`-`)[1]}`});
@@ -263,7 +258,8 @@ const Form = () => {
                 value={property.price}
                 slotProps={{
                   input: {
-                    min: 0
+                    min: 0,
+                    step: 100
                   },
                 }}
                 fullWidth
@@ -345,7 +341,8 @@ const Form = () => {
                 value={property.size}
                 slotProps={{
                   input: {
-                    min: 0
+                    min: 0,
+                    step: 10
                   },
                 }}
                 fullWidth
@@ -387,7 +384,7 @@ const Form = () => {
                 role={undefined}
                 slotProps={{
                   root: {
-                    className: styles.button
+                    className: global.button
                   },
                 }}
                 tabIndex={-1}
@@ -423,13 +420,13 @@ const Form = () => {
                 component="label"
                 role={undefined}
                 sx={{mt: `15px`}}
-                slotProps={{
-                  root: {
-                    className: styles.button
-                  },
-                }}
                 tabIndex={-1}
                 variant="outlined"
+                slotProps={{
+                  root: {
+                    className: global.button
+                  },
+                }}
                 startDecorator={
                   <SvgIcon>
                     <svg
@@ -457,12 +454,20 @@ const Form = () => {
                 />
               </Button>
             </div>
-            <Button
-              sx={{mt: `15px`}}
+            <span
               onClick={() => is_valid(required) ? handle_submit() : not_valid()}
             >
-              Submit
-            </Button>
+              <Button
+                sx={{mt: `15px`}}
+                slotProps={{
+                  root: {
+                    className: global.button
+                  }
+                }}
+              >
+                Submit
+              </Button>
+            </span>
           </Box>
         </div>
         <div className={styles.image_container}>

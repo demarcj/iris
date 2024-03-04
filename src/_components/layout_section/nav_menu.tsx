@@ -25,6 +25,11 @@ export const NavMenu = () => (
       <li>
         <div><Link href="/contact_us">Contact</Link></div>
       </li>
+      <li>
+        <div>
+          <Link href="/form"> List Your Property </Link> 
+        </div>
+      </li>
     </ul>
     
     {/* <ul className={[styles.nav, styles.setting].join(' ')}>

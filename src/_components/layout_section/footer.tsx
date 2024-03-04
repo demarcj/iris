@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from 'next/link';
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import styles from "@/_styles/footer.module.css";
 
@@ -9,6 +10,7 @@ export const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.footer_section}>
         <div> &#169;{year} IRis Pattaya Property </div>
+        <Link href='/login'>Login</Link>
       </div>
       <div className={styles.footer_section}>
         <div className={styles.contact}>

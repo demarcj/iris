@@ -1,0 +1,14 @@
+.login_section{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.login_container{
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  max-width: 800px;
+}

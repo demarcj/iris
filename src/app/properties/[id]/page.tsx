@@ -10,7 +10,7 @@ import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 
 import { PropertyModel } from "@/_models";
 
-import styles from "@/_styles/properties.module.css";
+import styles from "@/_styles/property.module.css";
 
 const load = async (id: string): Promise<PropertyModel> => {
   'use server';
@@ -26,7 +26,7 @@ const load = async (id: string): Promise<PropertyModel> => {
 
 const Property = async ({ params }: {params: {id: string}}) => {
   const property = await load(params.id);
-  console.log(property)
+
   return (
     <main className={styles.main}>
       <section className={[styles.image_container, styles.section].join(` `)}>
@@ -53,14 +53,14 @@ const Property = async ({ params }: {params: {id: string}}) => {
         </div>
       </section>
       <h1 className={styles.property_name}>{property.name} - Near {property.area}</h1>
-      <section className={styles.section}>
-        <h2 className={styles.header}>Property Details</h2>
-        { 
-          !!property.amenities?.length && property.amenities.map((amenity, key) => (
-            <div key={key}> { amenity } </div>
-          )) 
-        }
-      </section>
+      {
+        !!property.amenities?.length && (
+          <section className={styles.section}>
+            <h2 className={styles.header}>Property Amenities</h2>
+            { property.amenities.map((amenity, key) => <div key={key}> { amenity } </div> ) }
+          </section>
+        )
+      }
       <section className={styles.section}>
         <h2 className={styles.header}>Property Details</h2>
         <div className={styles.properties_container}>
@@ -69,10 +69,14 @@ const Property = async ({ params }: {params: {id: string}}) => {
           <div><FontAwesomeIcon icon={faMaximize} /> : {property.size}</div>
         </div>
       </section>
-      <section className={styles.section}>
-        <h2 className={styles.header}>About the Property</h2>
-        <div>{property.description}</div>
-      </section>
+      {
+        !!property.description?.length && (
+          <section className={styles.section}>
+            <h2 className={styles.header}>About the Property</h2>
+            <div>{property.description}</div>
+          </section>
+        )
+      }
     </main>
   )
 }

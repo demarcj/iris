@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { PropertyCard } from './';
+import { PropertyCardHorizontal } from './';
 import { CarouselModel } from "@/_models"
 import 'swiper/css';
 
@@ -26,7 +26,7 @@ export const Carousel: React.FC<CarouselModel> = ({items}) => {
         items.map((item, i) => { 
           return (
             <SwiperSlide key={i}>
-              <PropertyCard card={item} />
+              <PropertyCardHorizontal card={item} />
             </SwiperSlide>
           ) 
         })

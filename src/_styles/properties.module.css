@@ -1,60 +1,28 @@
 .main{
-  width: 1200px;
-  max-width: 100%;
-  margin: 0 auto;
-  --padding: 45px;
-}
-
-.image_container{
-  padding-bottom: var(--padding);
   display: flex;
   gap: 30px;
+}
+
+.main > div{
+  flex: 1;
 }
 
 .properties_container{
-  display: flex;
-  /* grid-template-columns: repeat(3, 1fr); */
-  gap: 30px;
+  overflow-y: scroll;
+  min-width: 515px;
 }
 
-.hero{
-  max-height: 75vh;
-  width: 70%;
+.img{
+  width: 100%;
+  max-height: 100vh;
 }
 
-.hero_side_container{
-  display: grid;
-  grid-template-rows: repeat(2, 1fr);
-  gap: 15px;
-  max-height: 75vh;
-}
-
-.hero_side{
-  height: auto;
-}
-
-.section{
-  padding-bottom: var(--padding);
-}
-
-.property_name{
-  text-align: center;
-  padding-bottom: var(--padding);
-  text-transform: capitalize;
-}
-
-.header{
-  padding-bottom: 15px;
-}
-
-@media screen and (width < 769px) and (width > 480px) {
-  .properties_container{
-    grid-template-columns: repeat(2, 1fr);
+@media screen and (width < 1025px) {
+  .map{
+    display: none;
   }
-}
-
-@media screen and (width < 481px) {
   .properties_container{
-    grid-template-columns: repeat(1, 1fr);
+    min-width: auto;
+    width: 100%;
   }
 }

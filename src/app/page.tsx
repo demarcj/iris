@@ -8,19 +8,37 @@ import { db } from "@/firebase/firebase";
 import styles from "./page.module.css";
 import Image from 'next/image';
 import { Carousel } from "@/_components/ui";
+import { PropertyModel } from '@/_models';
 
+type MainSection = {
+  name: string;
+  properties: PropertyModel[]
+}
 
 export default function Home() {
-  const [properties, set_properties] = useState([] as any[]);
+  const [properties_section, set_properties_section] = useState([] as MainSection[])
 
   const main_sections = [`Popular Properties`, `Hot Deal Properties`];
   
   useEffect(() => {
     const q = query(collection(db, `properties`));
     onSnapshot(q, (querySnapshot) => {
-      let items: any[] = [];
-      querySnapshot.forEach(item => items = !!Object.keys(item.data()).length ? [{...item.data()}, ...items] : items);
-      !!items.length && set_properties(items);
+      let items: PropertyModel[] = [];
+      querySnapshot.forEach(item => items = !!Object.keys(item.data()).length ? [{...item.data()}, ...items] as PropertyModel[] : items);
+      const main_list: MainSection[] = main_sections.map((section, index) => {
+        let properties;
+        if(index === 0){
+          properties = !!items.length ? items : [];
+        }
+        if(index === 1){
+          properties = !!items.length ? items.filter(item => item.hot_deal) : [];
+        }
+        return {
+          name: section,
+          properties: properties as PropertyModel[]
+        }
+      });
+      set_properties_section(main_list);
     });
   }, []);
   
@@ -36,10 +54,10 @@ export default function Home() {
         />
       </section>
       <main>
-        {!!properties.length && main_sections.map((section, i) => (
+        {!!properties_section.length && properties_section.map((section, i) => (
           <section key={i} className={styles.carousel_container}>
-            <h2 className={styles.carousel_header}>{ section }</h2>
-            <Carousel items={properties}/>
+            <h2 className={styles.carousel_header}>{ section.name }</h2>
+            <Carousel items={section.properties}/>
           </section>
         ))}
       </main>

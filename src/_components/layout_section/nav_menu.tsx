@@ -4,17 +4,15 @@ import styles from "@/_styles/nav_menu.module.css";
 
 export const NavMenu = () => (
   <header className={styles.header}>
-    <div className={styles.logo_wrapper}>
-      <Link href="/">
-        <Image
-          className={styles.logo}
-          src="/logo.png" 
-          alt=""
-          width={75}
-          height={75}
-        />
-      </Link>
-    </div>
+    <Link className={styles.logo_wrapper} href="/">
+      <Image
+        className={styles.logo}
+        src="/logo.png" 
+        alt=""
+        width={75}
+        height={75}
+      />
+    </Link>
     <ul className={styles.nav}>
       {/* <li>
         <div><Link href="/">Home</Link></div>

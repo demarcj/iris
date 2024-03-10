@@ -1,0 +1,49 @@
+.main{
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+  --padding: 45px;
+}
+
+.image_container{
+  padding-bottom: var(--padding);
+  display: flex;
+  gap: 30px;
+}
+
+.properties_container{
+  display: flex;
+  /* grid-template-columns: repeat(3, 1fr); */
+  gap: 30px;
+}
+
+.hero{
+  max-height: 75vh;
+  width: 70%;
+}
+
+.hero_side_container{
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  gap: 15px;
+  max-height: 75vh;
+}
+
+.hero_side{
+  height: auto;
+}
+
+.section{
+  padding-bottom: var(--padding);
+}
+
+.property_name{
+  text-align: center;
+  padding-bottom: var(--padding);
+  text-transform: capitalize;
+}
+
+.header{
+  padding-bottom: 15px;
+}
+

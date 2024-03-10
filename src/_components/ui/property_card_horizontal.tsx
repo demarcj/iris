@@ -5,9 +5,9 @@ import { PropertyCardModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 import 'swiper/css';
-import styles from "@/_styles/card.module.css";
+import styles from "@/_styles/property_card_horizontal.module.css";
 
-export const PropertyCard: React.FC<PropertyCardModel> = ({card}) =>  {
+export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({card}) =>  {
 
   return (
     <Link

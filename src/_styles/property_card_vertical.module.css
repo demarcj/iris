@@ -1,0 +1,46 @@
+.carousel_item{
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.carousel_item:last-of-type{
+  margin-bottom: 60px;
+  margin-bottom: 0;
+}
+
+.image_container{
+  display: grid;
+  place-items: center;
+  padding: 5px;
+}
+
+.carousel_img{
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+}
+
+.carousel_content{
+  padding: 15px;
+}
+
+.property_name{
+  padding-bottom: 15px;
+}
+
+.property_detail{
+  display: flex;
+  gap: 15px;
+  padding-top: 15px;
+}
+
+.elegant_style{
+  font-style: italic;
+  font-size: 18px;
+}

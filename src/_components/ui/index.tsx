@@ -1,2 +1,3 @@
 export * from './carousel'
-export * from './slides';
+export * from './property_card_horizontal';
+export * from './property_card_vertical';

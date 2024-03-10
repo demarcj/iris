@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { PropertyModel } from "@/_models"
 import { ToastContainer, toast } from 'react-toastify';
 import Image from "next/image";

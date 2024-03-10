@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 // Firebase
-// import { collection, addDoc } from "firebase/firestore";
-// import { db } from "@/firebase/firebase";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "@/firebase/firebase";
 
 // Material
 import Box from '@mui/material/Box';
@@ -38,6 +38,16 @@ const Login = () => {
   const handle_submit = async () => {
     try{
       // await addDoc(collection(db, `properties`), { ...property });
+      
+      const docRef = doc(db, "login", login.password);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        // docSnap.data() will be undefined in this case
+        toast("Incorrect name or password!");
+      }
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
       console.error(e);

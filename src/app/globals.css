@@ -41,9 +41,28 @@ input{
   color: white;
 }
 
+html:has(.property_main){
+  height: 100%;
+  body, main{
+    height: 100%;
+  }
+  body{
+    /* max-height: 100vh; */
+    &>[class*="layout"]{
+      overflow: hidden;
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   /* :root {} */
   html {
     color-scheme: dark;
+  }
+}
+
+@media screen and (width < 1025px) {
+  main{
+    padding: 0 15px;
   }
 }

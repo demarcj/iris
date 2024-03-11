@@ -1,11 +1,9 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
-// Firebase
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "@/firebase/firebase";
+import { get_login } from '@/_server';
 
 // Material
 import Box from '@mui/material/Box';
@@ -24,35 +22,26 @@ const Login = () => {
     password: ``,
     user_name: ``
   });
+
   const required = [`user_name`, `password`];
 
   const is_valid = (required_list: string[]): boolean => {
     return !required_list.filter((key: string) => !login[key as keyof typeof login]).length;
   };
 
-  const not_valid = () => {
+  const not_valid = async () => {
     const values = required.filter((key: string) => !login[key as keyof typeof login]).join(`, `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
-
-  const handle_submit = async () => {
-    try{
-      // await addDoc(collection(db, `properties`), { ...property });
-      
-      const docRef = doc(db, "login", login.password);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-      } else {
-        // docSnap.data() will be undefined in this case
-        toast("Incorrect name or password!");
-      }
-    } catch(e) {
-      toast(`Something went wrong. Please try again.`);
-      console.error(e);
-    }
+  
+  const handle_submit = async (e: any) => {
+    e.preventDefault();
+    const permission = await get_login(login);
+    // toast("Incorrect name or password!");
+    // toast(`Something went wrong. Please try again.`);
+    console.log(permission)
   }
+
 
   return (
     <>
@@ -84,7 +73,7 @@ const Login = () => {
                   required
                 />
               </FormControl>
-              <span onClick={() => is_valid(required) ? handle_submit() : not_valid()} >
+              <span onClick={e => is_valid(required) ? handle_submit(e) : not_valid()} >
                 <Button
                   sx={{mt: `15px`}}
                   slotProps={{

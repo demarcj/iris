@@ -37,8 +37,9 @@ label{
 }
 
 input{
-  background-color: black;
-  color: white;
+  background-color: white;
+  border: none;
+  color: #000;
 }
 
 html:has(.property_main){

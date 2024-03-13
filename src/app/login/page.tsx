@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import { get_login } from '@/_server';
 
+// import { LoginModel } from "@/_models";
+
 // Material
 import Box from '@mui/material/Box';
 import Input from '@mui/joy/Input';
@@ -33,24 +35,26 @@ const Login = () => {
     const values = required.filter((key: string) => !login[key as keyof typeof login]).join(`, `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
+
+  const route = (url: string) => location.href = url;
   
   const handle_submit = async (e: any) => {
     e.preventDefault();
-    const permission = await get_login(login);
-    // toast("Incorrect name or password!");
-    // toast(`Something went wrong. Please try again.`);
-    console.log(permission)
+    const fetch_login = await get_login(login);
+    console.log(fetch_login)
+    !!Object.keys(fetch_login)?.length && localStorage.setItem(`user`, JSON.stringify(fetch_login))
+    !!Object.keys(fetch_login)?.length ? route(`/message`) : toast("Incorrect name or password!");
   }
-
 
   return (
     <>
-      <main className={styles.login_section}>
+      <main className={styles.login_main}>
         <section className={styles.login_container}>
             <Box
               component="form"
               noValidate
               autoComplete="off"
+              onSubmit={e => is_valid(required) ? handle_submit(e) : not_valid()}
             >
               <FormControl>
                 <FormLabel sx={label} required>User Name</FormLabel>
@@ -73,9 +77,10 @@ const Login = () => {
                   required
                 />
               </FormControl>
-              <span onClick={e => is_valid(required) ? handle_submit(e) : not_valid()} >
+              <span>
                 <Button
                   sx={{mt: `15px`}}
+                  type='submit'
                   slotProps={{
                     root: {
                       className: global.button

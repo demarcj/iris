@@ -1,11 +1,11 @@
-.login_main{
+.main{
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
 }
 
-.login_container{
+.section{
   border: 1px solid white;
   border-radius: 5px;
   padding: 15px;
@@ -13,11 +13,11 @@
   max-width: 800px;
 }
 
-.input_container{
-  display: grid;
-  padding-bottom: 16px;
+.detail,
+.header_container {
+  text-align: center;
 }
 
-.label{
-  padding-bottom: 15px;
+.header_container{
+  padding-bottom: 45px;
 }

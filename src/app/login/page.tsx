@@ -41,7 +41,6 @@ const Login = () => {
   const handle_submit = async (e: any) => {
     e.preventDefault();
     const fetch_login = await get_login(login);
-    console.log(fetch_login)
     !!Object.keys(fetch_login)?.length && localStorage.setItem(`user`, JSON.stringify(fetch_login))
     !!Object.keys(fetch_login)?.length ? route(`/message`) : toast("Incorrect name or password!");
   }

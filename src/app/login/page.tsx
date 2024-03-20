@@ -55,30 +55,34 @@ const Login = () => {
               autoComplete="off"
               onSubmit={e => is_valid(required) ? handle_submit(e) : not_valid()}
             >
-              <FormControl>
-                <FormLabel sx={label} required>User Name</FormLabel>
-                <Input
-                  id="address"
-                  value={login.user_name}
-                  fullWidth
-                  onChange={e => set_login({...login, user_name: e.target.value})}
-                  required
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel sx={label} required>Password</FormLabel>
-                <Input
-                  id="address"
-                  value={login.password}
-                  fullWidth
-                  slotProps={{ input: { type: 'password' } }}
-                  onChange={e => set_login({...login, password: e.target.value})}
-                  required
-                />
-              </FormControl>
+              <div className={styles.input_wrapper}>
+                <FormControl>
+                  <FormLabel sx={label} required>User Name</FormLabel>
+                  <Input
+                    id="user_name"
+                    value={login.user_name}
+                    fullWidth
+                    onChange={e => set_login({...login, user_name: e.target.value})}
+                    required
+                  />
+                </FormControl>
+              </div>
+              <div className={styles.input_wrapper}>
+                <FormControl>
+                  <FormLabel sx={label} required>Password</FormLabel>
+                  <Input
+                    id="password"
+                    value={login.password}
+                    fullWidth
+                    slotProps={{ input: { type: 'password' } }}
+                    onChange={e => set_login({...login, password: e.target.value})}
+                    required
+                  />
+                </FormControl>
+              </div>
               <span>
                 <Button
-                  sx={{mt: `15px`}}
+                  sx={{mt: `5px`}}
                   type='submit'
                   slotProps={{
                     root: {

@@ -4,23 +4,20 @@ import {useState, useEffect} from "react";
 import { PropertyCardVertical } from "@/_components/ui";
 import styles from "@/_styles/properties.module.css";
 
+import { get_properties } from "@/_server";
+import { PropertyModel } from "@/_models";
+
 // Nextjs
 import Image from 'next/image';
 
-// Firebase
-import { collection, getDoc, query, onSnapshot } from 'firebase/firestore';
-import { db } from "@/firebase/firebase";
-
 const Properties = () => {
-  const [cards, set_cards] = useState([] as any[])
+  const [cards, set_cards] = useState([] as PropertyModel[]);
 
   useEffect(() => {
-    const q = query(collection(db, `properties`));
-    onSnapshot(q, (querySnapshot) => {
-      let items: any[] = [];
-      querySnapshot.forEach(item => { items = [item.data(), ...items]; });
-      set_cards(items);
-    })
+    (async () => {
+      const data = await get_properties();
+      set_cards(data.properties);
+    })();
   }, []);
   
 

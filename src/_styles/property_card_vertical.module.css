@@ -5,7 +5,7 @@
   overflow: hidden;
   margin-bottom: 30px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr minmax(50%, 1fr);
 }
 
 .carousel_item:last-of-type{
@@ -28,16 +28,46 @@
 
 .carousel_content{
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .property_name{
+  padding-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.location_deal{
   padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.amenities{
+  display: flex;
+  gap: 10px;
+  text-transform: capitalize;
+  padding-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.more{
+  color: darkblue;
+}
+
+.more:hover{
+  text-decoration: underline;
+}
+
+.description{
+  padding-bottom: 10px;
 }
 
 .property_detail{
   display: flex;
-  gap: 15px;
   padding-top: 15px;
+  justify-content: space-between;
 }
 
 .elegant_style{

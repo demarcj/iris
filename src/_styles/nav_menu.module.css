@@ -3,6 +3,7 @@
   grid-template-columns: auto 1fr;
   gap: 15px;
   padding: 10px 30px;
+  background-color: black;
 }
 
 .nav{

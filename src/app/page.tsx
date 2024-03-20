@@ -1,9 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-// Firebase
-import { collection, getDoc, query, onSnapshot } from 'firebase/firestore';
-import { db } from "@/firebase/firebase";
+// server
+import { get_properties, get_hot_deal } from '@/_server';
 
 import styles from "./page.module.css";
 import Image from 'next/image';
@@ -12,34 +11,29 @@ import { PropertyModel } from '@/_models';
 
 type MainSection = {
   name: string;
-  properties: PropertyModel[]
+  properties: PropertyModel[];
 }
 
 export default function Home() {
-  const [properties_section, set_properties_section] = useState([] as MainSection[])
+  const [properties_section, set_properties_section] = useState([] as MainSection[]);
 
   const main_sections = [`Popular Properties`, `Hot Deal Properties`];
   
   useEffect(() => {
-    const q = query(collection(db, `properties`));
-    onSnapshot(q, (querySnapshot) => {
-      let items: PropertyModel[] = [];
-      querySnapshot.forEach(item => items = !!Object.keys(item.data()).length ? [{...item.data()}, ...items] as PropertyModel[] : items);
+    (async() => {
+      const popular = await get_properties();
+      const hot_deal = await get_hot_deal();
       const main_list: MainSection[] = main_sections.map((section, index) => {
-        let properties;
-        if(index === 0){
-          properties = !!items.length ? items : [];
-        }
-        if(index === 1){
-          properties = !!items.length ? items.filter(item => item.hot_deal) : [];
-        }
+        const data = index === 0 ? popular : hot_deal;
+        const properties = !!data.properties?.length ? data.properties : []; 
+  
         return {
           name: section,
           properties: properties as PropertyModel[]
         }
-      });
+      })
       set_properties_section(main_list);
-    });
+    })()
   }, []);
   
   return (
@@ -54,12 +48,18 @@ export default function Home() {
         />
       </section>
       <main>
-        {!!properties_section.length && properties_section.map((section, i) => (
-          <section key={i} className={styles.carousel_container}>
-            <h2 className={styles.carousel_header}>{ section.name }</h2>
-            <Carousel items={section.properties}/>
-          </section>
-        ))}
+        {
+          !!properties_section.length && properties_section.map((section, i) => (
+            <section 
+              key={i} 
+              className={styles.carousel_container}
+              style={{display: !!section.properties.length ? `block` : `none`}}
+            >
+              <h2 className={styles.carousel_header}>{ section.name }</h2>
+              <Carousel items={section.properties}/>
+            </section>
+          ))
+        }
       </main>
     </>
   );

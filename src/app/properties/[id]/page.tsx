@@ -1,6 +1,3 @@
-import { collection, getDoc, query, onSnapshot } from 'firebase/firestore';
-import { db } from "@/firebase/firebase"
-
 // Nextjs
 import Image from 'next/image';
 
@@ -8,24 +5,12 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 
-import { PropertyModel } from "@/_models";
+import { get_property } from '@/_server';
 
 import styles from "@/_styles/property.module.css";
 
-const load = async (id: string): Promise<PropertyModel> => {
-  'use server';
-  return new Promise((res, rej) => {
-    const q = query(collection(db, `properties`));
-    onSnapshot(q, (querySnapshot) => {
-      let items: any[] = [];
-      querySnapshot.forEach(item => { items = [item.data(), ...items]; });
-      res(items.find(item => item.id === id));
-    });
-  })
-}
-
 const Property = async ({ params }: {params: {id: string}}) => {
-  const property = await load(params.id);
+  const property = await get_property(params.id);
 
   return (
     <main className={styles.main}>
@@ -57,7 +42,13 @@ const Property = async ({ params }: {params: {id: string}}) => {
         !!property.amenities?.length && (
           <section className={styles.section}>
             <h2 className={styles.header}>Property Amenities</h2>
-            { property.amenities.map((amenity, key) => <div key={key}> { amenity } </div> ) }
+            <div className={styles.amenities}>
+              { 
+                property.amenities.map((amenity, key) => (
+                  <div key={key}>{ amenity.replaceAll(`_`, ` `) }</div>
+                ))
+              }
+            </div>
           </section>
         )
       }

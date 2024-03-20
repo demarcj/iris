@@ -1,13 +1,17 @@
 "use client";
 import Image from "next/image";
 import Link from 'next/link';
+
 import { PropertyCardModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import Chip from '@mui/joy/Chip';
 import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 import 'swiper/css';
 import styles from "@/_styles/property_card_vertical.module.css";
 
 export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card}) =>  {
+  const character_max = 100;
 
   return (
     <Link
@@ -24,13 +28,43 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card}) =>  {
         />
       </div>
       <div className={styles.carousel_content}>
-        <h3 className={styles.property_name}>{card.name}</h3>
-        <div className={styles.property_detail}>
-          <div><FontAwesomeIcon icon={faBed} /> : {card.bedrooms}</div>
-          <div><FontAwesomeIcon icon={faHotel} /> : {card.type}</div>
-          <div><FontAwesomeIcon icon={faMaximize} /> : {card.size}</div>
+        <div>
+          <div className={styles.location_deal}>
+            <div>Pattaya</div>
+            { card.hot_deal && <Chip color="danger" size="lg" variant="soft">Hot Deal</Chip> }
+          </div>
+          <h2 className={styles.property_name}>{card.name}</h2>
+          <div>
+            <div className={styles.amenities}>
+              {
+                card.amenities?.filter((amenity, i) => i < 3)
+                  .map((amenity, i) => <Chip color="primary" size="lg" variant="soft" key={i}>{ amenity.replaceAll(`_`, ` `) }</Chip>)
+              }
+            </div>
+            {
+              (card?.amenities && card.amenities?.length > 3) && (
+                <div className={styles.more}>
+                  +{card.amenities?.length ? (card.amenities?.length as number) - 3 : 0} More
+                </div>
+              )
+            }
+          </div>
+          { !!card?.description && (
+              <div className={styles.description}>
+                {card.description.substring(0, character_max)}
+                {card.description.length > character_max && `...`}
+              </div>
+            )
+          }
         </div>
-        <div><span className={styles.elegant_style}>Price: </span> ${card.price} </div>
+        <div>
+          <div><span className={styles.elegant_style}>Price: </span> ${card.price} </div>
+          <div className={styles.property_detail}>
+            <div><FontAwesomeIcon icon={faBed} /> : {card.bedrooms}</div>
+            <div><FontAwesomeIcon icon={faHotel} /> : {card.type}</div>
+            <div><FontAwesomeIcon icon={faMaximize} /> : {card.size}</div>
+          </div>
+        </div>
       </div>
     </Link>
   )

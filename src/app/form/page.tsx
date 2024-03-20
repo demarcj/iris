@@ -220,146 +220,168 @@ const Form = () => {
             noValidate
             autoComplete="off"
           >
-            <FormControl>
-              <FormLabel sx={label} required>Property Name</FormLabel>
-              <Input
-                id="name"
-                value={property.name}
-                fullWidth
-                onChange={e => set_property({ ...property, name: e.target.value })}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label} required>Address</FormLabel>
-              <Input
-                id="address"
-                value={property.address}
-                fullWidth
-                onChange={e => set_property({ ...property, address: e.target.value})}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label}>Unit Number</FormLabel>
-              <Input
-                id="unit_number"
-                value={property.unit_number}
-                fullWidth
-                onChange={e => set_property({ ...property, unit_number: e.target.value})}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label}>Property ID</FormLabel>
-              <Input
-                id="property_id"
-                value={property.property_id}
-                slotProps={{
-                  root:{
-                    style: {
-                      backgroundColor: `gray`,
-                      color: `black`,
-                      cursor: `not-allowed`,
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label} required>Property Name</FormLabel>
+                <Input
+                  id="name"
+                  value={property.name}
+                  fullWidth
+                  onChange={e => set_property({ ...property, name: e.target.value })}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label} required>Address</FormLabel>
+                <Input
+                  id="address"
+                  value={property.address}
+                  fullWidth
+                  onChange={e => set_property({ ...property, address: e.target.value})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label}>Unit Number</FormLabel>
+                <Input
+                  id="unit_number"
+                  value={property.unit_number}
+                  fullWidth
+                  onChange={e => set_property({ ...property, unit_number: e.target.value})}
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label}>Property ID</FormLabel>
+                <Input
+                  id="property_id"
+                  value={property.property_id}
+                  slotProps={{
+                    root:{
+                      style: {
+                        backgroundColor: `gray`,
+                        color: `black`,
+                        cursor: `not-allowed`,
+                      }
+                    },
+                    input: {
+                      style: {
+                        cursor: `not-allowed`,
+                      }
                     }
-                  },
-                  input: {
-                    style: {
-                      cursor: `not-allowed`,
-                    }
-                  }
-                }}
-                fullWidth
-                readOnly
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label} required>Email</FormLabel>
-              <Input
-                id="email"
-                type="email"
-                value={property.email}
-                fullWidth
-                onChange={e => set_property({ ...property, email: e.target.value})}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label} required>Phone Number</FormLabel>
-              <Input
-                id="phone"
-                type="phone"
-                value={property.phone}
-                fullWidth
-                onChange={e => set_property({ ...property, phone: e.target.value})}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label} required>Price</FormLabel>
-              <Input
-                id="price"
-                type="number"
-                value={property.price}
-                slotProps={{
-                  input: {
-                    min: 0,
-                    step: 100
-                  },
-                }}
-                fullWidth
-                onChange={e => set_property({ ...property, price: parseInt(e.target.value)})}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label}>Bathrooms No.</FormLabel>
-              <Input
-                id="bathrooms"
-                type="number"
-                value={property.bathrooms}
-                slotProps={{
-                  input: {
-                    min: 0
-                  },
-                }}
-                fullWidth
-                onChange={e => set_property({ ...property, bathrooms: parseInt(e.target.value)})}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label}>Bedrooms No.</FormLabel>
-              <Input
-                id="bedrooms"
-                type="number"
-                value={property.bedrooms}
-                slotProps={{
-                  input: {
-                    min: 0
-                  },
-                }}
-                fullWidth
-                onChange={e => set_property({ ...property, bedrooms: parseInt(e.target.value)})}
-                required
-              />
-            </FormControl>
-            <FormLabel style={label} required htmlFor="type">Property Type</FormLabel>
-            <Select
-              id="type"
-              value={property.type}
-              onChange={(e: any, value) => set_property({...property, type: value as string})}
-            >
-              { type_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
-            </Select>
-            <FormLabel style={label} required htmlFor="option"> Property Option</FormLabel>
-            <Select
-              id="option"
-              value={property.option}
-              onChange={(e: any, value) => set_property({...property, option: value as string})}
-            >
-              { option_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
-            </Select>
-            <FormLabel style={label} htmlFor="area">Nearby Areas</FormLabel>
+                  }}
+                  fullWidth
+                  readOnly
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label} required>Email</FormLabel>
+                <Input
+                  id="email"
+                  type="email"
+                  value={property.email}
+                  fullWidth
+                  onChange={e => set_property({ ...property, email: e.target.value})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label} required>Phone Number</FormLabel>
+                <Input
+                  id="phone"
+                  type="phone"
+                  value={property.phone}
+                  fullWidth
+                  onChange={e => set_property({ ...property, phone: e.target.value})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label} required>Price</FormLabel>
+                <Input
+                  id="price"
+                  type="number"
+                  value={property.price}
+                  slotProps={{
+                    input: {
+                      min: 0,
+                      step: 100
+                    },
+                  }}
+                  fullWidth
+                  onChange={e => set_property({ ...property, price: parseInt(e.target.value)})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label}>Bathrooms No.</FormLabel>
+                <Input
+                  id="bathrooms"
+                  type="number"
+                  value={property.bathrooms}
+                  slotProps={{
+                    input: {
+                      min: 0
+                    },
+                  }}
+                  fullWidth
+                  onChange={e => set_property({ ...property, bathrooms: parseInt(e.target.value)})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label}>Bedrooms No.</FormLabel>
+                <Input
+                  id="bedrooms"
+                  type="number"
+                  value={property.bedrooms}
+                  slotProps={{
+                    input: {
+                      min: 0
+                    },
+                  }}
+                  fullWidth
+                  onChange={e => set_property({ ...property, bedrooms: parseInt(e.target.value)})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormLabel style={label} required htmlFor="type">Property Type</FormLabel>
+              <Select
+                id="type"
+                value={property.type}
+                onChange={(e: any, value) => set_property({...property, type: value as string})}
+              >
+                { type_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+              </Select>
+            </div>
+            <div className={styles.input_container}>
+              <FormLabel style={label} required htmlFor="option"> Property Option</FormLabel>
+              <Select
+                id="option"
+                value={property.option}
+                onChange={(e: any, value) => set_property({...property, option: value as string})}
+              >
+                { option_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+              </Select>
+            </div>
+            {/* <FormLabel style={label} htmlFor="area">Nearby Areas</FormLabel>
             <Select
               id="area"
               value={property.area}
@@ -367,47 +389,53 @@ const Form = () => {
               multiple
             >
               { area_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
-            </Select>
-            <FormLabel style={label} htmlFor="amenities">Amenities</FormLabel>
-            <Select
-              id="amenities"
-              value={property.amenities}
-              onChange={(e: any, value) => set_property({...property, amenities: structuredClone(value)})}
-              multiple
-            >
-              { amenities_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
-            </Select>
-            <FormControl>
-              <FormLabel sx={label} required>Land Size</FormLabel>
-              <Input
-                id="size"
-                type="number"
-                value={property.size}
-                slotProps={{
-                  input: {
-                    min: 0,
-                    step: 10
-                  },
-                }}
-                fullWidth
-                onChange={(e: any) => set_property({ ...property, size: parseInt(e.target.value)})}
-                required
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel sx={label}>Description</FormLabel>
-              <Textarea
-                id="description"
-                value={property.description}
-                minRows={3}
-                slotProps={{
-                  textarea: {
-                    className: styles.textarea
-                  }
-                }}
-                onChange={(e) => set_property({...property, description: e.target.value})}
-              />
-            </FormControl>
+            </Select> */}
+            <div className={styles.input_container}>
+              <FormLabel style={label} htmlFor="amenities">Amenities</FormLabel>
+              <Select
+                id="amenities"
+                value={property.amenities}
+                onChange={(e: any, value) => set_property({...property, amenities: structuredClone(value)})}
+                multiple
+              >
+                { amenities_menu.map((menu, i) => <Option key={i} value={ menu.toLocaleLowerCase().replaceAll(` `, `_`) }>{ menu }</Option>) }
+              </Select>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label} required>Land Size</FormLabel>
+                <Input
+                  id="size"
+                  type="number"
+                  value={property.size}
+                  slotProps={{
+                    input: {
+                      min: 0,
+                      step: 10
+                    },
+                  }}
+                  fullWidth
+                  onChange={(e: any) => set_property({ ...property, size: parseInt(e.target.value)})}
+                  required
+                />
+              </FormControl>
+            </div>
+            <div className={styles.input_container}>
+              <FormControl>
+                <FormLabel sx={label}>Description</FormLabel>
+                <Textarea
+                  id="description"
+                  value={property.description}
+                  minRows={3}
+                  slotProps={{
+                    textarea: {
+                      className: styles.textarea
+                    }
+                  }}
+                  onChange={(e) => set_property({...property, description: e.target.value})}
+                />
+              </FormControl>
+            </div>
             <div className={styles.checkbox}>
               <FormControl>
                 <Checkbox

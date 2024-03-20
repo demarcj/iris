@@ -1,4 +1,5 @@
 import { contact } from '@/_data_local';
+import { format_phone_number } from "@/_function";
 
 import Link from 'next/link';
 
@@ -8,22 +9,8 @@ import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import styles from "@/_styles/footer.module.css";
 
 export const Footer = () => {
-  const { email, facebook, line, phone_number } = contact
+  const { email, facebook, line, phone_number } = contact;
   const year = new Date().getFullYear();
-
-  const format_phone_number = (number: number) => {
-    const number_list = `${number}`.split(``);
-    return number_list.map((num, index) => {
-      if(index < 2){
-        return ``;
-      } else if(index > 7) {
-        return num;
-      } else if(index === 4 || index === 7) {
-        return num + ` `;
-      }
-      return num;
-    });
-  }
 
   return (
     <footer className={styles.footer}>

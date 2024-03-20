@@ -30,7 +30,7 @@
 }
 
 .hero_side{
-  height: auto;
+  height: 100%;
 }
 
 .section{
@@ -40,6 +40,12 @@
 .property_name{
   text-align: center;
   padding-bottom: var(--padding);
+  text-transform: capitalize;
+}
+
+.amenities{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   text-transform: capitalize;
 }
 

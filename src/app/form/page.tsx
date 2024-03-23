@@ -43,6 +43,7 @@ const VisuallyHiddenInput = styled('input')`
 
 const property_default = {
   address: ``,
+  available_at: ``,
   amenities: [],
   area: [],
   bathrooms: 1, 
@@ -72,10 +73,10 @@ const Form = () => {
   const [loading, set_loading] = useState(false);
   const [property_id_data, set_property_id_data] = useState({id: ``, data: {} as any});
   
-  const required = [`address`, `name`, `option`, `phone`, `price`, `size`, `type`];
+  const required = [`address`, `available_at`, `name`, `option`, `phone`, `price`, `size`, `type`];
   const type_menu = [`Condo`, `House`, `Villa`, `Land`];
   const option_menu = [`Sell`, `Rental`];
-  const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
+  // const area_menu = [`Big Buddha`, `Walking Street`, `Pattaya Beach`, `Jomtien Beach`];
   const amenities_menu = [
     `Fitness Room`,
     `Free Wifi`,
@@ -202,9 +203,7 @@ const Form = () => {
 
   const get_property_id = () => !!property_id_data.id.length ? number_convert(property_id_data.data.property_id) : query_property_id();
 
-  useEffect(() => { 
-    get_property_id(); 
-  }, []);
+  useEffect(() => get_property_id(), []);
   
   useEffect(() => { 
     ((loading && is_valid([...required, `img`])) && update_property());
@@ -214,7 +213,7 @@ const Form = () => {
   return (
     <>
       <main className={styles.main}>
-        <div id="form">
+        <div id="form" className={styles.form_container}>
           <Box
             component="form"
             noValidate
@@ -435,6 +434,24 @@ const Form = () => {
                   onChange={(e) => set_property({...property, description: e.target.value})}
                 />
               </FormControl>
+            </div>
+            <div>
+              <FormControl>
+                <FormLabel sx={label} required>Available At</FormLabel>
+                <Input
+                  id="available_at"
+                  type="date"
+                  value={property.available_at}
+                  // slotProps={{
+                  //   input: {
+                  //   },
+                  // }}
+                  fullWidth
+                  onChange={(e: any) => set_property({ ...property, available_at: e.target.value})}
+                  required
+                />
+              </FormControl>
+              {/* <input type="date" id="start" name="trip-start" value="2018-07-22" /> */}
             </div>
             <div className={styles.checkbox}>
               <FormControl>

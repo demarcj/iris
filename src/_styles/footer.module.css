@@ -17,6 +17,12 @@
   overflow: hidden;
 }
 
+.login{
+  border: 2px solid var(--dark-green);
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
 @media screen and (width < 1025px) {
   .footer{
     padding: 15px;

@@ -37,7 +37,8 @@ const Property = async ({ params }: {params: {id: string}}) => {
           }
         </div>
       </section>
-      <h1 className={styles.property_name}>{property.name} - Near {property.area}</h1>
+      {/* <h1 className={styles.property_name}>{property.name} - Near {property.area}</h1> */}
+      <h1 className={styles.property_name}>{property.name}</h1>
       {
         !!property.amenities?.length && (
           <section className={styles.section}>

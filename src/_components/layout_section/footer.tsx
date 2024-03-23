@@ -16,7 +16,7 @@ export const Footer = () => {
     <footer className={styles.footer}>
       <div className={[styles.footer_section, styles.footer_left].join(` `)}>
         <div> &#169;{year} IRis Pattaya Property </div>
-        <Link href='/login'>Login</Link>
+        <Link className={styles.login} href='/login'>Login</Link>
       </div>
       <div className={[styles.footer_section, styles.footer_right].join(` `)}>
         <div className={styles.contact}>

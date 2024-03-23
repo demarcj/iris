@@ -1,5 +1,8 @@
-/* :root {
-} */
+:root {
+  --light-green: #92c827;
+  --dark-green: #0e6e33;
+  --green-blue: #0a7368;
+}
 
 * {
   box-sizing: border-box;

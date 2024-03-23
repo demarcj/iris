@@ -43,7 +43,7 @@ const ContactUs = () => {
         </a>
       </section>
       <section>
-        Iris Pattaya Property will be your 1st company in Thailand you want to reach when you need any property, real estate agent, buy, sell, rental, house, villa, land, townhouse, etc. Don't hesitate to contact us anytime.
+        Iris Pattaya Property will be your 1st company in Thailand you want to reach when you need any property, real estate agent, buy, sell, rental, house, villa, land, townhouse, etc. Don&apos;t hesitate to contact us anytime.
       </section>
     </main>
   )

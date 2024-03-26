@@ -1,6 +1,6 @@
 export type PropertyModel = {
   address: string;
-  amenities?: string[];
+  amenities: string[];
   area?: string[];
   available_at: string;
   bathrooms: number;

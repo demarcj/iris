@@ -54,6 +54,7 @@
 
 .more{
   color: darkblue;
+  display: inline-block;
 }
 
 .more:hover{

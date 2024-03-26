@@ -10,8 +10,8 @@ import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 import 'swiper/css';
 import styles from "@/_styles/property_card_vertical.module.css";
 
-export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card}) =>  {
-  const character_max = 100;
+export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card, display_amenities}) =>  {
+  const character_max = 75;
 
   return (
     <Link
@@ -43,7 +43,7 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card}) =>  {
             </div>
             {
               (card?.amenities && card.amenities?.length > 3) && (
-                <div className={styles.more}>
+                <div className={styles.more} onClick={e => display_amenities(e, card.amenities)}>
                   +{card.amenities?.length ? (card.amenities?.length as number) - 3 : 0} More
                 </div>
               )
@@ -51,7 +51,7 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card}) =>  {
           </div>
           { !!card?.description && (
               <div className={styles.description}>
-                {card.description.substring(0, character_max)}
+                {card.description.substring(0, character_max).trim()}
                 {card.description.length > character_max && `...`}
               </div>
             )

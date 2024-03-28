@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from 'next/link';
 
 import { PropertyCardModel } from "@/_models";
@@ -10,7 +10,11 @@ import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 import 'swiper/css';
 import styles from "@/_styles/property_card_vertical.module.css";
 
-export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card, display_amenities}) =>  {
+export interface PropertyCardVerticalModel extends PropertyCardModel {
+  display_amenities: (e: any, amenities_list: string[]) => void;
+}
+
+export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card, display_amenities}) =>  {
   const character_max = 75;
 
   return (
@@ -19,12 +23,17 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({card, display
       href={`/properties/${card.id}`}
     >
       <div className={styles.image_container}>
-        <Image
+        {/* <Image
           className={styles.carousel_img}
           src={card.img}
           width={2000}
           height={2000}
           alt=''
+        /> */}
+        <img
+          className={styles.carousel_img}
+          src={card.img} 
+          alt="" 
         />
       </div>
       <div className={styles.carousel_content}>

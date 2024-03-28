@@ -1,5 +1,5 @@
 // Nextjs
-import Image from 'next/image';
+// import Image from 'next/image';
 
 // Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,23 +15,34 @@ const Property = async ({ params }: {params: {id: string}}) => {
   return (
     <main className={styles.main}>
       <section className={[styles.image_container, styles.section].join(` `)}>
-        <Image
+        {/* <Image
           className={styles.hero}
           src={property.img}
           width={2000}
           height={2000}
           alt="" 
+        /> */}
+        <img
+          className={styles.hero}
+          src={property.img} 
+          alt="" 
         />
         <div className={styles.hero_side_container}>
           { 
             !!property.images?.length && property.images?.map((image, key) => (key < 2) && (
-              <Image
+              // <Image
+              //   className={styles.hero_side}
+              //   key={key}
+              //   src={image}
+              //   width={400}
+              //   height={400}
+              //   alt=''
+              // />
+              <img
                 className={styles.hero_side}
                 key={key}
-                src={image}
-                width={400}
-                height={400}
-                alt=''
+                src={image} 
+                alt="" 
               />
             ))
           }

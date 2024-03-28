@@ -9,12 +9,12 @@ export const Carousel: React.FC<CarouselModel> = ({items}) => {
   const [slide_view, set_slide_view] = useState(3);
 
   useEffect(() => {
-    const test = (
+    const responsive = (
       window.innerWidth >= 1200 ? 3 
       : window.innerWidth < 1200 && window.innerWidth >= 600 ? 2 
       : 1
     );
-    set_slide_view(test);
+    set_slide_view(responsive);
   }, []);
 
   return(

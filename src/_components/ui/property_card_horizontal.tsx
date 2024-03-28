@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from 'next/link';
 import { PropertyCardModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,12 +14,17 @@ export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({card}) =>  
       className={styles.carousel_item}
       href={`/properties/${card.id}`}
     >
-      <Image
+      {/* <Image
         className={styles.carousel_img}
         src={card.img}
         width={2000}
         height={2000}
         alt=''
+      /> */}
+      <img 
+        className={styles.carousel_img} 
+        src={card.img} 
+        alt="" 
       />
       <div className={styles.carousel_content}>
         <h3 className={styles.property_name}>{card.name}</h3>

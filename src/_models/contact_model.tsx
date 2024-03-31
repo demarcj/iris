@@ -1,4 +1,4 @@
-export type ContactModel = {
+export interface ContactModel {
   email: string;
   facebook: string;
   line: string;

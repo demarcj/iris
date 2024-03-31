@@ -1,5 +1,5 @@
 import { PropertyModel } from './';
 
-export type CarouselModel = {
+export interface CarouselModel {
   items: PropertyModel[];
 }

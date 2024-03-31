@@ -1,4 +1,4 @@
-export type LoginModel = {
+export interface LoginModel {
   created_at?: Date | string;
   device?: string;
   id?: string;

@@ -1,4 +1,4 @@
-export type PropertyModel = {
+export interface PropertyModel {
   address: string;
   amenities: string[];
   area?: string[];
@@ -13,11 +13,12 @@ export type PropertyModel = {
   images?: string[];
   img: string;
   name: string;
-  option?: string;
+  option?: string[];
   phone?: string;
-  price: number;
+  price: string;
   property_id: string;
   size?: number;
+  transfer_fees: string;
   type: string;
   updated_at: Date | string;
   unit_number?: string;

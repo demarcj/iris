@@ -1,11 +1,8 @@
 .main{
-  display: flex;
+  display: grid;
   flex-direction: row;
-  gap: 45px;
-}
-
-.main > div{
-  width: 100%;
+  gap: 30px;
+  grid-template-columns: minmax(50%, 1fr) 1fr;
 }
 
 .form_container{

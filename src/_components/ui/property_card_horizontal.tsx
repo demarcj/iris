@@ -8,31 +8,32 @@ import 'swiper/css';
 import styles from "@/_styles/property_card_horizontal.module.css";
 
 export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({card}) =>  {
+  const {id, img, name, bedrooms, price, size, type} = card;
 
   return (
     <Link
       className={styles.carousel_item}
-      href={`/properties/${card.id}`}
+      href={`/properties/${id}`}
     >
       {/* <Image
         className={styles.carousel_img}
-        src={card.img}
+        src={img}
         width={2000}
         height={2000}
         alt=''
       /> */}
       <img 
         className={styles.carousel_img} 
-        src={card.img} 
+        src={img} 
         alt="" 
       />
       <div className={styles.carousel_content}>
-        <h3 className={styles.property_name}>{card.name}</h3>
-        <div><span className={styles.elegant_style}>Price: </span> ${card.price} </div>
+        <h3 className={styles.property_name}>{name}</h3>
+        <div><span className={styles.elegant_style}>Price: </span> ${price} </div>
         <div className={styles.property_detail}>
-          <div><FontAwesomeIcon icon={faBed} /> : {card.bedrooms}</div>
-          <div><FontAwesomeIcon icon={faHotel} /> : {card.type}</div>
-          <div><FontAwesomeIcon icon={faMaximize} /> : {card.size}</div>
+          <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
+          <div><FontAwesomeIcon icon={faHotel} /> : {type}</div>
+          <div><FontAwesomeIcon icon={faMaximize} /> : {size}</div>
         </div>
       </div>
     </Link>

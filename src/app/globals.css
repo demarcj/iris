@@ -2,6 +2,7 @@
   --light-green: #92c827;
   --dark-green: #0e6e33;
   --green-blue: #0a7368;
+  --grid: 2fr 1fr;
 }
 
 * {
@@ -66,6 +67,9 @@ html:has(.property_main){
 }
 
 @media screen and (width < 1025px) {
+  :root{
+    --grid: 1fr;
+  }
   main{
     padding: 0 15px;
   }

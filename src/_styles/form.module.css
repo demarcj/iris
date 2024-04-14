@@ -26,10 +26,6 @@
   border-radius: 5px;
 }
 
-.textarea{
-  resize: vertical;
-}
-
 @media screen and (width < 769px) {
   .main{
     display: block;

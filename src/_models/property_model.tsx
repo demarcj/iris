@@ -1,5 +1,6 @@
 export interface PropertyModel {
   address: string;
+  agent_note?: string;
   amenities: string[];
   area?: string[];
   available_at: string;
@@ -12,14 +13,18 @@ export interface PropertyModel {
   id: string;
   images?: string[];
   img: string;
+  location: string;
   name: string;
   option?: string[];
   phone?: string;
   price: string;
   property_id: string;
   size?: number;
+  stories: number;
+  sub_district: string;
   transfer_fees: string;
   type: string;
   updated_at: Date | string;
   unit_number?: string;
+  views?: string[];
 }

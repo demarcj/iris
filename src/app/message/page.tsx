@@ -23,13 +23,17 @@ const Message = () => {
 
   return (
     <main className={styles.main}>
-      <section className={styles.section}>
-        <div className={styles.header_container}>
-          <h1>Hello, {login?.user_name}</h1>
-          <h2>You have successfully logged in!</h2>
-        </div>
-        <div className={styles.detail}>Redirecting you to the homepage in {counter}</div>
-      </section>
+      {
+        !!login?.user_name?.length && (
+          <section className={styles.section}>
+            <div className={styles.header_container}>
+              <h1>Hello, {login?.user_name}</h1>
+              <h2>You have successfully logged in!</h2>
+            </div>
+            <div className={styles.detail}>Redirecting you to the homepage in {counter}</div>
+          </section>
+        )
+      }
     </main>
   )
 }

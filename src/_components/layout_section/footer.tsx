@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
+import Button from '@mui/joy/Button';
+
 import styles from "@/_styles/footer.module.css";
 
 export const Footer = () => {
@@ -16,7 +18,10 @@ export const Footer = () => {
     <footer className={styles.footer}>
       <div className={[styles.footer_section, styles.footer_left].join(` `)}>
         <div> &#169;{year} IRis Pattaya Property </div>
-        <Link className={styles.login} href='/login'>Login</Link>
+        <Link href='/login'>
+          <Button color="success" variant="solid">Login</Button>
+        </Link>
+        {/* className={styles.login} */}
       </div>
       <div className={[styles.footer_section, styles.footer_right].join(` `)}>
         <div className={styles.contact}>

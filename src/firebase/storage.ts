@@ -4,7 +4,7 @@ import { storage } from "@/firebase/firebase";
 export async function updatePropertyImage(property_id: string, image: File) {
   try {
     if (!property_id)
-      throw new Error("No restaurant ID has been provided.");
+      throw new Error("No property ID has been provided.");
 
     if (!image || !image?.name)
       throw new Error("A valid image has not been provided.");

@@ -46,28 +46,33 @@ const VisuallyHiddenInput = styled('input')`
 
 const property_default = {
   address: ``,
-  available_at: ``,
+  agent_note: ``,
   amenities: [],
   area: [],
+  available_at: ``,
   bathrooms: 1, 
   bedrooms: 0,
   created_at: ``, 
   description: ``,
   email: ``, 
+  hot_deal: false,
   id: crypto.randomUUID(),
   images: [],
   img: ``,
-  hot_deal: false,
+  location: `None`,
   name: ``, 
   option: [], 
   phone: ``,
   price: `0`,
   property_id: ``,
   size: 0,
+  sub_district: ``,
+  stories: 0,
   transfer_fees: ``, 
   type: ``,
   updated_at: ``,
-  unit_number: ``
+  unit_number: ``,
+  views: []
 } as PropertyModel;
 
 const Form = () => {
@@ -76,9 +81,50 @@ const Form = () => {
   const [img, set_img] = useState({} as File);
   const [loading, set_loading] = useState(false);
   const [property_id_data, set_property_id_data] = useState({id: ``, data: {} as any});
+  const [ prev_location, next_location ] = useState(``);
   
-  const required = [`address`, `available_at`, `name`, `option`, `phone`, `price`, `size`, `type`];
+  const required = [`available_at`, `name`, `option`, `price`, `size`, `type`];
   const option_menu = [`Sell`, `Rental`];
+  const views_menu = [`Sea View`, `Partial Sea View`, `City View`, `Pool View`, `Garden View`, `Mountain View`];
+  const location_menu = [`None`, `Dark Side`, `Sea Side`];
+  const loction_map = {
+    none: [],
+    dark_side:  [
+      `Nongprue`,
+      `Nongpla-Lai`,
+      `Nongket Noi`,
+      `Nongket-Yai`,
+      `Pornprapa- Nimit`,
+      `Siam Country Club`,
+      `Mabprachan Lake`,
+      `Pong`,
+      `Takien Tia`,
+      `Nuen Plubwan`,
+      `Khao Noi`,
+      `Khao Talo`,
+      `Nongkrabok`,
+      `Tungklom-Tanman`,
+      `Chaknok Lake`,
+      `Chaiyapruk`,
+      `Huayyai`
+    ],
+    sea_side: [
+      `Naklua`,
+      `Wongamart Beach`,
+      `North Pattaya`,
+      `Central Pattaya Beach Road`,
+      `Central Pattaya 2 nd Road`,
+      `Buakhao, Central Pattaya`,
+      `South Pattaya`,
+      `Tamnak Hill`,
+      `Kasetsin-Tamnak Hill`,
+      `Jomtien Beach Road`,
+      `Jomtien 2 nd Road`,
+      `Na-Jomtien`,
+      `Bangsare`,
+      `Sattahip`
+    ]
+  }
   const transfer_fees = [`On buyer`, `On Owner`, `Share 50/50`];
   const type_menu = [
     `Bar`,
@@ -122,14 +168,13 @@ const Form = () => {
     `WIFI`
   ];
 
-  const set_data = (data: any, key_name: string) => {
-    set_property({...property, [key_name]: data})
-  }
+  const set_data = (data: any, key_name: string) => set_property({...property, [key_name]: data});
 
   const default_input: InputModel = {
     class_name: `input_container`,
     form_label: ``,
     type: `text`,
+    hint: ``,
     key_name: ``,
     value: ``,
     set_data,
@@ -151,6 +196,7 @@ const Form = () => {
       ...default_input,
       form_label: `Address`,
       value: property.address,
+      required: false,
       key_name: `address`,
     },
     {
@@ -162,25 +208,53 @@ const Form = () => {
     },
     {
       ...default_input,
+      form_label: `Views`,
+      value: property.views,
+      required: false,
+      multiple: true,
+      type: `select`,
+      key_name: `views`,
+      list: views_menu
+    },
+    {
+      ...default_input,
+      form_label: `Location`,
+      value: property.location,
+      required: false,
+      type: `select`,
+      key_name: `location`,
+      list: location_menu
+    },
+    {
+      ...default_input,
+      form_label: `Sub District`,
+      value: property.sub_district,
+      required: false,
+      type: `select`,
+      key_name: `sub_district`,
+      list: loction_map[(property.location.toLowerCase().replace(` `, `_`)  as keyof typeof loction_map)]
+    },
+    {
+      ...default_input,
       form_label: `Property ID`,
       value: property.property_id,
       type: `readonly`,
       key_name: `property_id`,
     },
-    {
-      ...default_input,
-      form_label: `Email`,
-      value: property.email,
-      type: `email`,
-      key_name: `email`,
-    },
-    {
-      ...default_input,
-      form_label: `Phone Number`,
-      value: property.phone,
-      type: `phone`,
-      key_name: `phone`,
-    },
+    // {
+    //   ...default_input,
+    //   form_label: `Email`,
+    //   value: property.email,
+    //   type: `email`,
+    //   key_name: `email`,
+    // },
+    // {
+    //   ...default_input,
+    //   form_label: `Phone Number`,
+    //   value: property.phone,
+    //   type: `phone`,
+    //   key_name: `phone`,
+    // },
     {
       ...default_input,
       form_label: `Price`,
@@ -195,6 +269,14 @@ const Form = () => {
       required: false,
       type: `number`,
       key_name: `bedrooms`,
+    },
+    {
+      ...default_input,
+      form_label: `Stories`,
+      value: property.stories,
+      required: false,
+      type: `number`,
+      key_name: `stories`,
     },
     {
       ...default_input,
@@ -250,8 +332,17 @@ const Form = () => {
       ...default_input,
       form_label: `Description`,
       value: property.description,
+      required: false,
       type: `textarea`,
       key_name: `description`,
+    },
+    {
+      ...default_input,
+      form_label: `Agent Note`,
+      value: property.agent_note,
+      required: false,
+      type: `textarea`,
+      key_name: `agent_note`,
     },
     {
       ...default_input,
@@ -349,9 +440,9 @@ const Form = () => {
     try{
       const data_images = !!images.length ? await get_images() : [];
       const data_img = await get_img();
-      const date = new Date();
+      const date = new Date().toISOString();
       set_property({ 
-        ...property, 
+        ...property,
         images: data_images as string[], 
         img: data_img as string,
         created_at: date,
@@ -388,10 +479,18 @@ const Form = () => {
 
   const get_property_id = () => !!property_id_data.id.length ? number_convert(property_id_data.data.property_id) : query_property_id();
 
+  const location_check = () => {
+    if(property.location !== prev_location){
+      next_location(property.location);
+      set_property({...property, sub_district: ``})
+    }
+  }
+
   useEffect(() => get_property_id(), []);
   
   useEffect(() => { 
-    ((loading && is_valid([...required, `img`])) && update_property());
+    (property.location.length > 1) && location_check();
+    (loading && is_valid([...required, `img`])) && update_property();
     (!property.property_id.length && get_property_id());
   }, [property]);
 
@@ -411,6 +510,7 @@ const Form = () => {
                   form_label={input.form_label} 
                   key={i}
                   key_name={input.key_name}
+                  hint={input.hint}
                   list={input.list}
                   min={input.min}
                   multiple={input.multiple}
@@ -454,7 +554,7 @@ const Form = () => {
                 Upload Main Image
                 <VisuallyHiddenInput 
                   type="file"
-                  accept=".jpg, .jpeg, .png .webp"
+                  accept=".jpg, .jpeg, .png, .webp"
                   onChange={e => handleImage(e, `single`)}
                 />
               </Button>
@@ -492,7 +592,7 @@ const Form = () => {
                 Upload Images
                 <VisuallyHiddenInput 
                   type="file"
-                  accept=".jpg, .jpeg, .png .webp"
+                  accept=".jpg, .jpeg, .png, .webp"
                   onChange={e => handleImage(e, `multiple`)}
                   multiple
                 />

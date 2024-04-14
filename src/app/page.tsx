@@ -33,7 +33,7 @@ export default function Home() {
         }
       })
       set_properties_section(main_list);
-    })()
+    })();
   }, []);
   
   return (

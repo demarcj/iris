@@ -110,7 +110,10 @@ const Property = () => {
             <div className={styles.section_detail_container}>
               <div>
                 <div className={styles.property_name}>
-                  <h1>{property.name} - {property.sub_district.replaceAll(`_`, ` `)}</h1>
+                  <h1>
+                    {property.name} 
+                    {property?.sub_district ? `- ${property.sub_district.replaceAll(`_`, ` `)}` : ``}
+                  </h1>
                   <h2>
                     {
                       new Intl.NumberFormat(

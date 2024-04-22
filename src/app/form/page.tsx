@@ -18,77 +18,73 @@ import { updatePropertyImage } from "@/firebase/storage";
 import { db } from "@/firebase/firebase";
 
 //Stylings
-// import { label } from '@/_styles';
 import styles from "@/_styles/form.module.css";
 import global from "@/_styles/global.module.css";
 
 // Material
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/joy/CircularProgress';
+import Sheet from '@mui/joy/Sheet';
 import Button from '@mui/joy/Button';
-import SvgIcon from '@mui/joy/SvgIcon';
-import { styled } from '@mui/joy';
+import { getInitColorSchemeScript } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 
 // Models
 import { PropertyModel, InputModel } from "@/_models";
-
-const VisuallyHiddenInput = styled('input')`
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  white-space: nowrap;
-  width: 1px;
-`;
 
 const property_default = {
   address: ``,
   agent_note: ``,
   amenities: [],
-  area: [],
+  allows_marijuana: false,
   available_at: ``,
   bathrooms: 1, 
   bedrooms: 0,
   created_at: ``, 
   description: ``,
-  email: ``, 
+  email: ``,
+  facilities: [],
+  floor: 0,
+  furnished: ``, 
   hot_deal: false,
   id: crypto.randomUUID(),
   images: [],
   img: ``,
-  location: `None`,
+  location: `Other`,
   name: ``, 
-  option: [], 
+  option: [],
+  ownership: ``, 
   phone: ``,
-  price: `0`,
+  price: ``,
   property_id: ``,
-  size: 0,
+  size: ``,
   sub_district: ``,
   stories: 0,
   transfer_fees: ``, 
   type: ``,
-  updated_at: ``,
   unit_number: ``,
+  useable_area: ``,
+  updated_at: ``,
   views: []
 } as PropertyModel;
 
 const Form = () => {
   const [property, set_property] = useState(structuredClone(property_default));
-  const [images, set_images] = useState([] as FileList[]);
+  const [images, set_images] = useState({} as FileList);
+  const [has_facilities, set_has_facilities] = useState(false);
   const [img, set_img] = useState({} as File);
   const [loading, set_loading] = useState(false);
   const [property_id_data, set_property_id_data] = useState({id: ``, data: {} as any});
-  const [ prev_location, next_location ] = useState(``);
+  const [prev_location, next_location] = useState(`Other`);
   
   const required = [`available_at`, `name`, `option`, `price`, `size`, `type`];
   const option_menu = [`Sell`, `Rental`];
   const views_menu = [`Sea View`, `Partial Sea View`, `City View`, `Pool View`, `Garden View`, `Mountain View`];
-  const location_menu = [`None`, `Dark Side`, `Sea Side`];
+  const furnished_menu = [`Furnished`, `Fully Furnished`, `Unfurnished`];
+  const ownership_menu = [`Foreign Quota`, `Thai Quota`, `Thai Company Name`]
+  const location_menu = [`Other`, `Dark Side`, `Sea Side`];
   const loction_map = {
-    none: [],
+    other: [],
     dark_side:  [
       `Nongprue`,
       `Nongpla-Lai`,
@@ -168,21 +164,53 @@ const Form = () => {
     `WIFI`
   ];
 
-  const set_data = (data: any, key_name: string) => set_property({...property, [key_name]: data});
+  const facilities_menu = [
+    `Swimming Pool`,
+    `Rooftop Swimming Pool`,
+    `Parking`,
+    `Underground Parking`,
+    `Garden`,
+    `Security Guard`,
+    `Sauna`,
+    `Steamed`,
+    `Elevator`,
+    `Accessibility`,
+    `Kids club`,
+    `Access to the beach`,
+    `Private Beach`,
+    `Near to the beach`,
+    `CCTV`
+  ]
+
+  const handle_image = (event: any, type: boolean) => {
+    const target = event?.target;
+    const files = !!target?.files.length ? target.files : null;
+    type ? set_images(structuredClone(files)) : set_img(structuredClone(files[0]));
+  }
+
+  const set_data = (data: any, key_name: string) => {
+    if(key_name === `has_facilities`){
+      set_has_facilities(data);
+      return;
+    }
+    set_property({...property, [key_name]: data})
+  };
 
   const default_input: InputModel = {
     class_name: `input_container`,
+    disabled: false,
     form_label: ``,
-    type: `text`,
+    handle_image,
     hint: ``,
     key_name: ``,
-    value: ``,
-    set_data,
-    required: true,
     list: [],
+    min: 0,
     multiple: false,
+    required: true,
+    set_data,
     step: 1,
-    min: 0
+    type: `text`,
+    value: ``
   }
 
   const input_list: InputModel[] = [
@@ -208,6 +236,25 @@ const Form = () => {
     },
     {
       ...default_input,
+      form_label: `Has Project Facilities`,
+      class_name: ``,
+      value: has_facilities,
+      type: `checkbox`,
+      key_name: `has_facilities`,
+    },
+    {
+      ...default_input,
+      form_label: `Project Facilities`,
+      value: property.facilities,
+      disabled: !has_facilities,
+      required: false,
+      multiple: true,
+      type: `select`,
+      key_name: `facilities`,
+      list: facilities_menu
+    },
+    {
+      ...default_input,
       form_label: `Views`,
       value: property.views,
       required: false,
@@ -230,7 +277,7 @@ const Form = () => {
       form_label: `Sub District`,
       value: property.sub_district,
       required: false,
-      type: `select`,
+      type: property.location.toLowerCase() === `other` ? `text` : `select`,
       key_name: `sub_district`,
       list: loction_map[(property.location.toLowerCase().replace(` `, `_`)  as keyof typeof loction_map)]
     },
@@ -259,7 +306,7 @@ const Form = () => {
       ...default_input,
       form_label: `Price`,
       value: property.price,
-      type: `number_format`,
+      type: `money_format`,
       key_name: `price`,
     },
     {
@@ -277,6 +324,14 @@ const Form = () => {
       required: false,
       type: `number`,
       key_name: `stories`,
+    },
+    {
+      ...default_input,
+      form_label: `Floor`,
+      value: property.floor,
+      required: false,
+      type: `number`,
+      key_name: `floor`,
     },
     {
       ...default_input,
@@ -305,11 +360,27 @@ const Form = () => {
     },
     {
       ...default_input,
+      form_label: `Ownership`,
+      value: property.ownership,
+      type: `select`,
+      key_name: `ownership`,
+      list: ownership_menu
+    },
+    {
+      ...default_input,
       form_label: `Transfer Fees`,
       value: property.transfer_fees,
       type: `select`,
       key_name: `transfer_fees`,
       list: transfer_fees
+    },
+    {
+      ...default_input,
+      form_label: `Furnished`,
+      value: property.furnished,
+      type: `select`,
+      key_name: `furnished`,
+      list: furnished_menu
     },
     {
       ...default_input,
@@ -325,8 +396,15 @@ const Form = () => {
       ...default_input,
       form_label: `Land Size`,
       value: property.size,
-      type: `number`,
+      type: `size_format`,
       key_name: `size`,
+    },
+    {
+      ...default_input,
+      form_label: `Useable Area`,
+      value: property.useable_area,
+      type: `size_format`,
+      key_name: `useable_area`,
     },
     {
       ...default_input,
@@ -354,20 +432,38 @@ const Form = () => {
     {
       ...default_input,
       form_label: `Hot Deal`,
-      class_name: `checkbox`,
+      class_name: ``,
       value: property.hot_deal,
       type: `checkbox`,
       key_name: `hot_deal`,
     },
+    {
+      ...default_input,
+      form_label: `Allows Marijuana`,
+      class_name: ``,
+      value: property.allows_marijuana,
+      type: `checkbox`,
+      key_name: `allows_marijuana`,
+    },
+    {
+      ...default_input,
+      form_label: `Upload Main Image`,
+      class_name: `Button`,
+      value: property.img,
+      type: `image`,
+      key_name: `img`,
+    },
+    {
+      ...default_input,
+      form_label: `Upload Images`,
+      class_name: `Button`,
+      value: property.images,
+      multiple: true,
+      type: `image`,
+      key_name: `images`,
+    }
   ]
 
-  const handleImage = (event: any, type: `single` | `multiple`) => {
-    const target = event?.target;
-    const files = !!target?.files.length ? target.files : null;
-    type === `single` ? set_img(structuredClone(files[0])) : set_images(structuredClone(files));
-  }
-
-  
   const is_valid = (required_list: string[]): boolean => {
     const has_img = !!img?.name;
     const required_property = !required_list.filter((key: string) => {
@@ -390,6 +486,7 @@ const Form = () => {
       return await updatePropertyImage(id, image as File);
     } catch(e) {
       toast(`Something went wrong with uploading image. Please try uploading and submiting again.`);
+      return ``;
     }
   }
 
@@ -413,19 +510,25 @@ const Form = () => {
       const promise = new Promise(async (res, rej) => {
         await submit_img(property.id, img).then(data => res(data));
       });
-      promise.then(data => resolve(data));
+      promise.then((data) => resolve(data));
     });
   }
 
-  const update_property = async () => {
+  const update_property = async (img: string = ``, images: string[] = []) => {
     try{
-      await addDoc(collection(db, `properties`), { ...property });
+      await addDoc(collection(db, `properties`), { 
+        ...property, 
+        img, 
+        images,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      });
       const property_ref = doc(collection(db, "property_id"), property_id_data.id);
       await updateDoc(property_ref, { property_id: (property_id_data.data.property_id + 1) })
         .then(() => {
           set_property({ ...property_default, id: crypto.randomUUID() });
           set_img({} as File);
-          set_images([] as FileList[]);
+          set_images({} as FileList);
           set_loading(false);
           toast(`Entry has successfully been saved!`);
         });
@@ -437,17 +540,12 @@ const Form = () => {
 
   const handle_submit = async () => {
     set_loading(true);
+    is_valid([...required, `img`])
+
     try{
-      const data_images = !!images.length ? await get_images() : [];
+      const data_images = !!images.length ? await get_images() as string[] : [];
       const data_img = await get_img();
-      const date = new Date().toISOString();
-      set_property({ 
-        ...property,
-        images: data_images as string[], 
-        img: data_img as string,
-        created_at: date,
-        updated_at: date
-      });
+      update_property((data_img as string), data_images);
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
       set_loading(false);
@@ -489,14 +587,14 @@ const Form = () => {
   useEffect(() => get_property_id(), []);
   
   useEffect(() => { 
-    (property.location.length > 1) && location_check();
-    (loading && is_valid([...required, `img`])) && update_property();
+    (property.location.length > 0) && location_check();
     (!property.property_id.length && get_property_id());
   }, [property]);
 
   return (
-    <>
+    <CssVarsProvider defaultMode="system">
       <main className={styles.main}>
+        {getInitColorSchemeScript()}
         <div id="form" className={styles.form_container}>
           <Box
             component="form"
@@ -507,9 +605,11 @@ const Form = () => {
               (input, i) => 
                 <InputUI 
                   class_name={input.class_name}
+                  disabled={input.disabled}
                   form_label={input.form_label} 
                   key={i}
                   key_name={input.key_name}
+                  handle_image={input.handle_image}
                   hint={input.hint}
                   list={input.list}
                   min={input.min}
@@ -522,82 +622,28 @@ const Form = () => {
                 />
               )
             }
-            <div>
-              <Button
-                component="label"
-                role={undefined}
-                slotProps={{
-                  root: {
-                    className: global.button
-                  },
-                }}
-                tabIndex={-1}
-                variant="outlined"
-                startDecorator={
-                  <SvgIcon>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                      />
-                    </svg>
-                  </SvgIcon>
-                }
-              >
-                Upload Main Image
-                <VisuallyHiddenInput 
-                  type="file"
-                  accept=".jpg, .jpeg, .png, .webp"
-                  onChange={e => handleImage(e, `single`)}
-                />
-              </Button>
-            </div>
-            <div>
-              <Button
-                component="label"
-                role={undefined}
-                sx={{mt: `15px`}}
-                tabIndex={-1}
-                variant="outlined"
-                slotProps={{
-                  root: {
-                    className: global.button
-                  },
-                }}
-                startDecorator={
-                  <SvgIcon>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                      />
-                    </svg>
-                  </SvgIcon>
-                }
-              >
-                Upload Images
-                <VisuallyHiddenInput 
-                  type="file"
-                  accept=".jpg, .jpeg, .png, .webp"
-                  onChange={e => handleImage(e, `multiple`)}
-                  multiple
-                />
-              </Button>
-            </div>
+            {
+              img?.name?.length && (
+              <div>
+                <h2>Main Image</h2>
+                <div>
+                  {img.name}
+                </div>
+              </div>
+              )
+            }
+            {
+              !!Object.values(images)?.length && (
+                <div>
+                  <h2>Images</h2>
+                  {
+                    Object.values(images).map((image, i) => (
+                      <div key={i}>{image?.name}</div>
+                    ))
+                  }
+                </div>
+              )
+            }
             <span
               onClick={() => is_valid(required) ? handle_submit() : not_valid()}
             >
@@ -626,7 +672,7 @@ const Form = () => {
       </main>
       <ToastContainer />
       { loading && <div className={global.loading}><CircularProgress variant="soft" /></div> }
-    </>
+    </CssVarsProvider>
   )
 }
 

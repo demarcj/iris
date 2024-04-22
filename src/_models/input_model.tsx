@@ -1,8 +1,10 @@
 export interface InputModel {
     class_name: string;
+    disabled: boolean;
     form_label: string;
     hint: string;
     key_name: string;
+    handle_image: (event: any, type: boolean) => void;
     list: any[];
     min: number;
     multiple: boolean;

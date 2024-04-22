@@ -2,7 +2,9 @@
   --light-green: #92c827;
   --dark-green: #0e6e33;
   --green-blue: #0a7368;
+  --card-bg: #e9eefa;
   --grid: 2fr 1fr;
+  --header-footer-bg: var(--green-blue)
 }
 
 * {
@@ -41,9 +43,7 @@ label{
 }
 
 input{
-  background-color: white;
   border: none;
-  color: #000;
 }
 
 html:has(.property_main){
@@ -60,7 +60,6 @@ html:has(.property_main){
 }
 
 @media (prefers-color-scheme: dark) {
-  /* :root {} */
   html {
     color-scheme: dark;
   }

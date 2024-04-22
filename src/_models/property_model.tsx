@@ -2,13 +2,16 @@ export interface PropertyModel {
   address: string;
   agent_note?: string;
   amenities: string[];
-  area?: string[];
+  allows_marijuana: boolean;
   available_at: string;
   bathrooms: number;
   bedrooms: number;
   created_at: Date | string;
   description?: string;
   email: string;
+  facilities?: string[];
+  floor?: number;
+  furnished: string;
   hot_deal: boolean;
   id: string;
   images?: string[];
@@ -16,15 +19,17 @@ export interface PropertyModel {
   location: string;
   name: string;
   option?: string[];
+  ownership: string;
   phone?: string;
   price: string;
   property_id: string;
-  size?: number;
+  size?: string;
   stories: number;
   sub_district: string;
   transfer_fees: string;
   type: string;
-  updated_at: Date | string;
   unit_number?: string;
+  updated_at: Date | string;
+  useable_area: string;
   views?: string[];
 }

@@ -1,5 +1,5 @@
 .carousel_item{
-  background-color: white;
+  background-color: var(--card-bg);;
   color: black;
   border-radius: 5px;
   overflow: hidden;
@@ -42,6 +42,7 @@
   padding-bottom: 15px;
   display: flex;
   justify-content: space-between;
+  text-transform: capitalize;
 }
 
 .amenities{
@@ -69,6 +70,7 @@
   display: flex;
   padding-top: 15px;
   justify-content: space-between;
+  text-transform: capitalize;
 }
 
 .elegant_style{

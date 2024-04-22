@@ -8,7 +8,7 @@ import { PropertyCardModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Chip from '@mui/joy/Chip';
-import { faBed, faMaximize, faHotel, faBathtub } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faMaximize, faHotel, faBathtub, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 // Styles
 import 'swiper/css';
@@ -45,7 +45,10 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
       <div className={styles.carousel_content}>
         <div>
           <div className={styles.location_deal}>
-            <div>Pattaya</div>
+            <div>
+              <FontAwesomeIcon icon={faLocationDot} />
+              {` ${card.sub_district ? card.sub_district : `Pattaya`}`.toLowerCase().replaceAll(`_`, ` `)}
+            </div>
             { card.hot_deal && <Chip color="danger" size="lg" variant="soft">Hot Deal</Chip> }
           </div>
           <h2 className={styles.property_name}>{name}</h2>
@@ -53,7 +56,7 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
             <div className={styles.amenities}>
               {
                 amenities?.filter((amenity, i) => i < 3)
-                  .map((amenity, i) => <Chip color="primary" size="lg" variant="soft" key={i}>{ amenity.replaceAll(`_`, ` `) }</Chip>)
+                  .map((amenity, i) => <Chip color="primary" size="lg" variant="outlined" key={i}>{ amenity.replaceAll(`_`, ` `) }</Chip>)
               }
             </div>
             {
@@ -89,8 +92,8 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
           <div className={styles.property_detail}>
             <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
             <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
-            <div><FontAwesomeIcon icon={faHotel} /> : {type}</div>
-            <div><FontAwesomeIcon icon={faMaximize} /> : {size}</div>
+            <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
+            <div><FontAwesomeIcon icon={faMaximize} /> : {new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm</div>
           </div>
         </div>
       </div>

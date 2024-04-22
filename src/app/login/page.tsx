@@ -13,6 +13,9 @@ import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import FormLabel from '@mui/joy/FormLabel';
 import FormControl from '@mui/joy/FormControl';
+import Sheet from '@mui/joy/Sheet';
+import { getInitColorSchemeScript } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 
 // Style
 import { label } from '@/_styles';
@@ -46,58 +49,55 @@ const Login = () => {
   }
 
   return (
-    <>
+    <CssVarsProvider defaultMode="system">
       <main className={styles.login_main}>
+        {getInitColorSchemeScript()}
         <section className={styles.login_container}>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              onSubmit={e => is_valid(required) ? handle_submit(e) : not_valid()}
-            >
-              <div className={styles.input_wrapper}>
-                <FormControl>
-                  <FormLabel sx={label} required>User Name</FormLabel>
-                  <Input
-                    id="user_name"
-                    value={login.user_name}
-                    fullWidth
-                    onChange={e => set_login({...login, user_name: e.target.value})}
-                    required
-                  />
-                </FormControl>
-              </div>
-              <div className={styles.input_wrapper}>
-                <FormControl>
-                  <FormLabel sx={label} required>Password</FormLabel>
-                  <Input
-                    id="password"
-                    value={login.password}
-                    fullWidth
-                    slotProps={{ input: { type: 'password' } }}
-                    onChange={e => set_login({...login, password: e.target.value})}
-                    required
-                  />
-                </FormControl>
-              </div>
-              <span>
-                <Button
-                  sx={{mt: `5px`}}
-                  type='submit'
-                  slotProps={{
-                    root: {
-                      className: global.button
-                    }
-                  }}
-                >
-                  Login
-                </Button>
-              </span>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={e => is_valid(required) ? handle_submit(e) : not_valid()}
+          >
+            <FormControl>
+              <FormLabel sx={label} required>User Name</FormLabel>
+              <Input
+                id="user_name"
+                value={login.user_name}
+                fullWidth
+                onChange={e => set_login({...login, user_name: e.target.value})}
+                required
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel sx={label} required>Password</FormLabel>
+              <Input
+                id="password"
+                value={login.password}
+                fullWidth
+                slotProps={{ input: { type: 'password' } }}
+                onChange={e => set_login({...login, password: e.target.value})}
+                required
+              />
+            </FormControl>
+            <span>
+              <Button
+                sx={{mt: `5px`}}
+                type='submit'
+                slotProps={{
+                  root: {
+                    className: global.button
+                  }
+                }}
+              >
+                Login
+              </Button>
+            </span>
           </Box>
         </section>
       </main>
       <ToastContainer />
-    </>
+    </CssVarsProvider>
   )
 }
 

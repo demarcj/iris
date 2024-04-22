@@ -1,4 +1,7 @@
 export const label = { 
-  color: `white`, 
+  display: `inline-block`, 
+  paddingBottom: `5px`
+};
+export const checkbox = { 
   paddingBottom: `5px`
 };

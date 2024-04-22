@@ -6,7 +6,7 @@ interface CustomProps {
   name: string;
 }
 
-export const NumericMoneyFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
+export const NumericSizeFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
   function NumericFormatAdapter(props, ref) {
     const { onChange, ...other } = props;
 
@@ -23,10 +23,10 @@ export const NumericMoneyFormatAdapter = React.forwardRef<NumericFormatProps, Cu
           });
         }}
         thousandSeparator
-        allowNegative={false}
         allowLeadingZeros={false}
+        allowNegative={false}
         valueIsNumericString
-        prefix="฿"
+        suffix=' sqm'
       />
     );
   },

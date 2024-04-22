@@ -3,8 +3,12 @@ import { format_phone_number } from "@/_function";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 
 import styles from "@/_styles/contact.module.css";
+
+library.add(fab);
 
 const ContactUs = () => {
   const { email, facebook, line, phone_number } = contact;

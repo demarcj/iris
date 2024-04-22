@@ -1,5 +1,5 @@
 .carousel_item{
-  background-color: white;
+  background-color: var(--card-bg);
   display: block;
   color: black;
   border-radius: 5px;
@@ -19,12 +19,14 @@
 .property_name{
   text-align: center;
   padding-bottom: 15px;
+  text-transform: capitalize;
 }
 
 .property_detail{
   display: flex;
   gap: 15px;
   padding-top: 15px;
+  text-transform: capitalize;
 }
 
 .elegant_style{

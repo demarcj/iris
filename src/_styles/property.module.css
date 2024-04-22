@@ -12,8 +12,9 @@
 }
 
 .properties_container{
-  display: flex;
-  gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 }
 
 .hero{
@@ -48,6 +49,7 @@
 .amenities{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
   text-transform: capitalize;
 }
 
@@ -62,7 +64,8 @@
 }
 
 .section_detail{
-  background-color: #42414d;
+  text-transform: capitalize;
+  background-color: var(--card-bg);
   padding: 15px;
   border-radius: 5px;
 }
@@ -71,8 +74,14 @@
   display: grid;
 }
 
-@media screen and (width < 1025px) {
+@media (width < 1025px) {
   .hero_side_container{
     display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .section_detail{
+    background-color: #42414d;
   }
 }

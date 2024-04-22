@@ -19,9 +19,8 @@ export const Footer = () => {
       <div className={[styles.footer_section, styles.footer_left].join(` `)}>
         <div> &#169;{year} IRis Pattaya Property </div>
         <Link href='/login'>
-          <Button color="success" variant="solid">Login</Button>
+          <Button color="neutral" variant="soft">Login</Button>
         </Link>
-        {/* className={styles.login} */}
       </div>
       <div className={[styles.footer_section, styles.footer_right].join(` `)}>
         <div className={styles.contact}>

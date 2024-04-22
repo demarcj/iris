@@ -45,8 +45,8 @@ export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({card}) =>  
         <div className={styles.property_detail}>
           <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
           <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
-          <div><FontAwesomeIcon icon={faHotel} /> : {type}</div>
-          <div><FontAwesomeIcon icon={faMaximize} /> : {size}</div>
+          <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
+          <div><FontAwesomeIcon icon={faMaximize} /> : {new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm</div>
         </div>
       </div>
     </Link>

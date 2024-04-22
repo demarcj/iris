@@ -5,11 +5,8 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+// React
 import { useEffect, useState } from "react";
-
-// Font Awesome
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBed, faMaximize, faHotel } from "@fortawesome/free-solid-svg-icons";
 
 // Joy UI
 import Button from '@mui/joy/Button';
@@ -18,16 +15,39 @@ import Button from '@mui/joy/Button';
 import { get_property, admin_check } from '@/_server';
 
 // Model
-import { PropertyModel, LoginModel } from '@/_models';
+import { PropertyModel } from '@/_models';
 
 // Style
 import styles from "@/_styles/property.module.css";
 
 const Property = () => {
   const searchParams = useParams();
-  const [ property, set_property ] = useState({} as PropertyModel);
-  const [ loading, set_loading ] = useState(true);
-  const [ is_login, set_is_login ] = useState(false)
+  const [property, set_property] = useState({} as PropertyModel);
+  const [loading, set_loading] = useState(true);
+  const [is_login, set_is_login] = useState(false);
+  const [detail_list, set_detail_list] = useState([] as Record<string, any>[]);
+
+  const details = [
+    `type`,
+    `bedrooms`,
+    `bathrooms`,
+    `furnished`,
+    `size`,
+    `useable_area`,
+    `floor`,
+    `stories`,
+    `available_at`,
+    `allows_marijuana`,
+    `ownership`
+  ];
+
+  const convert_to_string = (key: string, value: unknown) => {
+    
+    if(key === `allows_marijuana`){
+      return value ? `Yes` : `No` 
+    }
+    return `${value}`.replaceAll(`_`, ` `).toLowerCase();
+  }
   
   useEffect(() => {
     (async() => {
@@ -39,6 +59,14 @@ const Property = () => {
       set_loading(false);
     })();
   }, []);
+
+  useEffect(() => {
+    if(!!Object.keys(property)?.length){
+      const filter_details: Record<string, any>[] = details.filter(detail => !!property[detail as keyof typeof property])
+      .map(detail => ({key: detail, value: property[detail as keyof typeof property]}));
+      set_detail_list(filter_details);
+    }
+  }, [property]);
 
   return (
     <>
@@ -81,15 +109,33 @@ const Property = () => {
             </section>
             <div className={styles.section_detail_container}>
               <div>
-                <h1 className={styles.property_name}>{property.name}</h1>
-                <section className={[styles.section, styles.section_detail].join(` `)}>
-                  <h2 className={styles.header}>Property Details</h2>
-                  <div className={styles.properties_container}>
-                    <div><FontAwesomeIcon icon={faBed} /> : {property.bedrooms}</div>
-                    <div><FontAwesomeIcon icon={faHotel} /> : {property.type.replaceAll(`_`, ` `)}</div>
-                    <div><FontAwesomeIcon icon={faMaximize} /> : {property.size}</div>
-                  </div>
-                </section>
+                <div className={styles.property_name}>
+                  <h1>{property.name} - {property.sub_district.replaceAll(`_`, ` `)}</h1>
+                  <h2>
+                    {
+                      new Intl.NumberFormat(
+                        `th-TH`, 
+                        {
+                          style: `currency`, 
+                          currency: `THB`,
+                          maximumSignificantDigits: 2
+                        }
+                      ).format(parseInt(property.price))
+                    } 
+                  </h2>
+                </div>
+                {
+                  !!detail_list?.length && (
+                    <section className={[styles.section, styles.section_detail].join(` `)}>
+                      <h2 className={styles.header}>Property Details</h2>
+                      <div className={styles.properties_container}>
+                        {
+                          detail_list.map(detail => <div key={detail.key}>{detail.key.replaceAll(`_`, ` `).toLowerCase()}: {convert_to_string(detail.key, detail.value)}</div>)
+                        }
+                      </div>
+                    </section>
+                  )
+                }
                 {
                   !!property.amenities?.length && (
                     <section className={[styles.section, styles.section_detail].join(` `)}>
@@ -97,6 +143,20 @@ const Property = () => {
                       <div className={styles.amenities}>
                         {
                           property.amenities.map((amenity, key) => (
+                            <div key={key}>{ amenity.replaceAll(`_`, ` `) }</div>
+                          ))
+                        }
+                      </div>
+                    </section>
+                  )
+                }
+                {
+                  !!property.facilities?.length && (
+                    <section className={[styles.section, styles.section_detail].join(` `)}>
+                      <h2 className={styles.header}>Property Facilites</h2>
+                      <div className={styles.amenities}>
+                        {
+                          property.facilities.map((amenity, key) => (
                             <div key={key}>{ amenity.replaceAll(`_`, ` `) }</div>
                           ))
                         }

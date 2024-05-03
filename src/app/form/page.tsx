@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 // Next
 import Image from "next/image";
+import { useSearchParams } from 'next/navigation'
 
 // Firebase
 import { collection, addDoc, query, onSnapshot, doc, updateDoc } from "firebase/firestore";
@@ -24,13 +25,15 @@ import global from "@/_styles/global.module.css";
 // Material
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/joy/CircularProgress';
-import Sheet from '@mui/joy/Sheet';
 import Button from '@mui/joy/Button';
 import { getInitColorSchemeScript } from '@mui/joy/styles';
 import { CssVarsProvider } from '@mui/joy/styles';
 
 // Models
 import { PropertyModel, InputModel } from "@/_models";
+
+// Server
+import { get_property, admin_check, update_property } from '@/_server';
 
 const property_default = {
   address: ``,
@@ -76,12 +79,17 @@ const Form = () => {
   const [loading, set_loading] = useState(false);
   const [property_id_data, set_property_id_data] = useState({id: ``, data: {} as any});
   const [prev_location, next_location] = useState(`Other`);
+  const [edit_mode, set_edit_mode] = useState(false);
+  const [property_ref, set_property_ref] = useState(``);
   
+  const searchParams = useSearchParams();
+  const id = searchParams.get(`id`);
+  const edit = searchParams.get(`edit`);
   const required = [`available_at`, `name`, `option`, `price`, `size`, `type`];
   const option_menu = [`Sell`, `Rental`];
   const views_menu = [`Sea View`, `Partial Sea View`, `City View`, `Pool View`, `Garden View`, `Mountain View`];
   const furnished_menu = [`Furnished`, `Fully Furnished`, `Unfurnished`];
-  const ownership_menu = [`Foreign Quota`, `Thai Quota`, `Thai Company Name`]
+  const ownership_menu = [`Foreign Quota`, `Thai Quota`, `Thai Company Name`];
   const location_menu = [`Other`, `Dark Side`, `Sea Side`];
   const loction_map = {
     other: [],
@@ -277,9 +285,9 @@ const Form = () => {
       form_label: `Sub District`,
       value: property.sub_district,
       required: false,
-      type: property.location.toLowerCase() === `other` ? `text` : `select`,
+      type: property?.location?.toLowerCase() === `other` ? `text` : `select`,
       key_name: `sub_district`,
-      list: loction_map[(property.location.toLowerCase().replace(` `, `_`)  as keyof typeof loction_map)]
+      list: loction_map[(property?.location?.toLowerCase().replace(` `, `_`) as keyof typeof loction_map)]
     },
     {
       ...default_input,
@@ -465,7 +473,7 @@ const Form = () => {
   ]
 
   const is_valid = (required_list: string[]): boolean => {
-    const has_img = !!img?.name;
+    const has_img = edit_mode ? true : !!img?.name;
     const required_property = !required_list.filter((key: string) => {
       if(Array.isArray(property[key as keyof typeof property])){
         return (!property[key as keyof typeof property] as any)?.length;
@@ -514,7 +522,7 @@ const Form = () => {
     });
   }
 
-  const update_property = async (img: string = ``, images: string[] = []) => {
+  const create_property = async (img: string = ``, images: string[] = []) => {
     try{
       await addDoc(collection(db, `properties`), { 
         ...property, 
@@ -529,7 +537,6 @@ const Form = () => {
           set_property({ ...property_default, id: crypto.randomUUID() });
           set_img({} as File);
           set_images({} as FileList);
-          set_loading(false);
           toast(`Entry has successfully been saved!`);
         });
     } catch(e) {
@@ -538,19 +545,30 @@ const Form = () => {
     }
   }
 
+  const handle_update_property = async () => {
+    const data = await update_property(property_ref ,property);
+    const message = data ? `The update was a success` : `Something went wrong with request.`;
+    toast(message);
+  }
+
   const handle_submit = async () => {
     set_loading(true);
-    is_valid([...required, `img`])
+    const valid_switch = edit_mode ? required : [...required, `img`];
+    is_valid(valid_switch);
 
     try{
-      const data_images = !!images.length ? await get_images() as string[] : [];
-      const data_img = await get_img();
-      update_property((data_img as string), data_images);
+      if(edit_mode){
+        await handle_update_property();
+      } else {
+        const data_images = !!images.length ? await get_images() as string[] : [];
+        const data_img = await get_img();
+        create_property((data_img as string), data_images);
+      }
     } catch(e) {
       toast(`Something went wrong. Please try again.`);
-      set_loading(false);
       console.error(e);
     }
+    set_loading(false);
   }
 
   const number_convert = (num: string) => {
@@ -584,17 +602,38 @@ const Form = () => {
     }
   }
 
-  useEffect(() => get_property_id(), []);
+  const valid_edit_mode = async (): Promise<boolean> => {
+    const has_login = await admin_check(localStorage.getItem(`user`));
+    if(!has_login){
+      return false;
+    }
+    const has_edit = Object.is(edit, `true`);
+    const data = await get_property(id || ``);
+    const has_property = Object.hasOwn(data, `id`);
+    if(has_property){
+      const property_data = data.property;
+      const has_facilities_list = property_data?.facilities !== undefined && property_data.facilities?.length > 0;
+      set_property(property_data);
+      set_property_ref(data.id);
+      set_has_facilities(has_facilities_list);
+      set_edit_mode(true);
+    }
+    return has_edit && has_login && has_property;
+  }
+
+  useEffect(() => {
+    (async () => !(await valid_edit_mode()) && get_property_id())();
+  }, []);
   
   useEffect(() => { 
-    (property.location.length > 0) && location_check();
-    (!property.property_id.length && get_property_id());
+    (property?.location?.length > 0) && location_check();
+    (!property?.property_id?.length && get_property_id());
   }, [property]);
 
   return (
     <CssVarsProvider defaultMode="system">
+      {getInitColorSchemeScript()}
       <main className={styles.main}>
-        {getInitColorSchemeScript()}
         <div id="form" className={styles.form_container}>
           <Box
             component="form"

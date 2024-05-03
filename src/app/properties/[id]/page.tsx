@@ -42,7 +42,6 @@ const Property = () => {
   ];
 
   const convert_to_string = (key: string, value: unknown) => {
-    
     if(key === `allows_marijuana`){
       return value ? `Yes` : `No` 
     }
@@ -54,7 +53,7 @@ const Property = () => {
       const has_login = await admin_check(localStorage.getItem(`user`));
       const id = (searchParams.id as string) || ``;
       const property_data = await get_property(id);
-      set_property(property_data);
+      set_property(property_data.property);
       set_is_login(has_login); 
       set_loading(false);
     })();

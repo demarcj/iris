@@ -19,9 +19,15 @@
 }
 
 .login{
-  border: 2px solid var(--dark-green);
-  padding: 5px 10px;
-  border-radius: 2px;
+  background-color: #e3effb;
+  color: #153455;
+  padding: 9px 14px;
+  border-radius: 5px;
+  display: block;
+}
+
+.login:hover{
+  background-color: #c7dff7;
 }
 
 @media screen and (width < 1025px) {

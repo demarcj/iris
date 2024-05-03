@@ -3,12 +3,18 @@
 // Nextjs
 // import Image from "next/image";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
+// Models
 import { PropertyCardModel } from "@/_models";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Chip from '@mui/joy/Chip';
+// Font Awesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel, faBathtub, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
+// Material
+import Chip from '@mui/joy/Chip';
+import { Button } from '@mui/joy';
 
 // Styles
 import 'swiper/css';
@@ -16,12 +22,19 @@ import styles from "@/_styles/property_card_vertical.module.css";
 
 export interface PropertyCardVerticalModel extends PropertyCardModel {
   display_amenities: (e: any, amenities_list: string[]) => void;
+  edit_mode: boolean;
 }
 
-export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card, display_amenities}) =>  {
+export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card, display_amenities, edit_mode}) =>  {
   const character_max = 75;
   const {id, name, amenities, description, bathrooms, bedrooms, size, type} = card;
   const price = typeof card.price === `string` ? card.price : `${card.price}`;
+  const router = useRouter();
+
+  const route_edit_mode = (e: any) => {
+    e.preventDefault();
+    router.push(`/form?edit=true&id=${id}`)
+  }
 
   return (
     <Link
@@ -96,6 +109,7 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
             <div><FontAwesomeIcon icon={faMaximize} /> : {new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm</div>
           </div>
         </div>
+        { edit_mode && <Button onClick={e => route_edit_mode(e)}>Edit Property</Button>}
       </div>
     </Link>
   )

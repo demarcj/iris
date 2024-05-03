@@ -1,10 +1,10 @@
 'use client';
-import {useState, useEffect, useRef} from "react";
+import { useState, useEffect } from "react";
 
 import { PropertyCardVertical } from "@/_components/ui";
 import styles from "@/_styles/properties.module.css";
 
-import { get_properties } from "@/_server";
+import { get_properties, admin_check } from "@/_server";
 import { PropertyModel } from "@/_models";
 
 // Nextjs
@@ -20,6 +20,7 @@ const Properties = () => {
   const [cards, set_cards] = useState([] as PropertyModel[]);
   const [show_list, set_show_list] = useState(false);
   const [amenities, set_amenities] = useState([] as string[]);
+  const [edit_mode, set_edit_mode] = useState(false);
   const [open, setOpen] = useState(false);
 
   
@@ -39,6 +40,8 @@ const Properties = () => {
   useEffect(() => {
     (async () => {
       const data = await get_properties();
+      const has_login = await admin_check(localStorage.getItem(`user`));
+      set_edit_mode(has_login);
       set_cards(data.properties);
       set_show_list(true);
     })();
@@ -52,7 +55,14 @@ const Properties = () => {
             !show_list ? 
             `` :  
             !!cards.length ? 
-            cards.map(slide => <PropertyCardVertical key={slide.id} card={slide} display_amenities={display_amenities}/>) : 
+            cards.map(slide => (
+              <PropertyCardVertical 
+                key={slide.id} 
+                card={slide} 
+                display_amenities={display_amenities}
+                edit_mode={edit_mode}
+              />)
+            ) : 
             <div className={styles.empty_list_message}>{ empty_list_message }</div> 
           } 
         </div>

@@ -52,7 +52,6 @@ html:has(.property_main){
     height: 100%;
   }
   body{
-    /* max-height: 100vh; */
     &>[class*="layout"]{
       overflow: hidden;
     }

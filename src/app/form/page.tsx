@@ -1,7 +1,7 @@
 "use client";
 
 // React
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 // UI
 import { InputUI } from '@/_components/ui'

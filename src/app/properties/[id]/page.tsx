@@ -17,6 +17,9 @@ import { get_property, admin_check } from '@/_server';
 // Model
 import { PropertyModel } from '@/_models';
 
+// Function
+import { get_format_size } from '@/_function';
+
 // Style
 import styles from "@/_styles/property.module.css";
 
@@ -43,7 +46,10 @@ const Property = () => {
 
   const convert_to_string = (key: string, value: unknown) => {
     if(key === `allows_marijuana`){
-      return value ? `Yes` : `No` 
+      return value ? `Yes` : `No`; 
+    }
+    if(key === `size` || key === `useable_area`){
+      return get_format_size(value as string);
     }
     return `${value}`.replaceAll(`_`, ` `).toLowerCase();
   }
@@ -53,7 +59,7 @@ const Property = () => {
       const has_login = await admin_check(localStorage.getItem(`user`));
       const id = (searchParams.id as string) || ``;
       const property_data = await get_property(id);
-      set_property(property_data.property);
+      set_property(property_data);
       set_is_login(has_login); 
       set_loading(false);
     })();
@@ -132,7 +138,11 @@ const Property = () => {
                       <h2 className={styles.header}>Property Details</h2>
                       <div className={styles.properties_container}>
                         {
-                          detail_list.map(detail => <div key={detail.key}>{detail.key.replaceAll(`_`, ` `).toLowerCase()}: {convert_to_string(detail.key, detail.value)}</div>)
+                          detail_list.map(detail => (
+                            <div key={detail.key}>
+                              {detail.key.replaceAll(`_`, ` `).toLowerCase()}: {convert_to_string(detail.key, detail.value)}
+                            </div>
+                          ))
                         }
                       </div>
                     </section>
@@ -170,7 +180,7 @@ const Property = () => {
                   !!property.description?.length && (
                     <section className={[styles.section, styles.section_detail].join(` `)}>
                       <h2 className={styles.header}>About the Property</h2>
-                      <div>{property.description}</div>
+                      <div className={styles.description}>{property.description}</div>
                     </section>
                   )
                 }

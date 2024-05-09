@@ -28,9 +28,17 @@
   column-gap: 15px;
   row-gap: 15px;
   margin: auto;
-  padding: 15px;
   border: none;
   text-transform: capitalize;
+}
+
+.delete_message{
+  text-align: center;
+}
+
+.name{
+  font-weight: 700;
+  color: red;
 }
 
 @media screen and (width < 1025px) {

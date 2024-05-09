@@ -1,15 +1,23 @@
 "use client";
 // import Image from "next/image";
 import Link from 'next/link';
-import { PropertyCardModel } from "@/_models";
+
+// function
+import { get_format_size } from "@/_function";
+
+import { PropertyModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel, faBathtub } from "@fortawesome/free-solid-svg-icons";
 import 'swiper/css';
 import styles from "@/_styles/property_card_horizontal.module.css";
 
-export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({card}) =>  {
-  const {id, img, name, bedrooms, bathrooms, size, type} = card;
-  const price = typeof card.price === `string` ? card.price : `${card.price}`
+interface PropertyCardModel {
+  property: PropertyModel;
+}
+
+export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({property}) =>  {
+  const {id, img, name, bedrooms, bathrooms, size, type} = property;
+  const price = typeof property.price === `string` ? property.price : `${property.price}`
 
   return (
     <Link
@@ -46,7 +54,7 @@ export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({card}) =>  
           <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
           <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
           <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
-          <div><FontAwesomeIcon icon={faMaximize} /> : {new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm</div>
+          <div><FontAwesomeIcon icon={faMaximize} /> : {get_format_size(size)}</div>
         </div>
       </div>
     </Link>

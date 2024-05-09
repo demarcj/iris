@@ -80,7 +80,6 @@ const Form = () => {
   const [property_id_data, set_property_id_data] = useState({id: ``, data: {} as any});
   const [prev_location, next_location] = useState(`Other`);
   const [edit_mode, set_edit_mode] = useState(false);
-  const [property_ref, set_property_ref] = useState(``);
   
   const searchParams = useSearchParams();
   const id = searchParams.get(`id`);
@@ -546,7 +545,7 @@ const Form = () => {
   }
 
   const handle_update_property = async () => {
-    const data = await update_property(property_ref ,property);
+    const data = await update_property(property);
     const message = data ? `The update was a success` : `Something went wrong with request.`;
     toast(message);
   }
@@ -609,12 +608,10 @@ const Form = () => {
     }
     const has_edit = Object.is(edit, `true`);
     const data = await get_property(id || ``);
-    const has_property = Object.hasOwn(data, `id`);
+    const has_property = Object.hasOwn(data, `ref`);
     if(has_property){
-      const property_data = data.property;
-      const has_facilities_list = property_data?.facilities !== undefined && property_data.facilities?.length > 0;
-      set_property(property_data);
-      set_property_ref(data.id);
+      const has_facilities_list = data?.facilities !== undefined && data.facilities?.length > 0;
+      set_property(data);
       set_has_facilities(has_facilities_list);
       set_edit_mode(true);
     }

@@ -26,7 +26,7 @@ export const Carousel: React.FC<CarouselModel> = ({items}) => {
         items.map((item, i) => { 
           return (
             <SwiperSlide key={i}>
-              <PropertyCardHorizontal card={item} />
+              <PropertyCardHorizontal property={item} />
             </SwiperSlide>
           ) 
         })

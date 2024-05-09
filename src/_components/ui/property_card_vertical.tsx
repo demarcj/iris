@@ -6,11 +6,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 // Models
-import { PropertyCardModel } from "@/_models";
+import { PropertyModel } from "@/_models";
 
 // Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel, faBathtub, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+
+// Function
+import { get_format_size } from "@/_function";
 
 // Material
 import Chip from '@mui/joy/Chip';
@@ -20,15 +23,17 @@ import { Button } from '@mui/joy';
 import 'swiper/css';
 import styles from "@/_styles/property_card_vertical.module.css";
 
-export interface PropertyCardVerticalModel extends PropertyCardModel {
-  display_amenities: (e: any, amenities_list: string[]) => void;
+interface PropertyCardModel {
+  display_amenities: (e: any, property: PropertyModel) => void;
   edit_mode: boolean;
+  delete_property: (e: any, property: PropertyModel) => void;
+  property: PropertyModel;
 }
 
-export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card, display_amenities, edit_mode}) =>  {
+export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, display_amenities, delete_property, edit_mode}) =>  {
   const character_max = 75;
-  const {id, name, amenities, description, bathrooms, bedrooms, size, type} = card;
-  const price = typeof card.price === `string` ? card.price : `${card.price}`;
+  const {id, name, amenities, description, bathrooms, bedrooms, img, size, type, sub_district, hot_deal} = property;
+  const price = typeof property.price === `string` ? property.price : `${property.price}`;
   const router = useRouter();
 
   const route_edit_mode = (e: any) => {
@@ -51,7 +56,7 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
         /> */}
         <img
           className={styles.carousel_img}
-          src={card.img} 
+          src={img} 
           alt="" 
         />
       </div>
@@ -60,9 +65,9 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
           <div className={styles.location_deal}>
             <div>
               <FontAwesomeIcon icon={faLocationDot} />
-              {` ${card.sub_district ? card.sub_district : `Pattaya`}`.toLowerCase().replaceAll(`_`, ` `)}
+              {` ${sub_district ? sub_district : `Pattaya`}`.toLowerCase().replaceAll(`_`, ` `)}
             </div>
-            { card.hot_deal && <Chip color="danger" size="lg" variant="soft">Hot Deal</Chip> }
+            { hot_deal && <Chip color="danger" size="lg" variant="soft">Hot Deal</Chip> }
           </div>
           <h2 className={styles.property_name}>{name}</h2>
           <div>
@@ -74,8 +79,8 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
             </div>
             {
               (amenities && amenities?.length > 3) && (
-                <div className={styles.more} onClick={e => display_amenities(e, card.amenities)}>
-                  +{card.amenities?.length ? (card.amenities?.length as number) - 3 : 0} More
+                <div className={styles.more} onClick={e => display_amenities(e, property)}>
+                  +{amenities?.length ? (amenities?.length as number) - 3 : 0} More
                 </div>
               )
             }
@@ -106,10 +111,15 @@ export const PropertyCardVertical: React.FC<PropertyCardVerticalModel> = ({card,
             <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
             <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
             <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
-            <div><FontAwesomeIcon icon={faMaximize} /> : {new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm</div>
+            <div><FontAwesomeIcon icon={faMaximize} /> : {get_format_size(size)}</div>
           </div>
         </div>
-        { edit_mode && <Button onClick={e => route_edit_mode(e)}>Edit Property</Button>}
+        { edit_mode && (
+          <div className={styles.btn_group}>
+            <Button onClick={e => route_edit_mode(e)}>Edit</Button>
+            <Button color="danger" onClick={e => delete_property(e, property)}>Delete</Button>
+          </div>
+        )}
       </div>
     </Link>
   )

@@ -1,3 +1,8 @@
+.btn_group{
+  display: grid;
+  gap: 5px
+}
+
 .carousel_item{
   background-color: var(--card-bg);;
   color: black;

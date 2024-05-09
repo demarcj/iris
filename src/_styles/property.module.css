@@ -74,6 +74,10 @@
   display: grid;
 }
 
+.description{
+  white-space: preserve-breaks;
+}
+
 @media (width < 1025px) {
   .hero_side_container{
     display: none;

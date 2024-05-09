@@ -23,6 +23,7 @@ export interface PropertyModel {
   phone?: string;
   price: string;
   property_id: string;
+  ref?: string;
   size?: string;
   stories: number;
   sub_district: string;

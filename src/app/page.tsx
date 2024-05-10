@@ -56,7 +56,7 @@ export default function Home() {
               style={{display: !!section.properties.length ? `block` : `none`}}
             >
               <h2 className={styles.carousel_header}>{ section.name }</h2>
-              <Carousel items={section.properties}/>
+              <Carousel properties={section.properties}/>
             </section>
           ))
         }

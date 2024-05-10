@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel, faBathtub, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 // Function
-import { get_format_size } from "@/_function";
+import { get_format_size, format_bedroom } from "@/_function";
 
 // Material
 import Chip from '@mui/joy/Chip';
@@ -108,7 +108,7 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, dis
             }  
           </div>
           <div className={styles.property_detail}>
-            <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
+            <div><FontAwesomeIcon icon={faBed} /> : {format_bedroom(bedrooms)}</div>
             <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
             <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
             <div><FontAwesomeIcon icon={faMaximize} /> : {get_format_size(size)}</div>

@@ -9,6 +9,7 @@
 
 .carousel_container{
   padding: 30px 0;
+  position: relative;
 }
 
 .carousel_header{

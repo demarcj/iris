@@ -1,36 +1,45 @@
 "use client";
-import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
 import { PropertyCardHorizontal } from './';
-import { CarouselModel } from "@/_models"
+
+import { PropertyModel } from '@/_models'
+
+// Styles
 import 'swiper/css';
+import 'swiper/css/navigation';
 
-export const Carousel: React.FC<CarouselModel> = ({items}) => {
-  const [slide_view, set_slide_view] = useState(3);
+interface CarouselModel {
+  properties: PropertyModel[];
+}
 
-  useEffect(() => {
-    const responsive = (
-      window.innerWidth >= 1200 ? 3 
-      : window.innerWidth < 1200 && window.innerWidth >= 600 ? 2 
-      : 1
-    );
-    set_slide_view(responsive);
-  }, []);
-
-  return(
+export const Carousel: React.FC<CarouselModel> = ({properties}) => (
+  <>
     <Swiper
       spaceBetween={50}
-      slidesPerView={slide_view}
+      slidesPerView={1}
+      breakpoints={{
+        600: {
+          slidesPerView: 2,
+          navigation: {enabled: properties.length > 2}
+        },
+        1200: {
+          slidesPerView: 3,
+          navigation: {enabled: properties.length > 3}
+        }
+      }}
+      navigation={{ enabled: properties.length > 1}}
+      modules={[Navigation]}
     >
       { 
-        items.map((item, i) => { 
+        properties.map((property, i) => { 
           return (
             <SwiperSlide key={i}>
-              <PropertyCardHorizontal property={item} />
+              <PropertyCardHorizontal property={property} />
             </SwiperSlide>
           ) 
         })
       }
     </Swiper>
-  )
-}
+  </>
+)

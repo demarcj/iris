@@ -5,11 +5,20 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+// Fontawesome
+import { faChevronLeft, faChevronRight, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 // React
 import { useEffect, useState } from "react";
 
-// Joy UI
+// Material
 import Button from '@mui/joy/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
 
 // Server
 import { get_property, admin_check } from '@/_server';
@@ -18,31 +27,40 @@ import { get_property, admin_check } from '@/_server';
 import { PropertyModel } from '@/_models';
 
 // Function
-import { get_format_size } from '@/_function';
+import { get_format_size, format_bedroom } from '@/_function';
 
 // Style
 import styles from "@/_styles/property.module.css";
+import global from "@/_styles/global.module.css";
+// import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css';
 
 const Property = () => {
   const searchParams = useParams();
   const [property, set_property] = useState({} as PropertyModel);
   const [loading, set_loading] = useState(true);
+  const [images, set_images] = useState([] as string[]);
+  const [image_ref, set_image_ref] = useState(0);
   const [is_login, set_is_login] = useState(false);
   const [detail_list, set_detail_list] = useState([] as Record<string, any>[]);
+  const [image_dialog, set_image_dialog] = useState(false);
 
   const details = [
-    `type`,
-    `bedrooms`,
-    `bathrooms`,
-    `furnished`,
-    `size`,
-    `useable_area`,
-    `floor`,
-    `stories`,
-    `available_at`,
     `allows_marijuana`,
-    `ownership`
+    `available_at`,
+    `bathrooms`,
+    `bedrooms`,
+    `floor`,
+    `furnished`,
+    `option`,
+    `ownership`,
+    `size`,
+    `stories`,
+    `type`,
+    `useable_area`,
   ];
+  const see_more_message = `Click on here to see more images`;
 
   const convert_to_string = (key: string, value: unknown) => {
     if(key === `allows_marijuana`){
@@ -51,7 +69,28 @@ const Property = () => {
     if(key === `size` || key === `useable_area`){
       return get_format_size(value as string);
     }
+    if(key === `option`){
+      return (value as string[]).join(` / `);
+    }
+    if(key === `bedrooms`){
+      return format_bedroom(value as number);
+    }
     return `${value}`.replaceAll(`_`, ` `).toLowerCase();
+  }
+
+  const handle_image_close = () => {
+    set_image_ref(0);
+    set_image_dialog(false);
+  };
+
+  const open_image_dialog = (index?: number) => {
+    if(!property?.images?.length){
+      return;
+    }
+    if(index){
+      set_image_ref(index + 1)
+    }
+    set_image_dialog(true);
   }
   
   useEffect(() => {
@@ -59,6 +98,8 @@ const Property = () => {
       const has_login = await admin_check(localStorage.getItem(`user`));
       const id = (searchParams.id as string) || ``;
       const property_data = await get_property(id);
+      const images_check = property_data?.images || []; 
+      set_images([property_data.img, ...images_check]);
       set_property(property_data);
       set_is_login(has_login); 
       set_loading(false);
@@ -86,11 +127,23 @@ const Property = () => {
                 height={2000}
                 alt="" 
               /> */}
-              <img
-                className={styles.hero}
-                src={property.img} 
-                alt="" 
-              />
+              <div 
+                className={styles.image_wrapper}
+                onClick={() => open_image_dialog()}
+              >
+                <img
+                  className={styles.hero}
+                  src={property.img} 
+                  alt=""
+                />
+                {
+                  !!property?.images?.length && (
+                    <div className={styles.image_more}>
+                      {see_more_message} <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </div>
+                  )
+                }
+              </div>
               <div className={styles.hero_side_container}>
                 { 
                   !!property.images?.length && property.images?.map((image, key) => (key < 2) && (
@@ -102,12 +155,20 @@ const Property = () => {
                     //   height={400}
                     //   alt=''
                     // />
-                    <img
-                      className={styles.hero_side}
+                    <div
+                      className={styles.image_wrapper}
+                      onClick={() => open_image_dialog(key)}
                       key={key}
-                      src={image} 
-                      alt="" 
-                    />
+                    >
+                      <img
+                        className={styles.hero_side}
+                        src={image}
+                        alt="" 
+                      />
+                      <div className={styles.image_more}>
+                        {see_more_message} <FontAwesomeIcon icon={faMagnifyingGlass} />
+                      </div>
+                    </div>
                   ))
                 }
               </div>
@@ -198,6 +259,47 @@ const Property = () => {
                   <Button > Contact Us </Button>
                 </Link>
               </section>
+              <Dialog 
+                open={image_dialog}
+                onClose={handle_image_close}
+              >
+                <div className={[global.dialog, styles.dialog].join(' ')}>
+                  <div className="swiper-button">
+                    <div className="button_prev">
+                      <FontAwesomeIcon icon={faChevronLeft}/>
+                    </div>
+                    <div className="button_next">
+                      <FontAwesomeIcon icon={faChevronRight}/>
+                    </div>
+                  </div>
+                  <Swiper
+                    slidesPerView={1}
+                    navigation={{
+                      nextEl: `.button_next`,
+                      prevEl: `.button_prev`,
+                      disabledClass: `swiper-button-disabled`
+                    }} 
+                    modules={[Navigation, Pagination]}
+                    pagination={{ type: 'progressbar' }}
+                    // initialSlide={image_ref}
+                  >
+                    { 
+                      images.map((item, i) => { 
+                        return (
+                          <SwiperSlide key={i}>
+                            <img className={styles.image_slide} src={item} alt="" />
+                          </SwiperSlide>
+                        ) 
+                      })
+                    }
+                  </Swiper>
+                  <DialogActions>
+                    <Button onClick={handle_image_close} autoFocus>
+                      Close
+                    </Button>
+                  </DialogActions>
+                </div>
+              </Dialog>
             </div>
           </main>
         )

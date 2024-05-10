@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 // function
-import { get_format_size } from "@/_function";
+import { get_format_size, format_bedroom } from "@/_function";
 
 import { PropertyModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,7 +51,7 @@ export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({property}) 
           } 
         </div>
         <div className={styles.property_detail}>
-          <div><FontAwesomeIcon icon={faBed} /> : {bedrooms}</div>
+          <div><FontAwesomeIcon icon={faBed} /> : {format_bedroom(bedrooms)}</div>
           <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
           <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
           <div><FontAwesomeIcon icon={faMaximize} /> : {get_format_size(size)}</div>

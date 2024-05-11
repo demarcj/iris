@@ -156,7 +156,7 @@ const Property = () => {
                     //   alt=''
                     // />
                     <div
-                      className={styles.image_wrapper}
+                      className={[styles.image_wrapper, styles.hero_wrapper].join(` `)}
                       onClick={() => open_image_dialog(key)}
                       key={key}
                     >
@@ -264,30 +264,33 @@ const Property = () => {
                 onClose={handle_image_close}
               >
                 <div className={[global.dialog, styles.dialog].join(' ')}>
-                  <div className="swiper-button">
+                  {/* <div className="swiper-button">
                     <div className="button_prev">
                       <FontAwesomeIcon icon={faChevronLeft}/>
                     </div>
                     <div className="button_next">
                       <FontAwesomeIcon icon={faChevronRight}/>
                     </div>
-                  </div>
+                  </div> */}
                   <Swiper
                     slidesPerView={1}
-                    navigation={{
-                      nextEl: `.button_next`,
-                      prevEl: `.button_prev`,
-                      disabledClass: `swiper-button-disabled`
-                    }} 
+                    // navigation={{
+                    //   nextEl: `.button_next`,
+                    //   prevEl: `.button_prev`,
+                    //   disabledClass: `swiper-button-disabled`
+                    // }} 
+                    navigation={true}
                     modules={[Navigation, Pagination]}
                     pagination={{ type: 'progressbar' }}
-                    // initialSlide={image_ref}
+                    autoHeight={true}
                   >
                     { 
                       images.map((item, i) => { 
                         return (
                           <SwiperSlide key={i}>
-                            <img className={styles.image_slide} src={item} alt="" />
+                            <div className={styles.image_slide_wrapper}>
+                              <img className={styles.image_slide} src={item} alt="" />
+                            </div>
                           </SwiperSlide>
                         ) 
                       })

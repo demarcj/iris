@@ -8,6 +8,7 @@
 
 .dialog{
   padding: 15px;
+  overflow: hidden;
 }
 
 @media screen and (width < 769px) {

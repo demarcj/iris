@@ -84,11 +84,7 @@ const Login = () => {
               <Button
                 sx={{mt: `5px`}}
                 type='submit'
-                slotProps={{
-                  root: {
-                    className: global.button
-                  }
-                }}
+                slotProps={{ root: { className: global.button } }}
               >
                 Login
               </Button>

@@ -6,6 +6,17 @@ interface CustomProps {
   name: string;
 }
 
+export const format_money = (price: string = ``) => {
+  return new Intl.NumberFormat(
+    `th-TH`, 
+    {
+      style: `currency`, 
+      currency: `THB`,
+      maximumSignificantDigits: 2
+    }
+  ).format(parseInt(price));
+}
+
 export const NumericMoneyFormatAdapter = React.forwardRef<NumericFormatProps, CustomProps>(
   function NumericFormatAdapter(props, ref) {
     const { onChange, ...other } = props;

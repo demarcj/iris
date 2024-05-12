@@ -2,11 +2,16 @@
 
 // Nextjs
 // import Image from 'next/image';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+
+// NPM
+import { ToastContainer, toast } from 'react-toastify';
+
+// UI
+import { DeletePropertyDialog } from "@/_components/ui";
 
 // Fontawesome
-import { faChevronLeft, faChevronRight, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // React
@@ -21,23 +26,22 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 
 // Server
-import { get_property, admin_check } from '@/_server';
+import { get_property, admin_check, delete_property } from '@/_server';
 
 // Model
 import { PropertyModel } from '@/_models';
 
 // Function
-import { get_format_size, format_bedroom } from '@/_function';
+import { format_size, format_bedroom, format_money, route_edit } from '@/_function';
 
 // Style
 import styles from "@/_styles/property.module.css";
 import global from "@/_styles/global.module.css";
-// import 'swiper/css/navigation';
+import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
 
 const Property = () => {
-  const searchParams = useParams();
   const [property, set_property] = useState({} as PropertyModel);
   const [loading, set_loading] = useState(true);
   const [images, set_images] = useState([] as string[]);
@@ -45,37 +49,56 @@ const Property = () => {
   const [is_login, set_is_login] = useState(false);
   const [detail_list, set_detail_list] = useState([] as Record<string, any>[]);
   const [image_dialog, set_image_dialog] = useState(false);
+  const [delete_dialog, set_delete_dialog] = useState(false);
 
   const details = [
     `allows_marijuana`,
     `available_at`,
     `bathrooms`,
     `bedrooms`,
+    `building`,
     `floor`,
     `furnished`,
     `option`,
     `ownership`,
+    `price`,
+    `rental_price`,
     `size`,
     `stories`,
     `type`,
     `useable_area`,
   ];
   const see_more_message = `Click on here to see more images`;
+  const searchParams = useParams();
+  const router = useRouter();
 
   const convert_to_string = (key: string, value: unknown) => {
-    if(key === `allows_marijuana`){
-      return value ? `Yes` : `No`; 
+    const key_map = {
+      allows_marijuana: value ? `Yes` : `No`,
+      size: format_size(value as string),
+      price: format_money(value as string),
+      rental_price: format_money(value as string),
+      useable_area: format_size(value as string),
+      option: Array.isArray(value) && (value as string[]).join(` / `),
+      bedrooms: format_bedroom(value as number)
     }
-    if(key === `size` || key === `useable_area`){
-      return get_format_size(value as string);
+    return Object.hasOwn(key_map, key) ? key_map[key as keyof typeof key_map] : `${value}`.replaceAll(`_`, ` `).toLowerCase();
+  }
+
+  const route_edit_mode = (e: any) => router.push(route_edit(property));
+
+  const handle_delete_property = async () => set_delete_dialog(true);
+
+  const handle_delete_close = () =>  set_delete_dialog(false);
+
+  const confirmed_delete = async () => {
+    const confirmation = await delete_property(property);
+    if(confirmation){
+      router.push(`/message?type=delete&property_name=${property.name}`);
+    } else {
+      toast(`Something went wrong. Try again.`);
+      set_delete_dialog(false);
     }
-    if(key === `option`){
-      return (value as string[]).join(` / `);
-    }
-    if(key === `bedrooms`){
-      return format_bedroom(value as number);
-    }
-    return `${value}`.replaceAll(`_`, ` `).toLowerCase();
   }
 
   const handle_image_close = () => {
@@ -88,7 +111,7 @@ const Property = () => {
       return;
     }
     if(index){
-      set_image_ref(index + 1)
+      set_image_ref(index + 1);
     }
     set_image_dialog(true);
   }
@@ -119,59 +142,85 @@ const Property = () => {
       {
         (!loading && !!property?.id.length) && (
           <main className={styles.main}>
-            <section className={[styles.image_container, styles.section].join(` `)}>
-              {/* <Image
-                className={styles.hero}
-                src={property.img}
-                width={2000}
-                height={2000}
-                alt="" 
-              /> */}
-              <div 
-                className={styles.image_wrapper}
-                onClick={() => open_image_dialog()}
-              >
-                <img
+            <section className={styles.section}>
+              <div className={[styles.image_container].join(` `)}>
+                {/* <Image
                   className={styles.hero}
-                  src={property.img} 
-                  alt=""
-                />
-                {
-                  !!property?.images?.length && (
-                    <div className={styles.image_more}>
-                      {see_more_message} <FontAwesomeIcon icon={faMagnifyingGlass} />
-                    </div>
-                  )
-                }
-              </div>
-              <div className={styles.hero_side_container}>
-                { 
-                  !!property.images?.length && property.images?.map((image, key) => (key < 2) && (
-                    // <Image
-                    //   className={styles.hero_side}
-                    //   key={key}
-                    //   src={image}
-                    //   width={400}
-                    //   height={400}
-                    //   alt=''
-                    // />
-                    <div
-                      className={[styles.image_wrapper, styles.hero_wrapper].join(` `)}
-                      onClick={() => open_image_dialog(key)}
-                      key={key}
-                    >
-                      <img
-                        className={styles.hero_side}
-                        src={image}
-                        alt="" 
-                      />
+                  src={property.img}
+                  width={2000}
+                  height={2000}
+                  alt="" 
+                /> */}
+                <div 
+                  className={styles.image_wrapper}
+                  onClick={() => open_image_dialog()}
+                >
+                  <img
+                    className={styles.hero}
+                    src={property.img} 
+                    alt=""
+                  />
+                  {
+                    !!property?.images?.length && (
                       <div className={styles.image_more}>
                         {see_more_message} <FontAwesomeIcon icon={faMagnifyingGlass} />
                       </div>
-                    </div>
-                  ))
-                }
+                    )
+                  }
+                </div>
+                <div className={styles.hero_side_container}>
+                  { 
+                    !!property.images?.length && property.images?.map((image, key) => (key < 2) && (
+                      // <Image
+                      //   className={styles.hero_side}
+                      //   key={key}
+                      //   src={image}
+                      //   width={400}
+                      //   height={400}
+                      //   alt=''
+                      // />
+                      <div
+                        className={[styles.image_wrapper, styles.hero_wrapper].join(` `)}
+                        onClick={() => open_image_dialog(key)}
+                        key={key}
+                      >
+                        <img
+                          className={styles.hero_side}
+                          src={image}
+                          alt="" 
+                        />
+                        <div className={styles.image_more}>
+                          {see_more_message} <FontAwesomeIcon icon={faMagnifyingGlass} />
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
               </div>
+              {
+                images.length && (
+                  <div className={styles.top_slider}>
+                    <Swiper
+                      slidesPerView={1}
+                      navigation={images.length > 1}
+                      modules={[Navigation, Pagination]}
+                      pagination={{ type: 'bullets' }}
+                    >
+                      { 
+                        images.map((image, i) => { 
+                          return (
+                            <SwiperSlide key={i}>
+                              <div className={styles.image_slide_mobile_wrapper}>
+                                <img className={styles.image_slide_mobile} src={image} alt="" />
+                              </div>
+                            </SwiperSlide>
+                          ) 
+                        })
+                      }
+                    </Swiper>
+                  </div>
+                )
+              }
             </section>
             <div className={styles.section_detail_container}>
               <div>
@@ -180,18 +229,7 @@ const Property = () => {
                     {property.name} 
                     {property?.sub_district ? `- ${property.sub_district.replaceAll(`_`, ` `)}` : ``}
                   </h1>
-                  <h2>
-                    {
-                      new Intl.NumberFormat(
-                        `th-TH`, 
-                        {
-                          style: `currency`, 
-                          currency: `THB`,
-                          maximumSignificantDigits: 2
-                        }
-                      ).format(parseInt(property.price))
-                    } 
-                  </h2>
+                  <h2> { format_money(property?.price || property?.rental_price) } </h2>
                 </div>
                 {
                   !!detail_list?.length && (
@@ -255,9 +293,21 @@ const Property = () => {
                 }
               </div>
               <section>
-                <Link href='/contact_us' className={styles.contact_link}>
-                  <Button > Contact Us </Button>
-                </Link>
+                <div className={styles.button_group}>
+                <Button
+                  color="success" 
+                  onClick={() => router.push(`/contact_us`)}
+                > Contact Us </Button>
+                  {
+                    is_login && (
+                      <div className={[styles.button_group, styles.section_detail].join(` `)}>
+                        <h2>Admin</h2>
+                        <Button onClick={e => route_edit_mode(e)}>Edit</Button>
+                        <Button color="danger" onClick={e => handle_delete_property()}>Delete</Button>
+                      </div>
+                    )
+                  }
+                </div>
               </section>
               <Dialog 
                 open={image_dialog}
@@ -285,11 +335,11 @@ const Property = () => {
                     autoHeight={true}
                   >
                     { 
-                      images.map((item, i) => { 
+                      images.map((image, i) => { 
                         return (
                           <SwiperSlide key={i}>
                             <div className={styles.image_slide_wrapper}>
-                              <img className={styles.image_slide} src={item} alt="" />
+                              <img className={styles.image_slide} src={image} alt="" />
                             </div>
                           </SwiperSlide>
                         ) 
@@ -297,13 +347,20 @@ const Property = () => {
                     }
                   </Swiper>
                   <DialogActions>
-                    <Button onClick={handle_image_close} autoFocus>
+                    <Button onClick={handle_image_close}>
                       Close
                     </Button>
                   </DialogActions>
                 </div>
               </Dialog>
+              <DeletePropertyDialog
+                confirmed_delete={confirmed_delete} 
+                open={delete_dialog}
+                on_close={handle_delete_close}
+                property={property}
+              />
             </div>
+            <ToastContainer />
           </main>
         )
       }

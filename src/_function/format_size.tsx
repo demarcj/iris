@@ -1,7 +1,7 @@
 import React from 'react';
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
 
-export const get_format_size = (size: string = ``): string => {
+export const format_size = (size: string = ``): string => {
   return `${new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm`;
 }
 

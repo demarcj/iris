@@ -38,6 +38,7 @@ const VisuallyHiddenInput = styled('input')`
 export const InputUI: React.FC<InputModel> = ({ 
     class_name,
     disabled,
+    display,
     form_label, 
     key_name,
     handle_image,
@@ -59,7 +60,10 @@ export const InputUI: React.FC<InputModel> = ({
     const empty_class = {};
     list = list?.length ? list : [];
   return (
-    <div className={styles[class_name]}>
+    <div 
+      className={styles[class_name]}
+      style={{display: display ? `block` : `none`}}
+    >
       {
         type === `text` ? (
           <FormControl>

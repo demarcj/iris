@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 // function
-import { get_format_size, format_bedroom } from "@/_function";
+import { format_size, format_bedroom, format_money } from "@/_function";
 
 import { PropertyModel } from "@/_models";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +16,7 @@ interface PropertyCardModel {
 }
 
 export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({property}) =>  {
-  const {id, img, name, bedrooms, bathrooms, size, type} = property;
+  const {id, img, name, bedrooms, bathrooms, size, type, rental_price} = property;
   const price = typeof property.price === `string` ? property.price : `${property.price}`
 
   return (
@@ -38,23 +38,14 @@ export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({property}) 
       />
       <div className={styles.carousel_content}>
         <h3 className={styles.property_name}>{name}</h3>
-        <div><span className={styles.elegant_style}>Price: </span> 
-          {
-            new Intl.NumberFormat(
-              `th-TH`, 
-              {
-                style: `currency`, 
-                currency: `THB`,
-                maximumSignificantDigits: 2
-              }
-            ).format(parseInt(price))
-          } 
+        <div>
+          <span className={styles.elegant_style}>Price: </span> { format_money(price || rental_price) } 
         </div>
         <div className={styles.property_detail}>
           <div><FontAwesomeIcon icon={faBed} /> : {format_bedroom(bedrooms)}</div>
           <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
           <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
-          <div><FontAwesomeIcon icon={faMaximize} /> : {get_format_size(size)}</div>
+          <div><FontAwesomeIcon icon={faMaximize} /> : {format_size(size)}</div>
         </div>
       </div>
     </Link>

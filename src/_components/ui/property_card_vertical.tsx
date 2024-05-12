@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel, faBathtub, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 // Function
-import { get_format_size, format_bedroom } from "@/_function";
+import { format_size, format_bedroom, format_money, route_edit } from "@/_function";
 
 // Material
 import Chip from '@mui/joy/Chip';
@@ -30,15 +30,15 @@ interface PropertyCardModel {
   property: PropertyModel;
 }
 
-export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, display_amenities, delete_property, edit_mode}) =>  {
+export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, display_amenities, delete_property, edit_mode}) => {
   const character_max = 75;
-  const {id, name, amenities, description, bathrooms, bedrooms, img, size, type, sub_district, hot_deal} = property;
+  const {id, name, amenities, description, bathrooms, bedrooms, img, size, type, sub_district, hot_deal, rental_price} = property;
   const price = typeof property.price === `string` ? property.price : `${property.price}`;
   const router = useRouter();
 
   const route_edit_mode = (e: any) => {
     e.preventDefault();
-    router.push(`/form?edit=true&id=${id}`)
+    router.push(route_edit(property));
   }
 
   return (
@@ -95,23 +95,13 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, dis
         </div>
         <div>
           <div>
-            <span className={styles.elegant_style}>Price: </span> 
-            {
-              new Intl.NumberFormat(
-                `th-TH`, 
-                {
-                  style: `currency`, 
-                  currency: `THB`,
-                  maximumSignificantDigits: 2
-                }
-              ).format(parseInt(price))
-            }  
+            <span className={styles.elegant_style}>Price: </span> { format_money(price || rental_price) }  
           </div>
           <div className={styles.property_detail}>
             <div><FontAwesomeIcon icon={faBed} /> : {format_bedroom(bedrooms)}</div>
             <div><FontAwesomeIcon icon={faBathtub} /> : {bathrooms}</div>
             <div><FontAwesomeIcon icon={faHotel} /> : {type.replaceAll(`_`, ` `)}</div>
-            <div><FontAwesomeIcon icon={faMaximize} /> : {get_format_size(size)}</div>
+            <div><FontAwesomeIcon icon={faMaximize} /> : {format_size(size)}</div>
           </div>
         </div>
         { edit_mode && (

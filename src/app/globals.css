@@ -4,7 +4,10 @@
   --green-blue: #0a7368;
   --card-bg: #e9eefa;
   --grid: 2fr 1fr;
-  --header-footer-bg: var(--green-blue)
+  --header-footer-bg: var(--green-blue);
+  --desktop: 1025px;
+  --tablet: 769px;
+  --mobile: 481px;
 }
 
 * {

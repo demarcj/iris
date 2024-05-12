@@ -15,6 +15,7 @@
 .properties_container{
   overflow-y: scroll;
   min-width: 515px;
+  padding: 30px 0;
 }
 
 .img{
@@ -30,10 +31,6 @@
   margin: auto;
   border: none;
   text-transform: capitalize;
-}
-
-.delete_message{
-  text-align: center;
 }
 
 .name{

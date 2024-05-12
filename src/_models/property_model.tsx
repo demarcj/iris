@@ -6,6 +6,7 @@ export interface PropertyModel {
   available_at: string;
   bathrooms: number;
   bedrooms: number;
+  building?: string;
   created_at: Date | string;
   description?: string;
   email: string;
@@ -18,11 +19,12 @@ export interface PropertyModel {
   img: string;
   location: string;
   name: string;
-  option?: string[];
+  option: string[];
   ownership: string;
   phone?: string;
-  price: string;
+  price?: string;
   property_id: string;
+  rental_price?: string;
   ref?: string;
   size?: string;
   stories: number;

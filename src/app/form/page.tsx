@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 // Next
 import Image from "next/image";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 
 // Firebase
 import { collection, addDoc, query, onSnapshot, doc, updateDoc } from "firebase/firestore";
@@ -43,6 +43,7 @@ const property_default = {
   available_at: ``,
   bathrooms: 1, 
   bedrooms: 0,
+  building: ``,
   created_at: ``, 
   description: ``,
   email: ``,
@@ -60,6 +61,7 @@ const property_default = {
   phone: ``,
   price: ``,
   property_id: ``,
+  rental_price: ``,
   size: ``,
   sub_district: ``,
   stories: 0,
@@ -84,12 +86,16 @@ const Form = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get(`id`);
   const edit = searchParams.get(`edit`);
-  const required = [`available_at`, `name`, `option`, `price`, `size`, `type`];
+  const required = [`available_at`, `furnished`, `name`, `option`, `price`, `size`, `type`];
   const option_menu = [`Sell`, `Rental`];
   const views_menu = [`Sea View`, `Partial Sea View`, `City View`, `Pool View`, `Garden View`, `Mountain View`];
   const furnished_menu = [`Furnished`, `Fully Furnished`, `Unfurnished`];
   const ownership_menu = [`Foreign Quota`, `Thai Quota`, `Thai Company Name`];
   const location_menu = [`Other`, `Dark Side`, `Sea Side`];
+  const price_map = {
+    rental: `rental_price`,
+    sell: `price`
+  };
   const loction_map = {
     other: [],
     dark_side:  [
@@ -196,16 +202,26 @@ const Form = () => {
   }
 
   const set_data = (data: any, key_name: string) => {
-    if(key_name === `has_facilities`){
+    let temp = property;
+    if(Object.is(key_name, `has_facilities`)){
       set_has_facilities(data);
       return;
     }
-    set_property({...property, [key_name]: data})
+    if(Object.is(key_name, `option`)){
+      if(!data.includes(`rental`)){
+        temp.rental_price = ``;
+      }
+      if(!data.includes(`sell`)){
+        temp.price = ``;
+      }
+    }
+    set_property({...temp, [key_name]: data})
   };
 
   const default_input: InputModel = {
     class_name: `input_container`,
     disabled: false,
+    display: true,
     form_label: ``,
     handle_image,
     hint: ``,
@@ -253,7 +269,7 @@ const Form = () => {
       ...default_input,
       form_label: `Project Facilities`,
       value: property.facilities,
-      disabled: !has_facilities,
+      display: has_facilities,
       required: false,
       multiple: true,
       type: `select`,
@@ -262,7 +278,17 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Views`,
+      form_label: `Amenities`,
+      value: property.amenities,
+      required: false,
+      multiple: true,
+      type: `select`,
+      key_name: `amenities`,
+      list: amenities_menu
+    },
+    {
+      ...default_input,
+      form_label: `Views from Property`,
       value: property.views,
       required: false,
       multiple: true,
@@ -311,10 +337,44 @@ const Form = () => {
     // },
     {
       ...default_input,
-      form_label: `Price`,
+      form_label: `Property Type`,
+      value: property.type,
+      type: `select`,
+      key_name: `type`,
+      list: type_menu
+    },
+    {
+      ...default_input,
+      form_label: `Building`,
+      value: property.building,
+      display: Object.is(property.type, `condo`),
+      required: false,
+      key_name: `building`,
+    },
+    {
+      ...default_input,
+      form_label: `Property Option`,
+      value: property.option,
+      type: `select`,
+      key_name: `option`,
+      multiple: true,
+      list: option_menu
+    },
+    {
+      ...default_input,
+      form_label: `Selling Price`,
       value: property.price,
+      display: !!property.option?.includes(`sell`),
       type: `money_format`,
       key_name: `price`,
+    },
+    {
+      ...default_input,
+      form_label: `Rental Price`,
+      value: property.rental_price,
+      display: !!property.option?.includes(`rental`),
+      type: `money_format`,
+      key_name: `rental_price`,
     },
     {
       ...default_input,
@@ -350,23 +410,6 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Property Type`,
-      value: property.type,
-      type: `select`,
-      key_name: `type`,
-      list: type_menu
-    },
-    {
-      ...default_input,
-      form_label: `Property Option`,
-      value: property.option,
-      type: `select`,
-      key_name: `option`,
-      multiple: true,
-      list: option_menu
-    },
-    {
-      ...default_input,
       form_label: `Ownership`,
       value: property.ownership,
       type: `select`,
@@ -389,16 +432,7 @@ const Form = () => {
       key_name: `furnished`,
       list: furnished_menu
     },
-    {
-      ...default_input,
-      form_label: `Amenities`,
-      value: property.amenities,
-      required: false,
-      multiple: true,
-      type: `select`,
-      key_name: `amenities`,
-      list: amenities_menu
-    },
+    
     {
       ...default_input,
       form_label: `Land Size`,
@@ -469,24 +503,39 @@ const Form = () => {
       type: `image`,
       key_name: `images`,
     }
-  ]
+  ];
 
-  const is_valid = (required_list: string[]): boolean => {
-    const has_img = edit_mode ? true : !!img?.name;
-    const required_property = !required_list.filter((key: string) => {
-      if(Array.isArray(property[key as keyof typeof property])){
-        return (!property[key as keyof typeof property] as any)?.length;
-      }
-      return !property[key as keyof typeof property]
-    }).length;
-    return has_img && required_property;
-  };
-
-  const not_valid = () => {
-    const has_img = !!img?.name ? [] : [`img`]
-    const values = [...required, ...has_img].filter((key: string) => !property[key as keyof typeof property]).join(`, `);
+  const not_valid = (required_list: string[]) => {
+    const values = required_list.filter((key: string | string[]) => !property[key as keyof typeof property]).join(`, `);
     toast(`${values} field(s) is empty. Please fill in all fields.`);
   }
+
+  const is_valid = (required_list: string[]) => {
+    const has_img = edit_mode ? true : !!img?.name;
+    
+    let invalid_list: string[] = [];
+    required_list.forEach((key: string) => {
+      if(Object.is(key, `price`)){
+        const get_keys = property.option.length ? property.option.map(req => price_map[req as keyof typeof price_map]).filter(req => !property[req as keyof typeof property]) : [`price`];
+        invalid_list = !get_keys ? invalid_list : [...invalid_list, ...get_keys];
+        return;
+      }
+      if(Array.isArray(property[key as keyof typeof property])){
+        invalid_list = (property[key as keyof typeof property] as any)?.length > 0 ? invalid_list : [...invalid_list, key];
+        return;
+      }
+      invalid_list = !!property[key as keyof typeof property] ? invalid_list : [...invalid_list, key];
+    })
+    if(!has_img){
+      invalid_list = [...invalid_list, `main image`]
+    }
+    console.log({has_img, invalid_list});
+    if(has_img && invalid_list.length === 0){
+      handle_submit();
+    } else {
+      not_valid(invalid_list);
+    }
+  };
 
   const submit_img = async (id: string, image: File | FileList) => {
     try{
@@ -552,8 +601,6 @@ const Form = () => {
 
   const handle_submit = async () => {
     set_loading(true);
-    const valid_switch = edit_mode ? required : [...required, `img`];
-    is_valid(valid_switch);
 
     try{
       if(edit_mode){
@@ -642,6 +689,7 @@ const Form = () => {
                 <InputUI 
                   class_name={input.class_name}
                   disabled={input.disabled}
+                  display={input.display}
                   form_label={input.form_label} 
                   key={i}
                   key_name={input.key_name}
@@ -681,7 +729,7 @@ const Form = () => {
               )
             }
             <span
-              onClick={() => is_valid(required) ? handle_submit() : not_valid()}
+              onClick={() => is_valid(required)}
             >
               <Button
                 sx={{mt: `15px`}}

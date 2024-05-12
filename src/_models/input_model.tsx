@@ -1,6 +1,7 @@
 export interface InputModel {
     class_name: string;
     disabled: boolean;
+    display: boolean;
     form_label: string;
     hint: string;
     key_name: string;

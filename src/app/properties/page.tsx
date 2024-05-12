@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 
 // UI
-import { PropertyCardVertical } from "@/_components/ui";
+import { PropertyCardVertical, DeletePropertyDialog } from "@/_components/ui";
 
 // Server
 import { get_properties, admin_check, delete_property } from "@/_server";
@@ -20,9 +20,6 @@ import Image from 'next/image';
 import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-// import DialogContent from '@mui/material/DialogContent';
-// import DialogContentText from '@mui/material/DialogContentText';
-// import DialogTitle from '@mui/material/DialogTitle';
 
 // style
 import global from "@/_styles/global.module.css";
@@ -130,28 +127,12 @@ const Properties = () => {
               </DialogActions>
             </div>
           </Dialog>
-          <Dialog 
+          <DeletePropertyDialog
+            confirmed_delete={confirmed_delete} 
             open={delete_dialog}
-            onClose={handle_delete_close}
-          >
-            <div className={global.dialog}>
-              <div className={styles.delete_message}>
-                Are you sure you want to delete the property - <div className={styles.name}>[{selected_property.name}]</div>
-              </div>
-              <DialogActions>
-                <Button 
-                  color="danger"
-                  variant="soft"
-                  onClick={confirmed_delete}
-                >
-                  Yes, I want to delete this property
-                </Button>
-                <Button onClick={handle_delete_close} autoFocus>
-                  Close
-                </Button>
-              </DialogActions>
-            </div>
-          </Dialog>
+            on_close={handle_delete_close}
+            property={selected_property}
+          />
         </div>
       </main>
       <ToastContainer />

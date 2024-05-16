@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://irispattayaproperties.com
-
-# Sitemaps
-Sitemap: https://irispattayaproperties.com/sitemap.xml

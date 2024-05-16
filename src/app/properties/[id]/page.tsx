@@ -3,6 +3,8 @@
 // Nextjs
 // import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
 
 // NPM
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,9 +23,6 @@ import { useEffect, useState } from "react";
 import Button from '@mui/joy/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
 
 // Server
 import { get_property, admin_check, delete_property } from '@/_server';
@@ -46,6 +45,7 @@ const Property = () => {
   const [loading, set_loading] = useState(true);
   const [images, set_images] = useState([] as string[]);
   const [image_ref, set_image_ref] = useState(0);
+  const [language, set_language] = useState(`th`);
   const [is_login, set_is_login] = useState(false);
   const [detail_list, set_detail_list] = useState([] as Record<string, any>[]);
   const [image_dialog, set_image_dialog] = useState(false);

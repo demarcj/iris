@@ -35,6 +35,9 @@ import { PropertyModel, InputModel } from "@/_models";
 // Server
 import { get_property, admin_check, update_property } from '@/_server';
 
+// Constants
+import { LanguageType } from '@/_constants';
+
 const property_default = {
   address: ``,
   agent_note: ``,
@@ -82,6 +85,7 @@ const Form = () => {
   const [property_id_data, set_property_id_data] = useState({id: ``, data: {} as any});
   const [prev_location, next_location] = useState(`Other`);
   const [edit_mode, set_edit_mode] = useState(false);
+  const [language, set_language] = useState(`th` as LanguageType);
   
   const searchParams = useSearchParams();
   const id = searchParams.get(`id`);
@@ -91,7 +95,10 @@ const Form = () => {
   const views_menu = [`Sea View`, `Partial Sea View`, `City View`, `Pool View`, `Garden View`, `Mountain View`];
   const furnished_menu = [`Furnished`, `Fully Furnished`, `Unfurnished`];
   const ownership_menu = [`Foreign Quota`, `Thai Quota`, `Thai Company Name`];
-  const location_menu = [`Other`, `Dark Side`, `Sea Side`];
+  const location_menu = { 
+    en: [`Other`, `Dark Side`, `Sea Side`],
+    th: [``, `ไม่ใช่ฝั่งทะเล`, `ฝั่งทะเล`]
+  };
   const price_map = {
     rental: `rental_price`,
     sell: `price`
@@ -239,27 +246,27 @@ const Form = () => {
   const input_list: InputModel[] = [
     {
       ...default_input,
-      form_label: `Property Name`,
+      form_label: Object.is(language, `en`) ? `Property Name` : `ชื่อโครงการ`,
       value: property.name,
       key_name: `name`,
     },
     {
       ...default_input,
-      form_label: `Address`,
+      form_label: Object.is(language, `en`) ? `Address` : ``,
       value: property.address,
       required: false,
       key_name: `address`,
     },
     {
       ...default_input,
-      form_label: `Unit Number`,
+      form_label: Object.is(language, `en`) ? `Unit Number` : `หมายเลขห้อง`,
       required: false,
       value: property.unit_number,
       key_name: `unit_number`,
     },
     {
       ...default_input,
-      form_label: `Has Project Facilities`,
+      form_label: Object.is(language, `en`) ? `Has Project Facilities` : ``,
       class_name: ``,
       value: has_facilities,
       type: `checkbox`,
@@ -267,7 +274,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Project Facilities`,
+      form_label: Object.is(language, `en`) ? `Project Facilities` : `สิ่งอำนวยความสะดวกของโครงการ`,
       value: property.facilities,
       display: has_facilities,
       required: false,
@@ -278,7 +285,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Amenities`,
+      form_label: Object.is(language, `en`) ? `Amenities` : ``,
       value: property.amenities,
       required: false,
       multiple: true,
@@ -288,7 +295,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Views from Property`,
+      form_label: Object.is(language, `en`) ? `Views from Property` : `วิวจากห้อง`,
       value: property.views,
       required: false,
       multiple: true,
@@ -298,16 +305,16 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Location`,
+      form_label: Object.is(language, `en`) ? `Location` : `ทำเลที่ตั้งที่ต้องการค้นหา`,
       value: property.location,
       required: false,
       type: `select`,
       key_name: `location`,
-      list: location_menu
+      list: location_menu[language]
     },
     {
       ...default_input,
-      form_label: `Sub District`,
+      form_label: Object.is(language, `en`) ? `Sub District` : ``,
       value: property.sub_district,
       required: false,
       type: property?.location?.toLowerCase() === `other` ? `text` : `select`,
@@ -316,7 +323,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Property ID`,
+      form_label: Object.is(language, `en`) ? `Property ID` : ``,
       value: property.property_id,
       type: `readonly`,
       key_name: `property_id`,
@@ -337,7 +344,7 @@ const Form = () => {
     // },
     {
       ...default_input,
-      form_label: `Property Type`,
+      form_label: Object.is(language, `en`) ? `Property Type` : `ประเภทของทรัพย์`,
       value: property.type,
       type: `select`,
       key_name: `type`,
@@ -345,7 +352,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Building`,
+      form_label: Object.is(language, `en`) ? `Building` : `ตึกที่ตั้งของห้องพัก`,
       value: property.building,
       display: Object.is(property.type, `condo`),
       required: false,
@@ -353,7 +360,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Property Option`,
+      form_label: Object.is(language, `en`) ? `Property Option` : `ทรัพย์นี้สำหรับ`,
       value: property.option,
       type: `select`,
       key_name: `option`,
@@ -362,7 +369,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Selling Price`,
+      form_label: Object.is(language, `en`) ? `Selling Price` : ``,
       value: property.price,
       display: !!property.option?.includes(`sell`),
       type: `money_format`,
@@ -370,7 +377,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Rental Price`,
+      form_label: Object.is(language, `en`) ? `Rental Price` : ``,
       value: property.rental_price,
       display: !!property.option?.includes(`rental`),
       type: `money_format`,
@@ -378,7 +385,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Bedrooms No.`,
+      form_label: Object.is(language, `en`) ? `Bedrooms No.` : `ห้องนอน`,
       value: property.bedrooms,
       required: false,
       type: `number`,
@@ -386,23 +393,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Stories`,
-      value: property.stories,
-      required: false,
-      type: `number`,
-      key_name: `stories`,
-    },
-    {
-      ...default_input,
-      form_label: `Floor`,
-      value: property.floor,
-      required: false,
-      type: `number`,
-      key_name: `floor`,
-    },
-    {
-      ...default_input,
-      form_label: `Bathroom No.`,
+      form_label: Object.is(language, `en`) ? `Bathroom No.` : `ห้องน้ำ`,
       value: property.bathrooms,
       required: false,
       type: `number`,
@@ -410,7 +401,23 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Ownership`,
+      form_label: Object.is(language, `en`) ? `Stories` : ``,
+      value: property.stories,
+      required: false,
+      type: `number`,
+      key_name: `stories`,
+    },
+    {
+      ...default_input,
+      form_label: Object.is(language, `en`) ? `Floor` : ``,
+      value: property.floor,
+      required: false,
+      type: `number`,
+      key_name: `floor`,
+    },
+    {
+      ...default_input,
+      form_label: Object.is(language, ``) ? `Ownership` : `กรรมสิทธิ์`,
       value: property.ownership,
       type: `select`,
       key_name: `ownership`,
@@ -418,7 +425,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Transfer Fees`,
+      form_label: Object.is(language, `en`) ? `Transfer Fees` : `ค่าธรรมเนียมการโอน`,
       value: property.transfer_fees,
       type: `select`,
       key_name: `transfer_fees`,
@@ -426,7 +433,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Furnished`,
+      form_label: Object.is(language, `en`) ? `Furnished` : ``,
       value: property.furnished,
       type: `select`,
       key_name: `furnished`,
@@ -435,21 +442,21 @@ const Form = () => {
     
     {
       ...default_input,
-      form_label: `Land Size`,
+      form_label: Object.is(language, `en`) ? `Land Size` : `ขนาด`,
       value: property.size,
       type: `size_format`,
       key_name: `size`,
     },
     {
       ...default_input,
-      form_label: `Useable Area`,
+      form_label: Object.is(language, `en`) ? `Useable Area` : `พื้นที่ใช้สอย`,
       value: property.useable_area,
       type: `size_format`,
       key_name: `useable_area`,
     },
     {
       ...default_input,
-      form_label: `Description`,
+      form_label: Object.is(language, `en`) ? `Description` : ``,
       value: property.description,
       required: false,
       type: `textarea`,
@@ -457,7 +464,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Agent Note`,
+      form_label: Object.is(language, `en`) ? `Agent Note` : ``,
       value: property.agent_note,
       required: false,
       type: `textarea`,
@@ -465,14 +472,14 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Available At`,
+      form_label: Object.is(language, `en`) ? `Available At` : `ว่างให้เช่าวันที่`,
       value: property.available_at,
       type: `date`,
       key_name: `available_at`,
     },
     {
       ...default_input,
-      form_label: `Hot Deal`,
+      form_label: Object.is(language, `en`) ? `Hot Deal` : ``,
       class_name: ``,
       value: property.hot_deal,
       type: `checkbox`,
@@ -480,7 +487,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Allows Marijuana`,
+      form_label: Object.is(language, `en`) ? `Allows Marijuana` : `อสังหาริมทรัพย์นี้สามารถปลูกกัญชาได้`,
       class_name: ``,
       value: property.allows_marijuana,
       type: `checkbox`,
@@ -488,7 +495,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Upload Main Image`,
+      form_label: Object.is(language, `en`) ? `Upload Main Image` : ``,
       class_name: `Button`,
       value: property.img,
       type: `image`,
@@ -496,7 +503,7 @@ const Form = () => {
     },
     {
       ...default_input,
-      form_label: `Upload Images`,
+      form_label: Object.is(language, `en`) ? `Upload Images` : ``,
       class_name: `Button`,
       value: property.images,
       multiple: true,
@@ -527,9 +534,8 @@ const Form = () => {
       invalid_list = !!property[key as keyof typeof property] ? invalid_list : [...invalid_list, key];
     })
     if(!has_img){
-      invalid_list = [...invalid_list, `main image`]
+      invalid_list = [...invalid_list, `main image`];
     }
-    console.log({has_img, invalid_list});
     if(has_img && invalid_list.length === 0){
       handle_submit();
     } else {

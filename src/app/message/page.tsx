@@ -25,10 +25,12 @@ const Message = () => {
         <h2>You have successfully logged in!</h2>
       </>
     ) : get_default;
+    const logged_off_message = <h1>You have successfully logged off!</h1>;
     const delete_message = <h1>You have successfully deleted the property {property_name}!</h1>
     return (
       type === `login` ? login_message : 
       type === `delete` ? delete_message : 
+      type === `logged_off` ? logged_off_message :
       get_default
     );
   }

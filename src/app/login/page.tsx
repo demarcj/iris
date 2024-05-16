@@ -13,7 +13,6 @@ import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import FormLabel from '@mui/joy/FormLabel';
 import FormControl from '@mui/joy/FormControl';
-import Sheet from '@mui/joy/Sheet';
 import { getInitColorSchemeScript } from '@mui/joy/styles';
 import { CssVarsProvider } from '@mui/joy/styles';
 
@@ -45,7 +44,7 @@ const Login = () => {
     e.preventDefault();
     const fetch_login = await get_login(login);
     !!Object.keys(fetch_login)?.length && localStorage.setItem(`user`, JSON.stringify(fetch_login))
-    !!Object.keys(fetch_login)?.length ? route(`/message`) : toast("Incorrect name or password!");
+    !!Object.keys(fetch_login)?.length ? route(`/message?type=login`) : toast("Incorrect name or password!");
   }
 
   return (
@@ -80,7 +79,7 @@ const Login = () => {
                 required
               />
             </FormControl>
-            <span>
+            <div>
               <Button
                 sx={{mt: `5px`}}
                 type='submit'
@@ -88,7 +87,7 @@ const Login = () => {
               >
                 Login
               </Button>
-            </span>
+            </div>
           </Box>
         </section>
       </main>

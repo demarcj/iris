@@ -82,7 +82,7 @@ input{
   opacity: 0.5;
 }
 
-html:has(.property_main){
+html:has(.properties_main){
   height: 100%;
   body, main{
     height: 100%;

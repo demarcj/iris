@@ -1,4 +1,4 @@
-'use client';
+
 
 // Model
 import { PropertyModel } from '@/_models';

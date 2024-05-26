@@ -35,3 +35,22 @@
   font-style: italic;
   font-size: 18px;
 }
+
+.not_show{
+  visibility: hidden;
+}
+
+.price{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.price_container{
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.price_container:has(.price + .price){
+  grid-template-columns: repeat(2, 1fr);
+}

@@ -1,9 +1,11 @@
 "use client";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import { PropertyCardHorizontal } from './';
+import { PropertyCardHorizontal } from '.';
 
-import { PropertyModel } from '@/_models'
+import { PropertyModel } from '@/_models';
+
+import { LanguageType } from '@/_constants/locale'
 
 // Styles
 import 'swiper/css';
@@ -11,9 +13,10 @@ import 'swiper/css/navigation';
 
 interface CarouselModel {
   properties: PropertyModel[];
+  language: LanguageType;
 }
 
-export const Carousel: React.FC<CarouselModel> = ({properties}) => (
+export const Carousel: React.FC<CarouselModel> = ({properties, language}) => (
   <>
     <Swiper
       spaceBetween={50}
@@ -35,7 +38,10 @@ export const Carousel: React.FC<CarouselModel> = ({properties}) => (
         properties.map((property, i) => { 
           return (
             <SwiperSlide key={i}>
-              <PropertyCardHorizontal property={property} />
+              <PropertyCardHorizontal 
+                property={property} 
+                language={language}
+              />
             </SwiperSlide>
           ) 
         })

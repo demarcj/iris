@@ -1,7 +1,9 @@
+import { AmenitiesMap, FacilitiesMap, OptionMap, ViewsMap } from "@/_constants/locale"
+
 export interface PropertyModel {
   address: string;
   agent_note?: string;
-  amenities: string[];
+  amenities: (keyof typeof AmenitiesMap)[];
   allows_marijuana: boolean;
   available_at: string;
   bathrooms: number;
@@ -10,7 +12,7 @@ export interface PropertyModel {
   created_at: Date | string;
   description?: string;
   email: string;
-  facilities?: string[];
+  facilities?: (keyof typeof FacilitiesMap)[];
   floor?: number;
   furnished: string;
   hot_deal: boolean;
@@ -19,7 +21,7 @@ export interface PropertyModel {
   img: string;
   location: string;
   name: string;
-  option: string[];
+  option: (keyof typeof OptionMap)[];
   ownership: string;
   phone?: string;
   price?: string;
@@ -34,5 +36,5 @@ export interface PropertyModel {
   unit_number?: string;
   updated_at: Date | string;
   useable_area: string;
-  views?: string[];
+  views?: (keyof typeof ViewsMap)[];
 }

@@ -18,6 +18,10 @@
   overflow: hidden;
 }
 
+.language_code{
+  text-transform: uppercase;
+}
+
 .login{
   background-color: #e3effb;
   color: #153455;

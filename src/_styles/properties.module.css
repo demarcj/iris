@@ -1,6 +1,7 @@
 .main{
   display: flex;
-  gap: 30px;
+  gap: 15px;
+  overflow: hidden;
 }
 
 .main > div{
@@ -12,6 +13,10 @@
   place-items: center;
 }
 
+div.dialog{
+  flex: 0;
+}
+
 .properties_container{
   overflow-y: scroll;
   min-width: 515px;
@@ -21,6 +26,7 @@
 .img{
   width: 100%;
   max-height: 100vh;
+  object-fit: cover;
 }
 
 .amenities{

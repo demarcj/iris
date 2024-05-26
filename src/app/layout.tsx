@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NavMenu, Footer } from "@/_components/layout_section";
 import { Suspense } from 'react';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,11 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NavMenu />
         <Suspense>
           <div className={styles.layout}>{children}</div>
         </Suspense>
-        <Footer />
       </body>
     </html>
   );

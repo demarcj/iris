@@ -1,3 +1,5 @@
+import { LanguageType } from "@/_constants/locale"
+
 export interface InputModel {
     class_name: string;
     disabled: boolean;
@@ -6,6 +8,7 @@ export interface InputModel {
     hint: string;
     key_name: string;
     handle_image: (event: any, type: boolean) => void;
+    language: LanguageType;
     list: any[];
     min: number;
     multiple: boolean;

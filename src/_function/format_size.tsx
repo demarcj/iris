@@ -1,8 +1,10 @@
 import React from 'react';
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
+import { LanguageType } from '@/_constants/locale';
 
-export const format_size = (size: string = ``): string => {
-  return `${new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} sqm`;
+export const format_size = (size: string = ``, locale: LanguageType = `en`): string => {
+  const format = Object.is(locale, `en`) ? `sqm` : `ตรม`;
+  return `${new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} ${format}`;
 }
 
 interface CustomProps {

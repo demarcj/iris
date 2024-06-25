@@ -73,7 +73,7 @@ export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, dis
           <div className={styles.location_deal}>
             <div>
               <FontAwesomeIcon icon={faLocationDot} />
-              {` ${sub_district ? SubDistrictMap[sub_district as keyof typeof SubDistrictMap][language] : SubDistrictMap[`pattaya` as keyof typeof SubDistrictMap][language]}`}
+              {` ${sub_district ? SubDistrictMap?.[sub_district]?.[language] || sub_district : SubDistrictMap[`pattaya`][language]}`}
             </div>
             { hot_deal && <Chip color="danger" size="lg" variant="soft">{PropertyMap.hot_deal[language]}</Chip> }
           </div>

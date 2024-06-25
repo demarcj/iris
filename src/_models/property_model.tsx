@@ -1,4 +1,4 @@
-import { AmenitiesMap, FacilitiesMap, OptionMap, ViewsMap } from "@/_constants/locale"
+import { AmenitiesMap, FacilitiesMap, OptionMap, ViewsMap, SubDistrictMap } from "@/_constants/locale"
 
 export interface PropertyModel {
   address: string;
@@ -30,7 +30,7 @@ export interface PropertyModel {
   ref?: string;
   size?: string;
   stories: number;
-  sub_district: string;
+  sub_district: (keyof typeof SubDistrictMap) | ``;
   transfer_fees: string;
   type: string;
   unit_number?: string;

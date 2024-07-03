@@ -5,7 +5,7 @@ export const ViewsMenu = [
   `partial_sea_view`, 
   `pool_view`, 
   `sea_view` 
-];
+] as const;
 
 export const ViewsMap = {
   city_view: {
@@ -32,4 +32,4 @@ export const ViewsMap = {
     en: `Sea View`,
     th: `วิวทะเล`
   }, 
-}
+} as const;

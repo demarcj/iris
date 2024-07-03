@@ -11,10 +11,10 @@ export const FurnishedMap = {
     en: `Unfurnished`,
     th: `ไม่มีเฟอร์นิเจอร์`
   }
-};
+} as const;
 
 export const FurnishedMenu: (keyof typeof FurnishedMap)[] = [
   `furnished`, 
   `fully_furnished`, 
   `unfurnished`
-];
+] as const;

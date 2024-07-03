@@ -119,7 +119,7 @@ export const PropertyMap = {
     en: `Views from Property`,
     th: `วิวจากห้อง`
   }
-}
+} as const;
 
 export const PropertyTypeLocale = {
   bars: {
@@ -158,4 +158,4 @@ export const PropertyTypeLocale = {
     en: `Townhouse`,
     th: `ทาวน์เฮ้าส์`
   },
-}
+} as const;

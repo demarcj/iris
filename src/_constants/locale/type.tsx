@@ -39,7 +39,7 @@ export const TypeMap = {
     en: `Pool Villa`,
     th: `พูลวิลล่า`
   }, 
-};
+} as const;
 
 export const TypeMenu: (keyof typeof TypeMap)[] = [
   `bar`,
@@ -52,4 +52,4 @@ export const TypeMenu: (keyof typeof TypeMap)[] = [
   `restaurant`,
   `townhouse`,
   `villa`, 
-];
+] as const;

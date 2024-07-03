@@ -144,7 +144,7 @@ export const SubDistrictMap = {
     en: `Wongamart Beach`,
     th: `หาดวงอมาตย์`
   },
-}
+} as const;
 
 export const SeaSideMenu: (keyof typeof SubDistrictMap)[] = [
   `naklua`,
@@ -161,7 +161,7 @@ export const SeaSideMenu: (keyof typeof SubDistrictMap)[] = [
   `na_jomtien`,
   `bangsare`,
   `sattahip`
-];
+] as const;
 
 export const DarkSideMenu: (keyof typeof SubDistrictMap)[] = [
   `nongprue`,
@@ -181,4 +181,4 @@ export const DarkSideMenu: (keyof typeof SubDistrictMap)[] = [
   `chaknok_lake`,
   `chaiyapruk`,
   `huayyai`
-]
+] as const;

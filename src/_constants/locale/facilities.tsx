@@ -59,7 +59,7 @@ export const FacilitiesMap = {
     en: `CCTV`,
     th: `กล้องวงจรปิด`
   }
-}
+} as const;
 
 export const FacilitiesMenu: (keyof typeof FacilitiesMap)[] = [
   `swimming_pool`,
@@ -77,4 +77,4 @@ export const FacilitiesMenu: (keyof typeof FacilitiesMap)[] = [
   `private_beach`,
   `near_to_the_beach`,
   `cctv`
-];
+] as const;

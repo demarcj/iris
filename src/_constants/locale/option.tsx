@@ -7,9 +7,9 @@ export const OptionMap = {
     en: `Sell`,
     th: `ขาย`
   }
-}
+} as const;
 
 export const OptionMenu: (keyof typeof OptionMap)[] = [
   `price`, 
   `rental_price`
-];
+] as const;

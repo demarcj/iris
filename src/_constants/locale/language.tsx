@@ -1,6 +1,3 @@
-export type LanguageType = `en` | `th`;
-
-
 export const LanguageToggleMap = {
   en: {
     code: `en`,
@@ -12,6 +9,6 @@ export const LanguageToggleMap = {
     cap: `TH`,
     translate: `ไทย`
   }
-}
+} as const;
 
-export const LanguageList: LanguageType[] = [`en`, `th`];
+export const LanguageList: (keyof typeof LanguageToggleMap)[] = [`en`, `th`] as const;

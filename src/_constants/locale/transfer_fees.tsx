@@ -11,10 +11,10 @@ export const TransferFeesMap = {
     en: `Share 50/50`,
     th: `ชำระคนละครึ่ง`
   }
-}
+} as const;
 
 export const TransferFeesMenu: (keyof typeof TransferFeesMap)[] = [
   `on_buyer`, 
   `on_owner`, 
   `share_50_50`
-];
+] as const;

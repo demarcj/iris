@@ -107,7 +107,7 @@ export const AmenitiesMap = {
     en: `WIFI`,
     th: `ไวไฟ`
   }
-}
+} as const;
 
 export const AmenitiesMenu: (keyof typeof AmenitiesMap)[] = [
   `air_conditioner`,
@@ -137,4 +137,4 @@ export const AmenitiesMenu: (keyof typeof AmenitiesMap)[] = [
   `water_tank`,
   `working_table`,
   `wifi`
-];
+] as const;

@@ -23,9 +23,9 @@ export const NavMap = {
       type: `link`
     }
   }
-}
+} as const;
 
 export const NavList: (keyof typeof NavMap)[] = [
   `properties`,
   `contact`,
-];
+] as const;

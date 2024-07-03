@@ -1,14 +1,14 @@
 import { NavMenu } from "@/_components/layout_section/nav";
 import { Footer } from "@/_components/layout_section/footer";
 
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
 export const DefaultLayout = ({
   children,
   language
 }: Readonly<{
   children: React.ReactNode;
-  language: LanguageType
+  language: keyof typeof LanguageToggleMap
 }>) => {
   return (
     <>

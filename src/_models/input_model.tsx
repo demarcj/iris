@@ -1,4 +1,4 @@
-import { LanguageType } from "@/_constants/locale"
+import { LanguageToggleMap } from "@/_constants/locale"
 
 export interface InputModel {
     class_name: string;
@@ -8,7 +8,7 @@ export interface InputModel {
     hint: string;
     key_name: string;
     handle_image: (event: any, type: boolean) => void;
-    language: LanguageType;
+    language: keyof typeof LanguageToggleMap;
     list: any[];
     min: number;
     multiple: boolean;

@@ -5,7 +5,7 @@ import { PropertyCardVertical } from "./";
 import { DeletePropertyDialog } from "@/_components/ui";
 
 // Constants
-import { LanguageType, AmenitiesMap } from "@/_constants/locale";
+import { LanguageToggleMap, AmenitiesMap } from "@/_constants/locale";
 
 // Material
 import Button from '@mui/joy/Button';
@@ -30,7 +30,7 @@ import styles from "@/_styles/properties.module.css";
 
 interface PropertiesListModel {
   properties: PropertyModel[],
-  language: LanguageType;
+  language: keyof typeof LanguageToggleMap;
 }
 
 export const PropertiesList: React.FC<PropertiesListModel> = ({properties, language}) => {

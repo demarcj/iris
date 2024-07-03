@@ -2,7 +2,7 @@
 import { Carousel } from "@/_components/ui";
 
 // Constants
-import { LanguageType } from "@/_constants/locale";
+import { LanguageToggleMap } from "@/_constants/locale";
 
 // Model
 import { PropertyModel } from '@/_models';
@@ -21,7 +21,7 @@ type MainSection = {
   properties: PropertyModel[];
 }
 
-export const HomeLayout = async ({language}: {language: LanguageType}) => {
+export const HomeLayout = async ({language}: {language: keyof typeof LanguageToggleMap}) => {
   const popular = await get_properties();
   const hot_deal = await get_hot_deal();
 

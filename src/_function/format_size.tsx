@@ -1,8 +1,8 @@
 import React from 'react';
 import { NumericFormat, NumericFormatProps } from 'react-number-format';
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
-export const format_size = (size: string = ``, locale: LanguageType = `en`): string => {
+export const format_size = (size: string = ``, locale: keyof typeof LanguageToggleMap = `en`): string => {
   const format = Object.is(locale, `en`) ? `sqm` : `ตรม`;
   return `${new Intl.NumberFormat(`en-US`).format(parseInt(`${size}`))} ${format}`;
 }

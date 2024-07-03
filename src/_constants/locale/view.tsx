@@ -1,12 +1,3 @@
-export const ViewsMenu = [
-  `city_view`, 
-  `garden_view`, 
-  `mountain_view`,
-  `partial_sea_view`, 
-  `pool_view`, 
-  `sea_view` 
-] as const;
-
 export const ViewsMap = {
   city_view: {
     en: `City View`,
@@ -33,3 +24,12 @@ export const ViewsMap = {
     th: `วิวทะเล`
   }, 
 } as const;
+
+export const ViewsMenu: (keyof typeof ViewsMap)[] = [
+  `city_view`, 
+  `garden_view`, 
+  `mountain_view`,
+  `partial_sea_view`, 
+  `pool_view`, 
+  `sea_view` 
+] as const;

@@ -3,7 +3,7 @@ import { FooterActivities } from './';
 
 // Constants
 import { Contact } from '@/_constants';
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
 // Function
 import { format_phone_number } from "@/_function";
@@ -22,7 +22,7 @@ import styles from "@/_styles/footer.module.css";
 
 library.add(fab);
 
-export const Footer = ({language}: {language: LanguageType}) => {
+export const Footer = ({language}: {language: keyof typeof LanguageToggleMap}) => {
   const { email, facebook, line, phone_number } = Contact;
   const year = new Date().getFullYear();
 

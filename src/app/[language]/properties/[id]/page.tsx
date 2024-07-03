@@ -17,7 +17,7 @@ import {
   AmenitiesMap, 
   FacilitiesMap,
   FurnishedMap, 
-  LanguageType, 
+  LanguageToggleMap, 
   OptionMap,
   OwnershipMap,
   PropertyMap,
@@ -34,7 +34,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css';
 
-const Property = async ({params}: {params: {id: string, language: LanguageType}}) => {
+const Property = async ({params}: {params: {id: string, language: keyof typeof LanguageToggleMap}}) => {
   const { id, language } = params;
   let property = await get_property(id);
   let loading = true;

@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 
 // Constants
-import { LanguageType } from "@/_constants/locale";
+import { LanguageToggleMap } from "@/_constants/locale";
 
 // Nextjs
 import { useRouter } from 'next/navigation';
@@ -32,7 +32,7 @@ import { DeletePropertyDialog } from "@/_components/ui";
 
 interface AdminButtonModel {
   property: PropertyModel;
-  language: LanguageType
+  language: keyof typeof LanguageToggleMap
 }
 
 export const AdminButton: React.FC<AdminButtonModel> = ({property, language}) => {

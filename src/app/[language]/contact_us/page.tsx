@@ -5,7 +5,7 @@ import { format_phone_number } from "@/_function";
 import { DefaultLayout } from "@/_components/layout_section";
 
 // Constant
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,7 @@ import styles from "@/_styles/contact.module.css";
 
 library.add(fab);
 
-const ContactUs = ({params}: {params: {language: LanguageType}}) => {
+const ContactUs = ({params}: {params: {language: keyof typeof LanguageToggleMap}}) => {
   const { email, facebook, line, phone_number } = Contact;
   const { language } = params;
   return (

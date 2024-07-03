@@ -1,7 +1,7 @@
 'use client';
 
 // Constants
-import { LanguageType, LanguageList, LanguageToggleMap } from '@/_constants/locale';
+import { LanguageList, LanguageToggleMap } from '@/_constants/locale';
 
 // Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 
-export const FooterActivities = ({language}: {language: LanguageType}) => {
+export const FooterActivities = ({language}: {language: keyof typeof LanguageToggleMap}) => {
   // const [is_login, set_is_login] = useState(false);
   // const [open, set_open] = useState(false);
   // const [ready, set_ready] = useState(false);
@@ -32,7 +32,7 @@ export const FooterActivities = ({language}: {language: LanguageType}) => {
 
   const router = useRouter();
 
-  const handle_language = (locale: LanguageType | null) => {
+  const handle_language = (locale: keyof typeof LanguageToggleMap | null) => {
     const tidy = locale === null ? `en` : locale;
     const pathname = location.pathname;
     if([`/`, `/th`].includes(pathname)){

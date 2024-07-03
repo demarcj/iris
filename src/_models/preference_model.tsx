@@ -1,5 +1,5 @@
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
 export interface PreferenceModel {
-  language: LanguageType;
+  language: keyof typeof LanguageToggleMap;
 }

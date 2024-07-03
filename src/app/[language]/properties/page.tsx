@@ -6,7 +6,7 @@ import { DefaultLayout } from '@/_components/layout_section'
 import { get_properties } from "@/_server";
 
 // Constants
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
 // Nextjs
 import Image from 'next/image';
@@ -14,7 +14,7 @@ import Image from 'next/image';
 // style
 import styles from "@/_styles/properties.module.css";
 
-const Properties = async ({params}: {params: {language: LanguageType}}) => {
+const Properties = async ({params}: {params: {language: keyof typeof LanguageToggleMap}}) => {
   const { language } = params;
   const properties = (await get_properties()).properties;
 

@@ -5,7 +5,7 @@ import { PropertyCardHorizontal } from '.';
 
 import { PropertyModel } from '@/_models';
 
-import { LanguageType } from '@/_constants/locale'
+import { LanguageToggleMap } from '@/_constants/locale'
 
 // Styles
 import 'swiper/css';
@@ -13,7 +13,7 @@ import 'swiper/css/navigation';
 
 interface CarouselModel {
   properties: PropertyModel[];
-  language: LanguageType;
+  language: keyof typeof LanguageToggleMap;
 }
 
 export const Carousel: React.FC<CarouselModel> = ({properties, language}) => (

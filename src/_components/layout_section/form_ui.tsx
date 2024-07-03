@@ -41,7 +41,7 @@ import {
   DarkSideMenu,
   FacilitiesMenu,
   FurnishedMenu,
-  LanguageType,
+  LanguageToggleMap,
   LocationMenu,
   OptionMenu,
   OwnershipMenu,
@@ -90,7 +90,7 @@ const property_default: PropertyModel = {
   views: []
 } as PropertyModel;
 
-export const FormUI = ({language}: {language: LanguageType}) => {
+export const FormUI = ({language}: {language: keyof typeof LanguageToggleMap}) => {
   const [property, set_property] = useState(structuredClone(property_default));
   const [images, set_images] = useState({} as FileList);
   const [has_facilities, set_has_facilities] = useState(false);

@@ -1,9 +1,9 @@
 // Component
 import { DefaultLayout, FormUI } from "@/_components/layout_section";
 
-import { LanguageType } from "@/_constants/locale";
+import { LanguageToggleMap } from "@/_constants/locale";
 
-const Form = ({params}: {params: {language: LanguageType}}) => {
+const Form = ({params}: {params: {language: keyof typeof LanguageToggleMap}}) => {
   const { language } = params;
   return (
     <DefaultLayout language={language}>

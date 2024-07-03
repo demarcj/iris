@@ -3,7 +3,7 @@ import { LoginNav } from './'
 
 // Constants
 import { NavList, NavMap } from '@/_constants';
-import { LanguageType } from '@/_constants/locale';
+import { LanguageToggleMap } from '@/_constants/locale';
 
 // Nextjs
 import Link from 'next/link';
@@ -12,7 +12,7 @@ import Image from 'next/image';
 // Styles
 import styles from "@/_styles/nav_menu.module.css";
 
-export const NavMenu = async ({language}: {language: LanguageType}) => {
+export const NavMenu = async ({language}: {language: keyof typeof LanguageToggleMap}) => {
   return (
     <header className={styles.header}>
       <Link className={styles.logo_wrapper} href={`/${Object.is(language, `en`) ? `` : language}`}>

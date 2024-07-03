@@ -23,7 +23,7 @@ import Chip from '@mui/joy/Chip';
 import { Button } from '@mui/joy';
 
 // Constants
-import { SubDistrictMap, LanguageType, TypeMap, AmenitiesMap, PropertyMap } from '@/_constants/locale';
+import { SubDistrictMap, LanguageToggleMap, TypeMap, AmenitiesMap, PropertyMap } from '@/_constants/locale';
 
 // Styles
 import 'swiper/css';
@@ -34,7 +34,7 @@ interface PropertyCardModel {
   edit_mode: boolean;
   delete_property: (e: any, property: PropertyModel) => void;
   property: PropertyModel;
-  language: LanguageType;
+  language: keyof typeof LanguageToggleMap;
 }
 
 export const PropertyCardVertical: React.FC<PropertyCardModel> = ({property, display_amenities, delete_property, edit_mode, language}) => {

@@ -27,7 +27,7 @@ import {
   AmenitiesMap, 
   FacilitiesMap,
   FurnishedMap,
-  LanguageType,
+  // LanguageToggleMap,
   LocationMap,
   OptionMap,
   OwnershipMap, 

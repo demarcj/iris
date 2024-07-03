@@ -1,7 +1,7 @@
 'use client';
 
 // Constants
-import { LanguageType } from "@/_constants/locale";
+import { LanguageToggleMap } from "@/_constants/locale";
 
 // Material
 import Box from '@mui/material/Box';
@@ -22,7 +22,7 @@ import { label } from '@/_styles';
 import styles from '@/_styles/login.module.css';
 import global from "@/_styles/global.module.css";
 
-export const LoginUI = ({language} : {language: LanguageType}) => {
+export const LoginUI = ({language} : {language: keyof typeof LanguageToggleMap}) => {
   const [login, set_login] = useState({
     password: ``,
     user_name: ``

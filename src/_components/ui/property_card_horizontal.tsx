@@ -11,7 +11,7 @@ import { format_size, format_bedroom, format_money } from "@/_function";
 import { PropertyModel } from "@/_models";
 
 // Constants
-import { LanguageType, TypeMap, PropertyMap } from "@/_constants/locale";
+import { LanguageToggleMap, TypeMap, PropertyMap } from "@/_constants/locale";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faMaximize, faHotel, faBathtub } from "@fortawesome/free-solid-svg-icons";
@@ -20,7 +20,7 @@ import styles from "@/_styles/property_card_horizontal.module.css";
 
 interface PropertyCardModel {
   property: PropertyModel;
-  language: LanguageType;
+  language: keyof typeof LanguageToggleMap;
 }
 
 export const PropertyCardHorizontal: React.FC<PropertyCardModel> = ({property, language}) => {

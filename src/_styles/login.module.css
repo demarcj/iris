@@ -13,11 +13,9 @@
   max-width: 800px;
 }
 
-.input{ padding-bottom: 10px; }
-
 .input_container{
   display: grid;
-  padding-bottom: 16px;
+  gap: 15px;
 }
 
 .label{ padding-bottom: 15px; }

@@ -27,8 +27,6 @@ import { get_login } from '@/_server';
 // Style
 import styles from '@/_styles/login.module.css';
 
-
-
 export const LoginUI = ({language} : {language: keyof typeof LanguageToggleMap}) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = useMemo(
@@ -73,8 +71,9 @@ export const LoginUI = ({language} : {language: keyof typeof LanguageToggleMap})
             component="form"
             noValidate
             autoComplete="off"
+            className={styles.input_container}
           >
-            <FormControl className={styles.input} fullWidth>
+            <FormControl fullWidth>
               <TextField
                 id="user_name"
                 value={login.user_name}
@@ -83,7 +82,7 @@ export const LoginUI = ({language} : {language: keyof typeof LanguageToggleMap})
                 required
               />
             </FormControl>
-            <FormControl className={styles.input} fullWidth>
+            <FormControl fullWidth>
               <TextField
                 id="password"
                 type={ show_password ? `text` : `password`}
@@ -102,7 +101,6 @@ export const LoginUI = ({language} : {language: keyof typeof LanguageToggleMap})
                     </InputAdornment>
                   )
                 }}
-                
                 required
               />
             </FormControl>

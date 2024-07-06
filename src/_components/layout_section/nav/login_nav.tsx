@@ -1,14 +1,13 @@
 'use client';
 
 // Contsants
-import { LanguageToggleMap, LanguageList } from "@/_constants/locale";
+import { LanguageToggleMap } from "@/_constants/locale";
 
 // Models
 import { NavModel } from '@/_models';
 
 // Nextjs
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 
 // React
 import { useState, useEffect } from 'react';
@@ -18,7 +17,6 @@ import { admin_check } from '@/_server';
 
 export const LoginNav = ({language}: {language: keyof typeof LanguageToggleMap}) => {
   const [admin_menu, set_admin_menu] = useState<NavModel[]>([]);
-  const params = useParams<{ language: keyof typeof LanguageToggleMap; }>()
 
   useEffect(() => {
     (async () => {

@@ -26,7 +26,7 @@
   border-radius: 5px;
 }
 
-@media screen and (width < 769px) {
+@media (width < 769px) {
   .main{
     display: block;
   }

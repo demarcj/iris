@@ -34,7 +34,7 @@
   background-color: #c7dff7;
 }
 
-@media screen and (width < 1025px) {
+@media (width < 1025px) {
   .footer{
     padding: 15px;
   }

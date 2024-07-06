@@ -1,4 +1,5 @@
 :root {
+  --light-dark: light-dark(darkGray, lightGray);
   --light-green: #92c827;
   --dark-green: #0e6e33;
   --green-blue: #0a7368;
@@ -100,7 +101,7 @@ html:has(.properties_main){
   }
 }
 
-@media screen and (width < 1025px) {
+@media (width < 1025px) {
   :root{
     --grid: 1fr;
   }

@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-@media screen and (width < 769px) {
+@media (width < 769px) {
   .button{
     width: 100%;
   }

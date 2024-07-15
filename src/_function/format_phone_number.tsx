@@ -5,7 +5,7 @@ export const format_phone_number = (number: string) => {
       return ``;
     } else if(index > 7) {
       return num;
-    } else if(index === 3 || index === 6) {
+    } else if(index === 4 || index === 7) {
       return num + ` `;
     }
     return num;
